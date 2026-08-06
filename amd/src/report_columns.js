@@ -55,7 +55,8 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], f
 
     var closeDropdown = function(element) {
         $(element).closest('.dropdown-menu').removeClass('show');
-        $(element).closest('.dropdown').find('[data-bs-toggle="dropdown"]').attr('aria-expanded', 'false').removeClass('show');
+        $(element).closest('.dropdown').find('[data-toggle="dropdown"], .la-report-column-menu-trigger')
+            .attr('aria-expanded', 'false').removeClass('show');
     };
 
     var closeModal = function(element) {
@@ -237,6 +238,23 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], f
     };
 
     var bindColumnControls = function() {
+        $(document).on('click', '[data-action="toggle-column-menu"]', function(event) {
+            var button = $(this);
+            var panel = button.closest('.la-report-columns-dropdown');
+            var menu = button.siblings('.dropdown-menu').first();
+            var open = menu.hasClass('show');
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            panel.find('.la-report-column-menu-trigger').not(button)
+                .attr('aria-expanded', 'false').removeClass('show');
+            panel.find('.la-report-column-item .dropdown-menu.show').not(menu).removeClass('show');
+
+            button.attr('aria-expanded', open ? 'false' : 'true').toggleClass('show', !open);
+            menu.toggleClass('show', !open);
+        });
+
         $(document).on('dragstart', COLUMN_LIST_SELECTOR + ' [data-column-key]', function(event) {
             if ($(this).attr('draggable') !== 'true') {
                 event.preventDefault();
@@ -451,6 +469,21 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], f
 
     return {
         init: function() {
+            $(document).on('click', '.la-report-columns-dropdown', function(event) {
+                event.stopPropagation();
+            });
+            $(document).on('hide.bs.dropdown', function(event) {
+                var dropdown = $(event.target);
+                var panel = dropdown.children('.la-report-columns-dropdown');
+
+                if (!panel.length) {
+                    return;
+                }
+
+                panel.find('.la-report-column-menu-trigger')
+                    .attr('aria-expanded', 'false').removeClass('show');
+                panel.find('.la-report-column-item .dropdown-menu.show').removeClass('show');
+            });
             bindColumnControls();
         }
     };

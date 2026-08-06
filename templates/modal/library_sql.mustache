@@ -86,7 +86,7 @@
         <legend class="visually-hidden">{{#str}}reportdetails, local_la{{/str}}</legend>
         <div class="d-flex align-items-center mb-2">
             <div class="position-relative d-flex ftoggler align-items-center me-1">
-                <a data-bs-toggle="collapse" href="#la-library-report-details-container" role="button" aria-expanded="true" aria-controls="la-library-report-details-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader">
+                <a data-toggle="collapse" href="#la-library-report-details-container" role="button" aria-expanded="true" aria-controls="la-library-report-details-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader">
                     <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
                     <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
                     <span class="visually-hidden">{{#str}}reportdetails, local_la{{/str}}</span>
@@ -127,7 +127,7 @@
             <legend class="visually-hidden">{{#str}}sql, local_la{{/str}}</legend>
             <div class="d-flex align-items-center mb-2">
                 <div class="position-relative d-flex ftoggler align-items-center me-1">
-                    <a data-bs-toggle="collapse" href="#la-library-sql-snippets-container" role="button" aria-expanded="false" aria-controls="la-library-sql-snippets-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
+                    <a data-toggle="collapse" href="#la-library-sql-snippets-container" role="button" aria-expanded="false" aria-controls="la-library-sql-snippets-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
                         <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
                         <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
                         <span class="visually-hidden">{{#str}}sql, local_la{{/str}}</span>
@@ -188,7 +188,7 @@
                     </div>
                 {{/sql_snippets}}
 
-                <a href="#la-library-full-query" class="d-inline-flex align-items-center gap-1" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="la-library-full-query">
+                <a href="#la-library-full-query" class="d-inline-flex align-items-center gap-1" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="la-library-full-query">
                     {{#str}}showfullquery, local_la{{/str}}
                     <i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i>
                 </a>
@@ -209,7 +209,7 @@
             <legend class="visually-hidden">{{#str}}columns, local_la{{/str}}</legend>
             <div class="d-flex align-items-center mb-2">
                 <div class="position-relative d-flex ftoggler align-items-center me-1">
-                    <a data-bs-toggle="collapse" href="#la-library-sql-columns-container" role="button" aria-expanded="false" aria-controls="la-library-sql-columns-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
+                    <a data-toggle="collapse" href="#la-library-sql-columns-container" role="button" aria-expanded="false" aria-controls="la-library-sql-columns-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
                         <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
                         <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
                         <span class="visually-hidden">{{#str}}columns, local_la{{/str}}</span>
@@ -237,7 +237,7 @@
                                 <td>{{type}}</td>
                                 <td>
                                     {{#drilldown_is_badge}}
-                                        <span class="badge {{drilldown_class}}"{{#drilldown_has_tooltip}} data-bs-toggle="tooltip" data-bs-placement="top" title="{{drilldown_tooltip}}"{{/drilldown_has_tooltip}}>{{drilldown}}</span>
+                                        <span class="badge {{drilldown_class}}"{{#drilldown_has_tooltip}} data-toggle="tooltip" data-placement="top" title="{{drilldown_tooltip}}"{{/drilldown_has_tooltip}}>{{drilldown}}</span>
                                     {{/drilldown_is_badge}}
                                     {{^drilldown_is_badge}}
                                         <code>{{drilldown}}</code>

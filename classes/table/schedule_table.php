@@ -223,7 +223,7 @@ class schedule_table extends general_table {
                             'class' => 'btn btn-icon d-flex no-caret dropdown-toggle icon-no-margin',
                             'id' => 'la-schedule-action-menu-toggle-' . (int) $row->id,
                             'aria-label' => get_string('actions', 'core'),
-                            'data-bs-toggle' => 'dropdown',
+                            'data-toggle' => 'dropdown',
                             'role' => 'button',
                             'aria-haspopup' => 'true',
                             'aria-expanded' => 'false',

@@ -70,7 +70,7 @@
     </ol>
 </nav>
 <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
-    <div class="d-flex align-items-center gap-3">
+    <div class="d-flex align-items-center gap-3 la-report-head-title">
         <h2 class="mb-0">{{title}}</h2>
         {{#summary}}
             <button type="button" class="btn p-0 border-0 text-muted opacity-25" data-action="toggle-report-summary" aria-label="{{#str}}show, core{{/str}}">
@@ -81,7 +81,7 @@
         {{/summary}}
     </div>
     {{#metrics}}
-        <div class="d-flex align-items-center gap-2 ms-auto flex-nowrap">
+        <div class="d-flex align-items-center gap-2 ms-auto flex-nowrap la-report-head-metrics">
             <div class="d-flex align-items-center" data-region="report-metric-avatars">
                 {{#avatars}}
                     <a href="#" class="la-report-avatar {{#active}}active{{/active}}">

@@ -146,10 +146,18 @@ body.path-local-la .generaltable td {
     border-color: var(--la-dark-border) !important;
 }
 
+body.path-local-la .la-main .table {
+    color: var(--la-dark-text);
+}
+
 body.path-local-la .form-control,
 body.path-local-la .form-select,
 body.path-local-la .input-group-text {
     box-shadow: none;
+}
+
+body.path-local-la .form-select:not([multiple]) {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dee2e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
 }
 
 body.path-local-la .form-control::placeholder {
@@ -476,6 +484,20 @@ body.path-local-la .la-app-more:focus {
 
 body.path-local-la .la-library-sql-section-content code:not(.la-sql-preview-code) {
     color: var(--la-dark-text) !important;
+}
+
+/* Moodle 4.5 gives tables an explicit light-theme text color. The library
+ * details modal is rendered outside .la-main, so its values need a scoped
+ * dark-theme override instead of relying on body text inheritance. */
+body.path-local-la .modal-content .la-library-sql-section-content .table,
+body.path-local-la .modal-content .la-library-sql-section-content .table th,
+body.path-local-la .modal-content .la-library-sql-section-content .table td {
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .modal-content #la-library-report-details-container .badge.text-bg-secondary {
+    background-color: #ced4da !important;
+    color: #1f2327 !important;
 }
 
 body.path-local-la .la-app-card .btn-icon,

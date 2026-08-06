@@ -467,14 +467,15 @@ class report_table extends sql_table {
             [
                 'type' => 'button',
                 'class' => 'btn btn-icon btn-link text-decoration-none p-0 text-primary',
-                'data-bs-toggle' => 'dropdown',
+                'data-toggle' => 'dropdown',
+                'aria-haspopup' => 'true',
                 'aria-expanded' => 'false',
                 'aria-label' => get_string('actions', 'core'),
                 'id' => $toggleid,
             ]
         );
 
-        $menu = html_writer::start_div('dropdown-menu dropdown-menu-end', [
+        $menu = html_writer::start_div('dropdown-menu dropdown-menu-end dropdown-menu-right la-report-row-actions-menu', [
             'aria-labelledby' => $toggleid,
         ]);
 
@@ -494,12 +495,12 @@ class report_table extends sql_table {
                 $label = (string) ($item['label'] ?? '');
 
                 $marker = !empty($item['moodle']) ?
-                    html_writer::span('m', 'opacity-25 small ms-3') :
-                    html_writer::tag('i', '', ['class' => 'fa-solid fa-angle-right opacity-25 small ms-3']);
+                    html_writer::span('m', 'opacity-25 small') :
+                    html_writer::span('›', 'opacity-25', ['aria-hidden' => 'true']);
 
                 $label = html_writer::span($label) .
-                    html_writer::span($marker, 'ms-auto');
-                $attributes['class'] .= ' d-flex align-items-center gap-2';
+                    html_writer::span($marker, 'ms-auto ml-auto');
+                $attributes['class'] .= ' d-flex align-items-center gap-2 la-report-row-action';
 
                 $menu .= html_writer::link(
                     table_helper::interpolate_value_template((string) ($item['url'] ?? '#'), $row),

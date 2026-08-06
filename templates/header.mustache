@@ -97,7 +97,7 @@
     <div class="container-fluid la-header-grid">
         <div class="d-flex align-items-center la-header-left">
             <a href="{{homeurl}}" class="d-none d-md-flex align-items-center me-4 px-3 py-2 text-decoration-none aabtn">
-                <span class="d-block font-monospace fw-bold text-dark la-company-name" data-region="la-company-name" data-full-name="{{companyname}}">{{companyname}}</span>
+                <span class="d-block font-monospace fw-bold text-dark la-header-brand la-company-name" data-region="la-company-name" data-full-name="{{companyname}}">{{companyname}}</span>
             </a>
 
             <div class="primary-navigation">
@@ -112,7 +112,7 @@
                         {{/canmanage}}
                         {{#has_reports_menu}}
                         <li class="nav-item dropdown px-2" role="none">
-                            <a role="menuitem" class="nav-link dropdown-toggle {{#is_reports}}active{{/is_reports}}" href="#" id="la-reports-dropdown-{{uniqid}}" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a role="menuitem" class="nav-link dropdown-toggle {{#is_reports}}active{{/is_reports}}" href="#" id="la-reports-dropdown-{{uniqid}}" data-toggle="dropdown" aria-expanded="false">
                                 {{#str}}reports, core{{/str}}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="la-reports-dropdown-{{uniqid}}">
@@ -149,7 +149,7 @@
                         {{#canmanage}}
                         {{#has_apps_menu}}
                         <li class="nav-item dropdown px-2" role="none">
-                            <a role="menuitem" class="nav-link dropdown-toggle {{#is_apps}}active{{/is_apps}}" href="#" id="la-apps-dropdown-{{uniqid}}" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a role="menuitem" class="nav-link dropdown-toggle {{#is_apps}}active{{/is_apps}}" href="#" id="la-apps-dropdown-{{uniqid}}" data-toggle="dropdown" aria-expanded="false">
                                 {{#str}}apps, local_la{{/str}}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="la-apps-dropdown-{{uniqid}}">
@@ -176,12 +176,12 @@
         {{#canmanage}}
         <div class="d-lg-flex justify-content-center la-header-search" role="search">
             <form method="get" action="{{searchurl}}" autocomplete="off" data-region="la-search-form" data-loading="{{#str}}loading, local_la{{/str}}">
-                <div class="input-group">
-                    <label class="visually-hidden" for="la-search-{{uniqid}}">{{#str}}search, core{{/str}}</label>
-                    <input class="form-control rounded-start-pill" id="la-search-{{uniqid}}" type="text" name="query" value="{{query}}" placeholder="{{#str}}typeslashtosearch, local_la{{/str}}" autocomplete="off">
+                <div class="input-group la-header-search-group">
+                    <label class="sr-only" for="la-search-{{uniqid}}">{{#str}}search, core{{/str}}</label>
+                    <input class="form-control la-header-search-input" id="la-search-{{uniqid}}" type="text" name="query" value="{{query}}" placeholder="{{#str}}typeslashtosearch, local_la{{/str}}" autocomplete="off">
 
-                    <div class="dropdown" id="la-search-menu-{{uniqid}}" data-region="la-search-menu">
-                        <button type="button" class="btn btn-outline-secondary dropdown-toggle rounded-end-pill" title="{{#str}}search, core{{/str}}" id="la-search-menu-toggle-{{uniqid}}" data-bs-toggle="dropdown" aria-expanded="false" data-region="la-search-scope-button">
+                    <div class="dropdown la-header-search-scope" id="la-search-menu-{{uniqid}}" data-region="la-search-menu">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle la-header-search-scope-button" title="{{#str}}search, core{{/str}}" id="la-search-menu-toggle-{{uniqid}}" data-toggle="dropdown" aria-expanded="false" data-region="la-search-scope-button">
                             <i class="icon fa fa-users fa-fw" aria-hidden="true" data-region="la-search-scope-icon"></i>
                             <span data-region="la-search-scope-label">{{#str}}users, core{{/str}}</span>
                         </button>

@@ -26,7 +26,7 @@
     * .form-control - JavaScript selector hook.
 
     Data attributes required for JS:
-    * data-bs-toggle="dropdown" - JavaScript data or selector hook.
+    * data-toggle="dropdown" - JavaScript data or selector hook.
 
     Context variables required for this template:
     * hasfilter - array|bool: Section data or visibility flag for hasfilter.
@@ -72,10 +72,10 @@
         ]
     }
 }}
-<div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+<div class="d-flex flex-wrap align-items-center gap-2 mb-4 la-library-controls">
     {{#hasfilter}}
         <div class="dropdown">
-            <button id="{{filterid}}" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <button id="{{filterid}}" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                 {{currentfilter}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="{{filterid}}">
@@ -88,7 +88,7 @@
 
     {{#hassecondaryfilter}}
         <div class="dropdown">
-            <button id="{{secondaryfilterid}}" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <button id="{{secondaryfilterid}}" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                 {{currentsecondaryfilter}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="{{secondaryfilterid}}">
@@ -113,7 +113,7 @@
 
     {{#hassort}}
         <div class="dropdown">
-            <button id="{{sortid}}" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <button id="{{sortid}}" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                 {{currentsort}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="{{sortid}}">
@@ -126,7 +126,7 @@
 
     {{#hasdirection}}
         <div class="dropdown">
-            <button id="{{directionid}}" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <button id="{{directionid}}" type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                 {{currentdirection}}
             </button>
             <ul class="dropdown-menu" aria-labelledby="{{directionid}}">

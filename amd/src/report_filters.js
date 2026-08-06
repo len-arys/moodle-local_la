@@ -433,7 +433,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/form-autocomplete'], f
         $(document).on('click', '[data-region="synthetic-cancel"]', function(e) {
             e.preventDefault();
             $(this).closest('.dropdown-menu').removeClass('show');
-            $(this).closest('.dropdown').find('[data-bs-toggle="dropdown"]').attr('aria-expanded', 'false').removeClass('show');
+            $(this).closest('.dropdown').find('[data-toggle="dropdown"]').attr('aria-expanded', 'false').removeClass('show');
         });
 
     };
@@ -473,6 +473,9 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/form-autocomplete'], f
 
     return {
         init: function() {
+            $(document).on('click', '.la-report-filters-dropdown, .la-report-synthetic-dropdown', function(event) {
+                event.stopPropagation();
+            });
             bindReportFilters();
             bindSyntheticControls();
             applySyntheticHeatmap(document);

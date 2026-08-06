@@ -65,22 +65,22 @@
                     <form method="get" action="" class="d-flex justify-content-start">
                         <input type="hidden" name="id" value="{{reportid}}">
                         <input type="hidden" name="tab" value="schedules">
-                        <div class="input-group mb-3 w-auto">
+                        <div class="input-group mb-3 w-auto la-search-input-group">
                             <label for="la-schedule-search">
                                 <span class="visually-hidden">{{#str}}search, core{{/str}}</span>
                             </label>
-                            <input id="la-schedule-search" name="schedule_search" type="text" class="form-control rounded-start border-end-0" placeholder="{{#str}}search, core{{/str}}" aria-label="{{#str}}search, core{{/str}}" value="{{search}}" size="28">
-                            <button class="input-group-text ps-2 pe-2 bg-white border-start-0" type="submit" aria-label="{{#str}}search, core{{/str}}">
+                            <input id="la-schedule-search" name="schedule_search" type="text" class="form-control" placeholder="{{#str}}search, core{{/str}}" aria-label="{{#str}}search, core{{/str}}" value="{{search}}" size="28">
+                            <button class="input-group-text bg-white" type="submit" aria-label="{{#str}}search, core{{/str}}">
                                 <i class="icon fa fa-search fa-fw" aria-hidden="true"></i>
                             </button>
                         </div>
                     </form>
                     {{#can_manage}}
                         <div class="dropdown">
-                            <button class="btn btn-primary dropdown-toggle" type="button" role="button" id="la-schedule-create-menu" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-haspopup="true" aria-expanded="false" data-for="dropdowndialog_button">
+                            <button class="btn btn-primary dropdown-toggle" type="button" role="button" id="la-schedule-create-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-for="dropdowndialog_button">
                                 {{#str}}newschedule, local_la{{/str}}
                             </button>
-                            <div class="dropdown-menu dropdown-menu-end dialog-small" aria-labelledby="la-schedule-create-menu" data-for="dropdowndialog_dialog">
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-right dialog-small" aria-labelledby="la-schedule-create-menu" data-for="dropdowndialog_dialog">
                                 <div class="p-2" data-for="dropdowndialog_content">
                                     <div class="d-flex flex-column choicelist p-1" role="listbox">
                                         <div class="d-flex flex-row align-items-start p-2 mb-1 position-relative rounded dropdown-item-outline">

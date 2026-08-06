@@ -81,15 +81,15 @@
 }}
 <div class="la-columns-modal">
     {{#hassections}}
-        <div class="input-group mb-3">
+        <div class="input-group mb-3 la-search-input-group">
             <input
                 type="search"
-                class="form-control rounded-start border-end-0"
+                class="form-control"
                 data-region="builder-search"
                 placeholder="{{#str}}search, core{{/str}}"
                 aria-label="{{#str}}search, core{{/str}}"
             >
-            <span class="input-group-text ps-2 bg-white">
+            <span class="input-group-text bg-white">
                 <i class="fa fa-search" aria-hidden="true"></i>
             </span>
         </div>
@@ -100,8 +100,8 @@
                         <button
                             class="btn btn-link text-decoration-none text-reset d-flex align-items-center w-100 px-3 py-2 la-columns-section-toggle"
                             type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#{{id}}-body"
+                            data-toggle="collapse"
+                            data-target="#{{id}}-body"
                             aria-expanded="false"
                             aria-controls="{{id}}-body"
                         >

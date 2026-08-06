@@ -79,7 +79,7 @@
         <section class="la-library container-fluid">
             {{{head}}}
 
-            <div class="table-responsive">
+            <div class="table-responsive-md la-library-table-responsive">
                 <table class="table border-top-0 align-middle mb-0">
                     <thead>
                     <tr>
@@ -95,11 +95,11 @@
                     {{#items}}
                         <tr>
                             <td>
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2 la-library-app-name">
                                     <span class="badge text-bg-primary la-reports-icon p-2">
                                         <i class="fa-solid fa-chart-column"></i>
                                     </span>
-                                    <div>
+                                    <div class="la-library-app-copy">
                                         {{#visible}}
                                             {{#isavailable}}
                                                 <a href="{{view_url}}">{{name}}</a>
@@ -134,9 +134,9 @@
                                     <div class="menubar d-flex" id="app-action-menu-{{id}}-menubar">
                                         <div class="action-menu-trigger">
                                             <div class="dropdown">
-                                                <a href="#" tabindex="0" class="btn btn-icon d-flex no-caret dropdown-toggle icon-no-margin"
+                                                <a href="#" tabindex="0" class="btn btn-icon d-flex align-items-center justify-content-center no-caret dropdown-toggle icon-no-margin la-library-app-actions-toggle"
                                                    id="app-action-menu-toggle-{{id}}" aria-label="{{#str}}actions, core{{/str}}"
-                                                   data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                                                   data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                                    aria-controls="app-action-menu-{{id}}-menu" title="{{#str}}actions, core{{/str}}">
                                                     <i class="icon fa fa-ellipsis-vertical fa-fw" aria-hidden="true"></i>
                                                     <span class="visually-hidden">{{#str}}actions, core{{/str}}</span>

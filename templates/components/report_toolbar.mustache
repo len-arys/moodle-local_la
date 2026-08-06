@@ -158,7 +158,7 @@
         </form>
     {{/has_search}}
 
-    <div class="d-flex flex-wrap align-items-center gap-2">
+    <div class="d-flex flex-wrap align-items-center gap-2 la-report-toolbar-actions">
         {{#synthetic.enabled}}
             <div class="dropdown">
                 {{^synthetic.available}}
@@ -167,7 +167,7 @@
                 <button
                     type="button"
                     class="btn btn-secondary{{^synthetic.available}} disabled{{/synthetic.available}}"
-                    {{#synthetic.available}}data-bs-toggle="dropdown" data-bs-auto-close="outside"{{/synthetic.available}}
+                    {{#synthetic.available}}data-toggle="dropdown"{{/synthetic.available}}
                     {{^synthetic.available}}disabled{{/synthetic.available}}
                     aria-expanded="false">
                     <i class="fa-regular fa-calendar me-2"></i>{{synthetic.label}}: {{synthetic.selected_label}}
@@ -176,7 +176,7 @@
                 </span>
                 {{/synthetic.available}}
                 {{#synthetic.available}}
-                <div class="dropdown-menu dropdown-menu-end moodle-has-zindex p-0 la-report-synthetic-dropdown">
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-right moodle-has-zindex p-0 la-report-synthetic-dropdown">
                     <form autocomplete="off" action="{{action}}" method="get" class="la-report-synthetic-form" data-region="synthetic-form">
                         {{#synthetic_hidden_params}}
                             <input type="hidden" name="{{name}}" value="{{value}}">
@@ -237,6 +237,7 @@
             </div>
         {{/synthetic.enabled}}
 
+        <div class="d-flex align-items-stretch la-report-view-controls">
         <div class="dropdown">
             <select
                 class="form-select"
@@ -263,10 +264,10 @@
         </div>
         {{#has_columns}}
             <div class="dropdown">
-                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                <button type="button" class="btn btn-outline-secondary" data-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-table-columns me-2"></i>{{#str}}columns, local_la{{/str}}
                 </button>
-                <div class="dropdown-menu dropdown-menu-end moodle-has-zindex p-0 la-report-columns-dropdown">
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-right moodle-has-zindex p-0 la-report-columns-dropdown">
                     <form autocomplete="off" class="la-report-columns-form">
                         <input type="hidden" name="id" value="{{reportid}}">
                         <div class="la-report-columns-body">
@@ -299,10 +300,10 @@
                                         </div>
                                         {{#can_manage}}
                                             <div class="dropdown">
-                                                <button type="button" class="btn btn-link p-0 la-report-column-menu-trigger" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions, core{{/str}}">
+                                                <button type="button" class="btn btn-link p-0 la-report-column-menu-trigger" data-action="toggle-column-menu" aria-expanded="false" aria-label="{{#str}}actions, core{{/str}}">
                                                     <i class="fa fa-ellipsis-vertical" aria-hidden="true"></i>
                                                 </button>
-                                                <div class="dropdown-menu dropdown-menu-end">
+                                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-right">
                                                     <button type="button" class="dropdown-item" data-action="edit-column">{{#str}}editcolumnname, local_la{{/str}}</button>
                                                     <button type="button" class="dropdown-item" data-action="column-settings">{{#str}}settings, core{{/str}}</button>
                                                     <button type="button" class="dropdown-item" data-action="delete-column">{{#str}}delete, core{{/str}}</button>
@@ -337,14 +338,14 @@
 
         {{#has_filters}}
             <div class="dropdown">
-                <button class="btn btn-outline-secondary position-relative" type="button" id="la-report-filters-button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false" title="{{#str}}filters, core{{/str}}">
+                <button class="btn btn-outline-secondary position-relative" type="button" id="la-report-filters-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{#str}}filters, core{{/str}}">
                     <i class="icon fa fa-filter fa-fw" aria-hidden="true"></i>
                     <span data-region="filter-button-label">{{#str}}filters, core{{/str}}</span>
                     {{#show_filter_count}}
                         <span class="la-report-filter-badge">{{filter_count_label}}</span>
                     {{/show_filter_count}}
                 </button>
-                <div class="filters-dropdown la-report-filters-dropdown dropdown-menu dropdown-menu-end moodle-has-zindex p-0" aria-labelledby="la-report-filters-button">
+                <div class="filters-dropdown la-report-filters-dropdown dropdown-menu dropdown-menu-end dropdown-menu-right moodle-has-zindex p-0" aria-labelledby="la-report-filters-button">
                     <div class="reportbuilder-filters-sidebar scroll-shadow" data-region="report-filters">
                         <div class="px-3 pt-3">
                             <div class="reportbuilder-filters-wrapper" data-region="report-filters-form">
@@ -389,6 +390,8 @@
                 </div>
             </div>
         {{/has_filters}}
+
+        </div>
 
     </div>
 </div>

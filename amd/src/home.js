@@ -119,6 +119,12 @@ define([
             return;
         }
 
+        form.addEventListener('click', function(event) {
+            if (event.target.closest('.la-home-context-menu')) {
+                event.stopPropagation();
+            }
+        });
+
         const sendbutton = form.querySelector('.la-home-prompt-send');
         const sendbuttonlabel = sendbutton ? sendbutton.getAttribute('aria-label') : '';
         const placeholders = [
@@ -370,8 +376,7 @@ define([
                 const button = document.createElement('button');
                 button.type = 'button';
                 button.className = 'la-home-context-chip';
-                button.setAttribute('data-bs-toggle', 'dropdown');
-                button.setAttribute('data-bs-auto-close', 'outside');
+                button.setAttribute('data-toggle', 'dropdown');
                 button.setAttribute('aria-expanded', 'false');
                 const label = document.createElement('span');
                 label.className = 'la-home-context-chip-label';

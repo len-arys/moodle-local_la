@@ -102,7 +102,7 @@
             {{{head}}}
             {{{controls}}}
 
-            <div class="table-responsive">
+            <div class="table-responsive-md la-library-table-responsive">
                 <table class="table border-top-0 align-middle mb-0">
                     <thead>
                     <tr>
@@ -122,7 +122,7 @@
                     {{#items}}
                         <tr>
                             <td class="{{#ishidden}}opacity-25{{/ishidden}}">
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2 la-library-report-name">
                                     <span class="badge {{icon_class}} la-reports-icon p-2">
                                         <i class="fa-solid fa-{{icon}}"></i>
                                     </span>
@@ -136,9 +136,9 @@
                                 </div>
                             </td>
                             <td class="text-center">
-                                <div class="form-check form-switch d-inline-flex justify-content-center mb-0">
+                                <div class="form-check form-switch d-inline-flex justify-content-center mb-0 la-library-enabled-switch">
                                     <input
-                                        class="form-check-input"
+                                        class="form-check-input la-library-enabled-toggle"
                                         type="checkbox"
                                         role="switch"
                                         autocomplete="off"
@@ -194,7 +194,7 @@
                                     <div class="menubar d-flex" id="action-menu-{{id}}-menubar">
                                         <div class="action-menu-trigger">
                                             <div class="dropdown">
-                                                <a href="#" tabindex="0" class="dropdown-toggle icon-no-margin text-decoration-none" id="action-menu-toggle-{{id}}" aria-label="{{#str}}actions, core{{/str}}" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="action-menu-{{id}}-menu">
+                                                <a href="#" tabindex="0" class="dropdown-toggle icon-no-margin text-decoration-none" id="action-menu-toggle-{{id}}" aria-label="{{#str}}actions, core{{/str}}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="action-menu-{{id}}-menu">
                                                     <i class="icon fa fa-ellipsis-vertical fa-fw " title="{{#str}}actions, core{{/str}}" role="img" aria-label="{{#str}}actions, core{{/str}}"></i>
                                                     <b class="caret"></b>
                                                 </a>
@@ -257,7 +257,7 @@
                                     <div class="menubar d-flex" id="action-menu-{{id}}-menubar">
                                         <div class="action-menu-trigger">
                                             <div class="dropdown">
-                                                <a href="#" tabindex="0" class="dropdown-toggle icon-no-margin text-decoration-none" id="action-menu-toggle-{{id}}" aria-label="{{#str}}actions, core{{/str}}" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="action-menu-{{id}}-menu">
+                                                <a href="#" tabindex="0" class="dropdown-toggle icon-no-margin text-decoration-none" id="action-menu-toggle-{{id}}" aria-label="{{#str}}actions, core{{/str}}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="action-menu-{{id}}-menu">
                                                     <i class="icon fa fa-ellipsis-vertical fa-fw" title="{{#str}}actions, core{{/str}}" role="img" aria-label="{{#str}}actions, core{{/str}}"></i>
                                                     <b class="caret"></b>
                                                 </a>
