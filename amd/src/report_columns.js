@@ -21,7 +21,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], function($, Ajax, Modal, Notification, Str) {
+define(['jquery', 'core/ajax', 'core/modal_factory', 'core/notification', 'core/str'], function($, Ajax, Modal, Notification, Str) {
     var COLUMN_LIST_SELECTOR = '[data-region="column-list"]';
     var COLUMN_ITEM_SELECTOR = '[data-column-key]';
     var BUILDER_ITEM_SELECTOR = '[data-region="builder-item"]';

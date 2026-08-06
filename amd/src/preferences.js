@@ -21,7 +21,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], function($, Ajax, Modal, Notification, Str) {
+define(['jquery', 'core/ajax', 'core/modal_factory', 'core/notification', 'core/str'], function($, Ajax, Modal, Notification, Str) {
     var TOGGLE_LICENSE_KEY = '[data-action="toggle-license-key"]';
     var LOG_DETAILS_ACTION = '[data-action="show-log-details"]';
 

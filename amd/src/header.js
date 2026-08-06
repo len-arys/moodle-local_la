@@ -21,7 +21,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], function($, Ajax, Modal, Notification, Str) {
+define(['jquery', 'core/ajax', 'core/modal_factory', 'core/notification', 'core/str'], function($, Ajax, Modal, Notification, Str) {
     var SEARCH_SCOPE_SELECTOR = '[data-region="la-search-scope"]';
     var SEARCH_FORM_SELECTOR = '[data-region="la-search-form"]';
     var MODAL_FORM_SELECTOR = '[data-region="la-header-search-modal-form"]';
