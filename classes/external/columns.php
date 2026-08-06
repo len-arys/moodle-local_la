@@ -6,10 +6,10 @@ namespace local_la\external;
 defined('MOODLE_INTERNAL') || die();
 
 use context_system;
-use core_external\external_api;
-use core_external\external_function_parameters;
-use core_external\external_single_structure;
-use core_external\external_value;
+use external_api;
+use external_function_parameters;
+use external_single_structure;
+use external_value;
 use local_la\local\audience;
 use local_la\local\helper;
 use local_la\local\report as report_helper;
@@ -1013,7 +1013,7 @@ class columns extends external_api {
 
         $params = self::validate_parameters(new external_function_parameters([
             'id' => new external_value(PARAM_INT, 'Report ID'),
-            'columns' => new \core_external\external_multiple_structure(
+            'columns' => new \external_multiple_structure(
                 new external_single_structure([
                     'entitykey' => new external_value(PARAM_ALPHANUMEXT, 'Entity key'),
                     'field' => new external_value(PARAM_ALPHANUMEXT, 'Field key'),
@@ -1201,7 +1201,7 @@ class columns extends external_api {
 
         $params = self::validate_parameters(new external_function_parameters([
             'id' => new external_value(PARAM_INT, 'Report ID'),
-            'columns' => new \core_external\external_multiple_structure(
+            'columns' => new \external_multiple_structure(
                 new external_single_structure([
                     'key' => new external_value(PARAM_ALPHANUMEXT, 'Column key'),
                     'order' => new external_value(PARAM_INT, 'Column order'),
@@ -1340,7 +1340,7 @@ class columns extends external_api {
     public static function save_builder_parameters(): external_function_parameters {
         return new external_function_parameters([
             'id' => new external_value(PARAM_INT, 'Report ID'),
-            'columns' => new \core_external\external_multiple_structure(
+            'columns' => new \external_multiple_structure(
                 new external_single_structure([
                     'entitykey' => new external_value(PARAM_ALPHANUMEXT, 'Entity key'),
                     'field' => new external_value(PARAM_ALPHANUMEXT, 'Field key'),
@@ -1367,7 +1367,7 @@ class columns extends external_api {
     public static function save_preferences_parameters(): external_function_parameters {
         return new external_function_parameters([
             'id' => new external_value(PARAM_INT, 'Report ID'),
-            'columns' => new \core_external\external_multiple_structure(
+            'columns' => new \external_multiple_structure(
                 new external_single_structure([
                     'key' => new external_value(PARAM_ALPHANUMEXT, 'Column key'),
                     'order' => new external_value(PARAM_INT, 'Column order'),

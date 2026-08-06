@@ -865,11 +865,13 @@ class report_table extends \table_sql {
         echo $this->get_dynamic_table_html_start();
         $this->wrap_html_start();
 
-        if ($this->responsive) {
+        $responsive = !isset($this->responsive) || $this->responsive;
+        if ($responsive) {
             echo html_writer::start_tag('div', ['class' => 'table-responsive']);
         }
 
-        echo html_writer::start_tag('table', $this->attributes) . $this->render_caption();
+        $caption = method_exists($this, 'render_caption') ? $this->render_caption() : '';
+        echo html_writer::start_tag('table', $this->attributes) . $caption;
     }
 
     /**
@@ -893,7 +895,8 @@ class report_table extends \table_sql {
         echo html_writer::end_tag('tbody');
         echo html_writer::end_tag('table');
 
-        if ($this->responsive) {
+        $responsive = !isset($this->responsive) || $this->responsive;
+        if ($responsive) {
             echo html_writer::end_tag('div');
         }
 

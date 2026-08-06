@@ -38,7 +38,8 @@ class general_table extends \table_sql {
             echo html_writer::start_tag('div', ['class' => 'table-responsive']);
         }
 
-        echo html_writer::start_tag('table', $this->attributes) . $this->render_caption();
+        $caption = method_exists($this, 'render_caption') ? $this->render_caption() : '';
+        echo html_writer::start_tag('table', $this->attributes) . $caption;
     }
 
     /**

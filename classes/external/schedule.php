@@ -19,10 +19,10 @@ namespace local_la\external;
 defined('MOODLE_INTERNAL') || die();
 
 use context_system;
-use core_external\external_api;
-use core_external\external_function_parameters;
-use core_external\external_single_structure;
-use core_external\external_value;
+use external_api;
+use external_function_parameters;
+use external_single_structure;
+use external_value;
 use editor_tiny\editor;
 use editor_tiny\manager;
 use local_la\local\audience;
@@ -97,7 +97,7 @@ class schedule extends external_api {
             'recurrence' => new external_value(PARAM_ALPHA, 'Recurrence'),
             'subject' => new external_value(PARAM_TEXT, 'Subject'),
             'body' => new external_value(PARAM_RAW, 'Body'),
-            'audiences' => new \core_external\external_multiple_structure(
+            'audiences' => new \external_multiple_structure(
                 new external_value(PARAM_ALPHANUMEXT, 'Audience type'),
                 'Audience types',
                 VALUE_DEFAULT,

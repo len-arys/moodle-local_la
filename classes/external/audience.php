@@ -19,10 +19,10 @@ namespace local_la\external;
 defined('MOODLE_INTERNAL') || die();
 
 use context_system;
-use core_external\external_api;
-use core_external\external_function_parameters;
-use core_external\external_single_structure;
-use core_external\external_value;
+use external_api;
+use external_function_parameters;
+use external_single_structure;
+use external_value;
 use local_la\local\audience as audience_helper;
 use local_la\local\helper;
 use local_la\local\logger;
@@ -39,7 +39,7 @@ class audience extends external_api {
         return new external_function_parameters([
             'reportid' => new external_value(PARAM_INT, 'Report ID'),
             'type' => new external_value(PARAM_ALPHA, 'Audience type'),
-            'instanceids' => new \core_external\external_multiple_structure(
+            'instanceids' => new \external_multiple_structure(
                 new external_value(PARAM_INT, 'Audience instance ID'),
                 'Audience instance IDs',
                 VALUE_DEFAULT,

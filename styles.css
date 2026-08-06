@@ -41,6 +41,128 @@ body.path-local-la {
     --la-scroll-shadow-ambient-bottom: radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center bottom;
 }
 
+/* Moodle 4.0 ships Font Awesome 4.7. Keep the Font Awesome 6 markup used by
+ * the plugin functional without loading a second icon font. */
+.fa-solid,
+.fa-regular,
+.fa-classic {
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.fa-file-lines::before {
+    content: "\f15c";
+}
+
+.fa-circle-dot::before {
+    content: "\f192";
+}
+
+.fa-table-cells-large::before {
+    content: "\f00a";
+}
+
+.fa-square::before {
+    content: "\f0c8";
+}
+
+.fa-square-check::before {
+    content: "\f046";
+}
+
+.fa-circle-check::before {
+    content: "\f058";
+}
+
+.fa-circle-xmark::before {
+    content: "\f057";
+}
+
+.fa-ellipsis-vertical::before {
+    content: "\f142";
+}
+
+.fa-trash-can::before {
+    content: "\f014";
+}
+
+.fa-rotate::before {
+    content: "\f021";
+}
+
+.fa-pen::before {
+    content: "\f040";
+}
+
+.fa-chart-column::before {
+    content: "\f080";
+}
+
+.fa-arrow-up-right-from-square::before {
+    content: "\f08e";
+}
+
+.fa-table-columns::before,
+.fa-lines-leaning::before {
+    content: "\f0db";
+}
+
+.fa-border-none::before {
+    content: "\f0c8";
+}
+
+.fa-magnifying-glass::before {
+    content: "\f002";
+}
+
+.fa-circle-question::before {
+    content: "\f059";
+}
+
+.fa-angles-right::before {
+    content: "\f101";
+}
+
+.fa-xmark::before {
+    content: "\f00d";
+}
+
+.fa-circle-exclamation::before {
+    content: "\f06a";
+}
+
+.fa-user-shield::before {
+    content: "\f132";
+}
+
+.fa-wand-magic-sparkles::before {
+    content: "\f0d0";
+}
+
+.fa-regular.fa-star::before {
+    content: "\f006";
+}
+
+.fa-regular.fa-circle::before {
+    content: "\f10c";
+}
+
+.fa-regular.fa-square::before {
+    content: "\f096";
+}
+
+.fa-regular.fa-circle-check::before {
+    content: "\f05d";
+}
+
+.fa-regular.fa-circle-xmark::before {
+    content: "\f05c";
+}
+
 /* Moodle 4.3 does not provide Bootstrap 5's visually-hidden utility. */
 .visually-hidden {
     position: absolute !important;

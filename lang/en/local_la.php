@@ -588,6 +588,7 @@ $string['filter_range'] = 'Range';
 $string['filter_before'] = 'Before';
 $string['filter_after'] = 'After';
 $string['basicfilters'] = 'Basic filters';
+$string['apply'] = 'Apply';
 $string['applyfilters'] = 'Apply';
 $string['resetallfilters'] = 'Reset all';
 $string['editreportdetails'] = 'Edit report details';
