@@ -41,7 +41,7 @@ body.path-local-la {
     --la-scroll-shadow-ambient-bottom: radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center bottom;
 }
 
-/* Moodle 4.5 does not provide Bootstrap 5's visually-hidden utility. */
+/* Moodle 4.3 does not provide Bootstrap 5's visually-hidden utility. */
 .visually-hidden {
     position: absolute !important;
     width: 1px !important;
@@ -54,12 +54,120 @@ body.path-local-la {
     border: 0 !important;
 }
 
-/* Moodle 4.5 does not provide Bootstrap 5's opacity utilities. */
+/* Moodle 4.3 does not provide Bootstrap 5's opacity utilities. */
 .opacity-25 {
     opacity: .25 !important;
 }
 
-/* Moodle 4.5 does not provide Bootstrap 5's text-bg color helpers. */
+/* Moodle 4.3 does not provide Bootstrap 5's gap or logical spacing utilities. */
+body .la-main .gap-1,
+body .modal-content .gap-1,
+body .la-header-grid .gap-1 {
+    gap: .25rem !important;
+}
+
+body .la-main .gap-2,
+body .modal-content .gap-2,
+body .la-header-grid .gap-2 {
+    gap: .5rem !important;
+}
+
+body .la-main .gap-3,
+body .modal-content .gap-3,
+body .la-header-grid .gap-3 {
+    gap: 1rem !important;
+}
+
+body .la-main .ms-1,
+body .modal-content .ms-1,
+body .la-header-grid .ms-1 {
+    margin-left: .25rem !important;
+}
+
+body .la-main .ms-2,
+body .modal-content .ms-2,
+body .la-header-grid .ms-2 {
+    margin-left: .5rem !important;
+}
+
+body .la-main .ms-3,
+body .modal-content .ms-3,
+body .la-header-grid .ms-3 {
+    margin-left: 1rem !important;
+}
+
+body .la-main .ms-auto,
+body .modal-content .ms-auto,
+body .la-header-grid .ms-auto {
+    margin-left: auto !important;
+}
+
+body .la-main .me-1,
+body .modal-content .me-1,
+body .la-header-grid .me-1 {
+    margin-right: .25rem !important;
+}
+
+body .la-main .me-2,
+body .modal-content .me-2,
+body .la-header-grid .me-2 {
+    margin-right: .5rem !important;
+}
+
+body .la-main .me-3,
+body .modal-content .me-3,
+body .la-header-grid .me-3 {
+    margin-right: 1rem !important;
+}
+
+body .la-main .me-4,
+body .modal-content .me-4,
+body .la-header-grid .me-4 {
+    margin-right: 1.5rem !important;
+}
+
+body .la-main .ps-3,
+body .modal-content .ps-3,
+body .la-header-grid .ps-3 {
+    padding-left: 1rem !important;
+}
+
+body .la-main .ps-4,
+body .modal-content .ps-4,
+body .la-header-grid .ps-4 {
+    padding-left: 1.5rem !important;
+}
+
+body .la-main .pe-2,
+body .modal-content .pe-2,
+body .la-header-grid .pe-2 {
+    padding-right: .5rem !important;
+}
+
+body .la-main .row.g-3,
+body .modal-content .row.g-3 {
+    row-gap: 1rem !important;
+}
+
+@media (min-width: 768px) {
+    body .la-main .ms-md-auto,
+    body .modal-content .ms-md-auto {
+        margin-left: auto !important;
+    }
+
+    body .la-main .pe-md-0,
+    body .modal-content .pe-md-0 {
+        padding-right: 0 !important;
+    }
+}
+
+@media (min-width: 992px) {
+    body .la-main .me-lg-3 {
+        margin-right: 1rem !important;
+    }
+}
+
+/* Moodle 4.3 does not provide Bootstrap 5's text-bg color helpers. */
 body .text-bg-primary {
     color: #fff !important;
     background-color: var(--primary, #0f6cbf) !important;
@@ -100,7 +208,7 @@ body .text-bg-dark {
     background-color: var(--dark, #343a40) !important;
 }
 
-/* Moodle 4.5 does not provide Bootstrap 5's subtle background helpers. */
+/* Moodle 4.3 does not provide Bootstrap 5's subtle background helpers. */
 body .la-main .bg-info-subtle {
     background-color: var(--bs-info-bg-subtle, #cff4fc) !important;
 }
@@ -124,6 +232,17 @@ body.path-local-la .notifications {
 
 .la-preferences-access-actions {
     gap: 0.5rem;
+    flex: 0 0 auto;
+}
+
+.la-preferences-access-actions .btn {
+    white-space: nowrap;
+}
+
+.la-preferences-access-capability {
+    flex: 0 1 29rem;
+    width: 29rem;
+    max-width: 100%;
 }
 
 body .la-main .la-library-controls {
@@ -146,7 +265,7 @@ body .la-main .la-library-controls {
     border-radius: 0 0.5rem 0.5rem 0 !important;
 }
 
-/* Moodle 4.5 does not provide Bootstrap 5's form-select component. */
+/* Moodle 4.3 does not provide Bootstrap 5's form-select component. */
 body .la-main .form-select,
 body .modal-content .form-select {
     display: block;
@@ -285,7 +404,7 @@ body .modal-content .form-select-sm {
     }
 }
 
-/* Moodle 4.5 does not provide Bootstrap 5's flex gap utilities. */
+/* Moodle 4.3 does not provide Bootstrap 5's flex gap utilities. */
 body .la-main .la-library-app-name {
     gap: .5rem !important;
 }
@@ -479,7 +598,7 @@ body .la-main .la-report-row-action {
     gap: .5rem !important;
 }
 
-/* Moodle 4.5 does not provide Bootstrap 5's g-3 row gutter utility. */
+/* Moodle 4.3 does not provide Bootstrap 5's g-3 row gutter utility. */
 body [data-region="column-form"],
 body [data-region="column-form"] [data-region="column-advanced"] > .row {
     row-gap: 1rem !important;

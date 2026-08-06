@@ -18,7 +18,10 @@ namespace local_la\table;
 
 defined('MOODLE_INTERNAL') || die();
 
-use core_table\sql_table;
+global $CFG;
+
+require_once($CFG->libdir . '/tablelib.php');
+
 use html_writer;
 use local_la\local\formula;
 use local_la\local\filters;
@@ -37,7 +40,10 @@ use paging_bar;
  * @copyright  2026 Learning Analytics Contributors
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class report_table extends sql_table {
+class report_table extends \table_sql {
+    /** @var bool Whether to wrap the table for horizontal scrolling. */
+    public bool $responsive = true;
+
     /** @var int */
     protected $reportid;
 

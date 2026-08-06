@@ -170,7 +170,7 @@
                     {{#synthetic.available}}data-toggle="dropdown"{{/synthetic.available}}
                     {{^synthetic.available}}disabled{{/synthetic.available}}
                     aria-expanded="false">
-                    <i class="fa-regular fa-calendar me-2"></i>{{synthetic.label}}: {{synthetic.selected_label}}
+                    <i class="fa-regular fa-calendar mr-2"></i>{{synthetic.label}}: {{synthetic.selected_label}}
                 </button>
                 {{^synthetic.available}}
                 </span>
@@ -265,7 +265,7 @@
         {{#has_columns}}
             <div class="dropdown">
                 <button type="button" class="btn btn-outline-secondary" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-table-columns me-2"></i>{{#str}}columns, local_la{{/str}}
+                    <i class="fa-solid fa-table-columns mr-2"></i>{{#str}}columns, local_la{{/str}}
                 </button>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-right moodle-has-zindex p-0 la-report-columns-dropdown">
                     <form autocomplete="off" class="la-report-columns-form">
