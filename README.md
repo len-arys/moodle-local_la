@@ -110,6 +110,7 @@ Learning-time tracking is disabled by default. The plugin implements Moodle's Pr
 ## Support
 
 - [Documentation and support](https://lenarys.com/support)
+- [Report a bug or request a feature](https://github.com/len-arys/local_la/issues)
 - Contact email: configure `contactemail` in `config.php`.
 
 When reporting an issue, include the Moodle version, plugin version, database type, relevant debugging output, and steps to reproduce. Do not include license keys or personal data.
