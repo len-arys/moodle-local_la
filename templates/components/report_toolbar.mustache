@@ -1,0 +1,394 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/components/report_toolbar
+
+    Renders report search, filters, columns, insights, and synthetic-data controls.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .btn-primary - JavaScript selector hook.
+    * .d-none - JavaScript selector hook.
+    * .dropdown - JavaScript selector hook.
+    * .dropdown-menu - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-check - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+    * .la-report-columns-form - JavaScript selector hook.
+    * .la-report-synthetic-metric - JavaScript selector hook.
+    * .row - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="cancel-column-edit" - JavaScript data or selector hook.
+    * data-action="column-settings" - JavaScript data or selector hook.
+    * data-action="delete-column" - JavaScript data or selector hook.
+    * data-action="edit-column" - JavaScript data or selector hook.
+    * data-action="open-report-modal-link" - JavaScript data or selector hook.
+    * data-action="save-column-edit" - JavaScript data or selector hook.
+    * data-bs-auto-close="outside" - JavaScript data or selector hook.
+    * data-bs-toggle="dropdown" - JavaScript data or selector hook.
+    * data-column-key - JavaScript data or selector hook.
+    * data-fieldtype="group" - JavaScript data or selector hook.
+    * data-fieldtype="submit" - JavaScript data or selector hook.
+    * data-groupname="buttonar" - JavaScript data or selector hook.
+    * data-insights-available - JavaScript data or selector hook.
+    * data-insights-message - JavaScript data or selector hook.
+    * data-method="local_la_get_columns" - JavaScript data or selector hook.
+    * data-params - JavaScript data or selector hook.
+    * data-patterns-available - JavaScript data or selector hook.
+    * data-patterns-message - JavaScript data or selector hook.
+    * data-region="column-display" - JavaScript data or selector hook.
+    * data-region="column-edit" - JavaScript data or selector hook.
+    * data-region="column-enabled-input" - JavaScript data or selector hook.
+    * data-region="column-handle" - JavaScript data or selector hook.
+    * data-region="column-list" - JavaScript data or selector hook.
+    * data-region="column-name-display" - JavaScript data or selector hook.
+    * data-region="column-name-input" - JavaScript data or selector hook.
+    * data-region="columns-cancel" - JavaScript data or selector hook.
+    * data-region="filter-button-label" - JavaScript data or selector hook.
+    * data-region="report-filters" - JavaScript data or selector hook.
+    * data-region="report-filters-form" - JavaScript data or selector hook.
+    * data-region="row-actions" - JavaScript data or selector hook.
+    * data-region="synthetic-cancel" - JavaScript data or selector hook.
+    * data-region="synthetic-custom-fields" - JavaScript data or selector hook.
+    * data-region="synthetic-form" - JavaScript data or selector hook.
+    * data-region="synthetic-preset" - JavaScript data or selector hook.
+    * data-report-id - JavaScript data or selector hook.
+    * data-size="lg" - JavaScript data or selector hook.
+    * data-title - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * has_search - array|bool: Section data or visibility flag for has search.
+    * action - string: URL for action.
+    * search_hidden_params - array|bool: Section data or visibility flag for search hidden params.
+    * name - string: Text for name.
+    * value - string: Text for value.
+    * search_operator_name - string: Text for search operator name.
+    * search_value_name - string: Text for search value name.
+    * search_term - string: Text for search term.
+    * search_name - string: Text for search name.
+    * synthetic.enabled - array|bool: Section data or visibility flag for synthetic enabled.
+    * synthetic.available - array|bool: Section data or visibility flag for synthetic available.
+    * synthetic.unavailable_label - string: Text for synthetic unavailable label.
+    * synthetic.label - string: Text for synthetic label.
+    * synthetic.selected_label - bool: Whether synthetic selected label is enabled.
+    * synthetic_hidden_params - array|bool: Section data or visibility flag for synthetic hidden params.
+    * synthetic.timesec_selected - array|bool: Section data or visibility flag for synthetic timesec selected.
+    * synthetic.metric_name - string: Text for synthetic metric name.
+    * synthetic.visits_selected - array|bool: Section data or visibility flag for synthetic visits selected.
+    * synthetic.options - array: List of entries for synthetic options.
+    * synthetic.preset_name - string: Text for synthetic preset name.
+    * selected - array|bool: Section data or visibility flag for selected.
+    * label - string: Text for label.
+    * synthetic.custom_selected - array|bool: Section data or visibility flag for synthetic custom selected.
+    * synthetic.from_name - string: Text for synthetic from name.
+    * synthetic.from - string: Text for synthetic from.
+    * synthetic.to_name - string: Text for synthetic to name.
+    * synthetic.to - string: Text for synthetic to.
+    * reportid - int: Numeric value for reportid.
+    * insights_available - array|bool: Section data or visibility flag for insights available.
+    * patterns_available - array|bool: Section data or visibility flag for patterns available.
+    * insights_unavailable_label - string: Text for insights unavailable label.
+    * patterns_unavailable_label - string: Text for patterns unavailable label.
+    * can_share - array|bool: Section data or visibility flag for can share.
+    * has_columns - array|bool: Section data or visibility flag for has columns.
+    * columns - array: List of entries for columns.
+    * key - string: Text for key.
+    * enabled - array|bool: Section data or visibility flag for enabled.
+    * visible - array|bool: Section data or visibility flag for visible.
+    * can_manage - array|bool: Section data or visibility flag for can manage.
+    * column_add_params - string: Text for column add params.
+    * has_filters - array|bool: Section data or visibility flag for has filters.
+    * show_filter_count - array|bool: Section data or visibility flag for show filter count.
+    * filter_count_label - string: Text for filter count label.
+    * synthetic_current_params - array|bool: Section data or visibility flag for synthetic current params.
+    * visible_filters - array|bool: Section data or visibility flag for visible filters.
+    * has_hidden_filters - array|bool: Section data or visibility flag for has hidden filters.
+    * hidden_filters - array|bool: Section data or visibility flag for hidden filters.
+    * reseturl - string: URL for reseturl.
+
+    Example context (json):
+    {
+        "reportid": 1,
+        "has_search": true,
+        "search_name": "search",
+        "search_term": "",
+        "has_columns": true,
+        "columns": [
+            {
+                "key": "name",
+                "name": "Name",
+                "visible": true
+            }
+        ]
+    }
+}}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    {{#has_search}}
+        <form class="flex-shrink-0 la-report-search-form" role="search" action="{{action}}" method="get">
+            {{#search_hidden_params}}
+                <input type="hidden" name="{{name}}" value="{{value}}">
+            {{/search_hidden_params}}
+            <input type="hidden" name="{{search_operator_name}}" value="contains">
+            <label class="visually-hidden" for="la-report-search-term">{{#str}}search, core{{/str}}</label>
+            <div class="input-group la-report-search-group">
+                <input
+                    id="la-report-search-term"
+                    type="search"
+                    name="{{search_value_name}}"
+                    class="form-control"
+                    value="{{search_term}}"
+                    placeholder="{{search_name}}">
+                <button type="submit" class="btn btn-outline-secondary">{{#str}}search, core{{/str}}</button>
+            </div>
+        </form>
+    {{/has_search}}
+
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        {{#synthetic.enabled}}
+            <div class="dropdown">
+                {{^synthetic.available}}
+                <span title="{{synthetic.unavailable_label}}" class="d-inline-block">
+                {{/synthetic.available}}
+                <button
+                    type="button"
+                    class="btn btn-secondary{{^synthetic.available}} disabled{{/synthetic.available}}"
+                    {{#synthetic.available}}data-bs-toggle="dropdown" data-bs-auto-close="outside"{{/synthetic.available}}
+                    {{^synthetic.available}}disabled{{/synthetic.available}}
+                    aria-expanded="false">
+                    <i class="fa-regular fa-calendar me-2"></i>{{synthetic.label}}: {{synthetic.selected_label}}
+                </button>
+                {{^synthetic.available}}
+                </span>
+                {{/synthetic.available}}
+                {{#synthetic.available}}
+                <div class="dropdown-menu dropdown-menu-end moodle-has-zindex p-0 la-report-synthetic-dropdown">
+                    <form autocomplete="off" action="{{action}}" method="get" class="la-report-synthetic-form" data-region="synthetic-form">
+                        {{#synthetic_hidden_params}}
+                            <input type="hidden" name="{{name}}" value="{{value}}">
+                        {{/synthetic_hidden_params}}
+                        <div class="la-report-synthetic-body px-3 py-3">
+                            <div class="la-report-synthetic-metric mb-3" role="radiogroup" aria-label="Synthetic column value">
+                                <label class="la-report-synthetic-metric-option{{#synthetic.timesec_selected}} active{{/synthetic.timesec_selected}}">
+                                    <input
+                                        class="visually-hidden"
+                                        type="radio"
+                                        name="{{synthetic.metric_name}}"
+                                        value="timesec"
+                                        {{#synthetic.timesec_selected}}checked{{/synthetic.timesec_selected}}>
+                                    <span>Learning time</span>
+                                </label>
+                                <label class="la-report-synthetic-metric-option{{#synthetic.visits_selected}} active{{/synthetic.visits_selected}}">
+                                    <input
+                                        class="visually-hidden"
+                                        type="radio"
+                                        name="{{synthetic.metric_name}}"
+                                        value="visits"
+                                        {{#synthetic.visits_selected}}checked{{/synthetic.visits_selected}}>
+                                    <span>Visits</span>
+                                </label>
+                            </div>
+
+                            {{#synthetic.options}}
+                                <label class="form-check d-flex align-items-center gap-2 mb-3">
+                                    <input
+                                        class="form-check-input mt-0"
+                                        type="radio"
+                                        name="{{synthetic.preset_name}}"
+                                        value="{{value}}"
+                                        data-region="synthetic-preset"
+                                        {{#selected}}checked{{/selected}}>
+                                    <span>{{label}}</span>
+                                </label>
+                            {{/synthetic.options}}
+
+                            <div class="la-report-synthetic-custom{{^synthetic.custom_selected}} d-none{{/synthetic.custom_selected}}" data-region="synthetic-custom-fields">
+                                <div>
+                                    <label class="form-label small text-muted mb-1">From</label>
+                                    <input type="date" class="form-control" name="{{synthetic.from_name}}" value="{{synthetic.from}}">
+                                </div>
+                                <div>
+                                    <label class="form-label small text-muted mb-1">To</label>
+                                    <input type="date" class="form-control" name="{{synthetic.to_name}}" value="{{synthetic.to}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="la-report-synthetic-footer px-3 py-3">
+                            <input type="submit" class="btn btn-primary" value="{{#str}}apply, core{{/str}}">
+                            <button type="button" class="btn btn-link ms-1" data-region="synthetic-cancel">{{#str}}cancel, core{{/str}}</button>
+                        </div>
+                    </form>
+                </div>
+                {{/synthetic.available}}
+            </div>
+        {{/synthetic.enabled}}
+
+        <div class="dropdown">
+            <select
+                class="form-select"
+                data-region="row-actions"
+                data-report-id="{{reportid}}"
+                data-insights-available="{{#insights_available}}1{{/insights_available}}{{^insights_available}}0{{/insights_available}}"
+                data-patterns-available="{{#patterns_available}}1{{/patterns_available}}{{^patterns_available}}0{{/patterns_available}}"
+                data-insights-message="{{insights_unavailable_label}}"
+                data-patterns-message="{{patterns_unavailable_label}}"
+                aria-label="{{#str}}chooserows, local_la{{/str}}">
+                <option value="" selected>{{#str}}chooserows, local_la{{/str}}</option>
+                <optgroup label="{{#str}}general, core{{/str}}">
+                    <option value="print">{{#str}}print, local_la{{/str}}</option>
+                    {{#can_share}}
+                        <option value="share">{{#str}}share, local_la{{/str}}</option>
+                    {{/can_share}}
+                    <option value="highlight">{{#str}}highlight, local_la{{/str}}</option>
+                </optgroup>
+                <optgroup label="{{#str}}aitools, local_la{{/str}}">
+                    <option value="userstory">{{#str}}summarizeinsights, local_la{{/str}}</option>
+                    <option value="analyze">{{#str}}findpatterns, local_la{{/str}}</option>
+                </optgroup>
+            </select>
+        </div>
+        {{#has_columns}}
+            <div class="dropdown">
+                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <i class="fa-solid fa-table-columns me-2"></i>{{#str}}columns, local_la{{/str}}
+                </button>
+                <div class="dropdown-menu dropdown-menu-end moodle-has-zindex p-0 la-report-columns-dropdown">
+                    <form autocomplete="off" class="la-report-columns-form">
+                        <input type="hidden" name="id" value="{{reportid}}">
+                        <div class="la-report-columns-body">
+                            <div class="px-3 py-3" data-region="column-list">
+                                {{#columns}}
+                                    <div class="la-report-column-item" data-column-key="{{key}}" draggable="true">
+                                        <input type="hidden" name="columns[{{key}}][enabled]" value="{{#enabled}}1{{/enabled}}{{^enabled}}0{{/enabled}}" data-region="column-enabled-input">
+                                        <button type="button" class="la-report-column-handle btn btn-link p-0" data-region="column-handle" aria-label="{{#str}}move, core{{/str}}">
+                                            <i class="fa-solid fa-border-none" aria-hidden="true"></i>
+                                        </button>
+                                        <div class="la-report-column-content flex-grow-1">
+                                            <label class="form-check d-flex align-items-center gap-2 mb-0 la-report-column-display" data-region="column-display">
+                                                <input class="form-check-input mt-0" type="checkbox" name="columns[{{key}}][visible]" value="1"{{#visible}} checked{{/visible}}>
+                                                <span data-region="column-name-display">{{name}}</span>
+                                            </label>
+                                            {{#can_manage}}
+                                                <div class="la-report-column-edit d-none" data-region="column-edit">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <input
+                                                            type="text"
+                                                            class="form-control form-control-sm"
+                                                            name="columns[{{key}}][name]"
+                                                            value="{{name}}"
+                                                            data-region="column-name-input">
+                                                        <button type="button" class="btn btn-link btn-sm px-0" data-action="cancel-column-edit">{{#str}}cancel, core{{/str}}</button>
+                                                        <button type="button" class="btn btn-primary btn-sm" data-action="save-column-edit">{{#str}}save, core{{/str}}</button>
+                                                    </div>
+                                                </div>
+                                            {{/can_manage}}
+                                        </div>
+                                        {{#can_manage}}
+                                            <div class="dropdown">
+                                                <button type="button" class="btn btn-link p-0 la-report-column-menu-trigger" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions, core{{/str}}">
+                                                    <i class="fa fa-ellipsis-vertical" aria-hidden="true"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <button type="button" class="dropdown-item" data-action="edit-column">{{#str}}editcolumnname, local_la{{/str}}</button>
+                                                    <button type="button" class="dropdown-item" data-action="column-settings">{{#str}}settings, core{{/str}}</button>
+                                                    <button type="button" class="dropdown-item" data-action="delete-column">{{#str}}delete, core{{/str}}</button>
+                                                </div>
+                                            </div>
+                                        {{/can_manage}}
+                                    </div>
+                                {{/columns}}
+                            </div>
+                        </div>
+                        <div class="la-report-columns-footer px-3 py-3 d-flex align-items-center justify-content-between gap-3">
+                            <div class="d-flex align-items-center">
+                                <input type="submit" class="btn btn-primary" value="{{#str}}apply, core{{/str}}">
+                                <button type="button" class="btn btn-link ms-1" data-region="columns-cancel">{{#str}}cancel, core{{/str}}</button>
+                            </div>
+                            {{#can_manage}}
+                                <a
+                                    href="#"
+                                    class="btn-link ms-auto"
+                                    data-action="open-report-modal-link"
+                                    data-method="local_la_get_columns"
+                                    data-size="lg"
+                                    data-params='{{column_add_params}}'
+                                    data-title="{{#str}}columnbank, local_la{{/str}}"
+                                ><i class="fa-solid fa-lines-leaning"></i> {{#str}}columnbank, local_la{{/str}}</a>
+                            {{/can_manage}}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {{/has_columns}}
+
+        {{#has_filters}}
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary position-relative" type="button" id="la-report-filters-button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false" title="{{#str}}filters, core{{/str}}">
+                    <i class="icon fa fa-filter fa-fw" aria-hidden="true"></i>
+                    <span data-region="filter-button-label">{{#str}}filters, core{{/str}}</span>
+                    {{#show_filter_count}}
+                        <span class="la-report-filter-badge">{{filter_count_label}}</span>
+                    {{/show_filter_count}}
+                </button>
+                <div class="filters-dropdown la-report-filters-dropdown dropdown-menu dropdown-menu-end moodle-has-zindex p-0" aria-labelledby="la-report-filters-button">
+                    <div class="reportbuilder-filters-sidebar scroll-shadow" data-region="report-filters">
+                        <div class="px-3 pt-3">
+                            <div class="reportbuilder-filters-wrapper" data-region="report-filters-form">
+                                <form autocomplete="off" action="{{action}}" method="get" accept-charset="utf-8" class="mform full-width-labels">
+                                    <div>
+                                        <input type="hidden" name="id" value="{{reportid}}">
+                                        <input type="hidden" name="tab" value="view">
+                                        {{#synthetic_current_params}}
+                                            <input type="hidden" name="{{name}}" value="{{value}}">
+                                        {{/synthetic_current_params}}
+                                    </div>
+                                    {{#visible_filters}}
+                                        {{> local_la/components/report_filter_item }}
+                                    {{/visible_filters}}
+                                    {{#has_hidden_filters}}
+                                        <div class="la-report-filter-section-title">{{#str}}hiddenfilters, local_la{{/str}}</div>
+                                        {{#hidden_filters}}
+                                            {{> local_la/components/report_filter_item }}
+                                        {{/hidden_filters}}
+                                    {{/has_hidden_filters}}
+                                    <div class="mb-3 row fitem la-report-filters-actions" data-groupname="buttonar">
+                                        <div class="col-md-12 d-flex flex-wrap align-items-center felement" data-fieldtype="group">
+                                            <fieldset class="w-100 m-0 p-0 border-0">
+                                                <legend class="visually-hidden">{{#str}}filters, core{{/str}}</legend>
+                                                <div class="d-flex flex-wrap align-items-center">
+                                                    <div class="fitem">
+                                                        <span data-fieldtype="submit">
+                                                            <input type="submit" class="btn btn-primary" value="{{#str}}applyfilters, local_la{{/str}}">
+                                                        </span>
+                                                    </div>
+                                                    <div class="fitem">
+                                                        <a href="{{reseturl}}" class="btn btn-link ms-1">{{#str}}resetallfilters, local_la{{/str}}</a>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/has_filters}}
+
+    </div>
+</div>

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/la/db" VERSION="2026071600" COMMENT="XMLDB file for local_la"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+  <TABLES>
+    <TABLE NAME="local_la_report" COMMENT="Report definitions available in the library">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Report name"/>
+        <FIELD NAME="shortname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Unique report shortname"/>
+        <FIELD NAME="info" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Short report description"/>
+        <FIELD NAME="tags" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Comma-separated report tags"/>
+        <FIELD NAME="version" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="1.0" SEQUENCE="false" COMMENT="Record version"/>
+        <FIELD NAME="plan" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="core" SEQUENCE="false" COMMENT="Required billing plan"/>
+        <FIELD NAME="report_params" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Default report parameters"/>
+        <FIELD NAME="sql_name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Unique SQL name required by this report"/>
+        <FIELD NAME="timesync" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Last sync timestamp with remote server"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Creation timestamp"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Modification timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="shortname_uix" UNIQUE="true" FIELDS="shortname" COMMENT="Unique report shortname"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_sql" COMMENT="SQL definitions used by shared reports and user copies">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="SQL definition name"/>
+        <FIELD NAME="code" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="SQL query code"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Record status"/>
+        <FIELD NAME="version" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="1.0" SEQUENCE="false" COMMENT="Record version"/>
+        <FIELD NAME="timeactivated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Activation timestamp"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Creation timestamp"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Modification timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="name_uix" UNIQUE="true" FIELDS="name" COMMENT="Unique SQL definition name"/>
+        <INDEX NAME="status_ix" UNIQUE="false" FIELDS="status" COMMENT="Status index"/>
+        <INDEX NAME="timeactivated_ix" UNIQUE="false" FIELDS="timeactivated" COMMENT="Activation time index"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_report_users" COMMENT="User relation to added reports and selected SQL copies">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Shared report id"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="User report visibility status"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="User id"/>
+        <FIELD NAME="favorite" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Favorite flag"/>
+        <FIELD NAME="user_params" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="User-specific report parameters"/>
+        <FIELD NAME="timeaccess" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Last access timestamp"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Creation timestamp"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Modification timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="User foreign key"/>
+        <KEY NAME="reportid_fk" TYPE="foreign" FIELDS="reportid" REFTABLE="local_la_report" REFFIELDS="id" COMMENT="Report foreign key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid_ix" UNIQUE="false" FIELDS="userid" COMMENT="User index"/>
+        <INDEX NAME="reportid_ix" UNIQUE="false" FIELDS="reportid" COMMENT="Report index"/>
+        <INDEX NAME="userstatus_ix" UNIQUE="false" FIELDS="userid, status" COMMENT="User visibility index"/>
+        <INDEX NAME="userfavorite_ix" UNIQUE="false" FIELDS="userid, favorite" COMMENT="User favorite index"/>
+        <INDEX NAME="useraccess_ix" UNIQUE="false" FIELDS="userid, timeaccess" COMMENT="User last access index"/>
+        <INDEX NAME="userreport_uix" UNIQUE="true" FIELDS="userid, reportid" COMMENT="One added report per user"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_report_audience" COMMENT="Audience rules assigned to reports">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Report id"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="Audience type"/>
+        <FIELD NAME="instanceid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Audience instance id"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Creation timestamp"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Modification timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+        <KEY NAME="reportid_fk" TYPE="foreign" FIELDS="reportid" REFTABLE="local_la_report" REFFIELDS="id" COMMENT="Report foreign key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="reporttypeinstance_uix" UNIQUE="true" FIELDS="reportid, type, instanceid" COMMENT="One audience rule per report"/>
+        <INDEX NAME="reportid_ix" UNIQUE="false" FIELDS="reportid" COMMENT="Report index"/>
+        <INDEX NAME="typeinstance_ix" UNIQUE="false" FIELDS="type, instanceid" COMMENT="Audience lookup index"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_report_schedule" COMMENT="Scheduled report emails">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="reportid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Report id"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Schedule name"/>
+        <FIELD NAME="format" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="csv" SEQUENCE="false" COMMENT="Export format"/>
+        <FIELD NAME="timestart" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Schedule start time"/>
+        <FIELD NAME="recurrence" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="none" SEQUENCE="false" COMMENT="Recurrence type"/>
+        <FIELD NAME="subject" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Email subject"/>
+        <FIELD NAME="body" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Email body"/>
+        <FIELD NAME="audiences" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Selected audience types"/>
+        <FIELD NAME="emptyreport" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="send" SEQUENCE="false" COMMENT="Empty report handling"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Schedule status"/>
+        <FIELD NAME="timelastsent" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Last sent time"/>
+        <FIELD NAME="failurecount" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Consecutive delivery failure count"/>
+        <FIELD NAME="timelastattempt" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Last delivery attempt time"/>
+        <FIELD NAME="timenextattempt" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Earliest retry time after a failure"/>
+        <FIELD NAME="lasterror" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Last delivery error"/>
+        <FIELD NAME="usercreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Creator user id"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Last modifier user id"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Creation timestamp"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Modification timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+        <KEY NAME="reportid_fk" TYPE="foreign" FIELDS="reportid" REFTABLE="local_la_report" REFFIELDS="id" COMMENT="Report foreign key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="status_ix" UNIQUE="false" FIELDS="status" COMMENT="Status index"/>
+        <INDEX NAME="statusstartlast_ix" UNIQUE="false" FIELDS="status, timestart, timelastsent" COMMENT="Due schedule lookup index"/>
+        <INDEX NAME="statusnextattempt_ix" UNIQUE="false" FIELDS="status, timenextattempt, timestart" COMMENT="Schedule retry lookup index"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_app" COMMENT="Applications available in the plugin">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="App name"/>
+        <FIELD NAME="shortname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Unique app shortname"/>
+        <FIELD NAME="info" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Short app description"/>
+        <FIELD NAME="definition" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="App JSON definition"/>
+        <FIELD NAME="version" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="1.0" SEQUENCE="false" COMMENT="App version"/>
+        <FIELD NAME="plan" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="core" SEQUENCE="false" COMMENT="Required billing plan"/>
+        <FIELD NAME="status" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Record status"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Creation timestamp"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Modification timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="shortname_uix" UNIQUE="true" FIELDS="shortname" COMMENT="Unique app shortname"/>
+        <INDEX NAME="status_ix" UNIQUE="false" FIELDS="status" COMMENT="Status index"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_logs" COMMENT="User action logs">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="User id"/>
+        <FIELD NAME="action" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Action name"/>
+        <FIELD NAME="objecttype" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Object type"/>
+        <FIELD NAME="objectid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Object id"/>
+        <FIELD NAME="details" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Action details"/>
+        <FIELD NAME="ip" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" COMMENT="IP address"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Creation timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="User foreign key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="usertime_ix" UNIQUE="false" FIELDS="userid, timecreated" COMMENT="User time index"/>
+        <INDEX NAME="action_ix" UNIQUE="false" FIELDS="action" COMMENT="Action index"/>
+        <INDEX NAME="object_ix" UNIQUE="false" FIELDS="objecttype, objectid" COMMENT="Object index"/>
+        <INDEX NAME="timecreated_ix" UNIQUE="false" FIELDS="timecreated" COMMENT="Creation time index"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_ai" COMMENT="AI report generation chat history">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="User id"/>
+        <FIELD NAME="prompt" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="User prompt"/>
+        <FIELD NAME="context" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Selected report and table context"/>
+        <FIELD NAME="response" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="AI response or error message"/>
+        <FIELD NAME="definition" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Generated report JSON"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="success" SEQUENCE="false" COMMENT="Generation status"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Creation timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="User foreign key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="usertime_ix" UNIQUE="false" FIELDS="userid, timecreated" COMMENT="User time index"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_time_page" COMMENT="Tracked Moodle pages for learning time aggregation">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Logical page name such as course, activity, or profile"/>
+        <FIELD NAME="instanceid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Main instance id for the page"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Related course id"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="nameinstancecourse_uix" UNIQUE="true" FIELDS="name, instanceid, courseid" COMMENT="One page record per logical page and course"/>
+        <INDEX NAME="courseid_ix" UNIQUE="false" FIELDS="courseid" COMMENT="Course index"/>
+        <INDEX NAME="instance_ix" UNIQUE="false" FIELDS="instanceid" COMMENT="Instance index"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_time_total" COMMENT="Per-user learning time aggregates by page">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="User id"/>
+        <FIELD NAME="pageid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Tracked page id"/>
+        <FIELD NAME="visits" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Visit count"/>
+        <FIELD NAME="timesec" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Tracked learning time in seconds"/>
+        <FIELD NAME="params" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Small JSON payload with ip, browser, and os"/>
+        <FIELD NAME="firstaccess" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="First access timestamp"/>
+        <FIELD NAME="lastaccess" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Last access timestamp"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id" COMMENT="User foreign key"/>
+        <KEY NAME="pageid_fk" TYPE="foreign" FIELDS="pageid" REFTABLE="local_la_time_page" REFFIELDS="id" COMMENT="Page foreign key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userpage_uix" UNIQUE="true" FIELDS="userid, pageid" COMMENT="One aggregate per user and page"/>
+        <INDEX NAME="lastaccess_ix" UNIQUE="false" FIELDS="lastaccess" COMMENT="Last access index"/>
+        <INDEX NAME="pageid_ix" UNIQUE="false" FIELDS="pageid" COMMENT="Page index"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_time_day" COMMENT="Per-day learning time aggregates">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="totalid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Parent total aggregate id"/>
+        <FIELD NAME="daystamp" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Start-of-day timestamp"/>
+        <FIELD NAME="visits" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Visit count for the day"/>
+        <FIELD NAME="timesec" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Tracked learning time in seconds for the day"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+        <KEY NAME="totalid_fk" TYPE="foreign" FIELDS="totalid" REFTABLE="local_la_time_total" REFFIELDS="id" COMMENT="Parent total foreign key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="totalday_uix" UNIQUE="true" FIELDS="totalid, daystamp" COMMENT="One day aggregate per total"/>
+        <INDEX NAME="daystamp_ix" UNIQUE="false" FIELDS="daystamp" COMMENT="Day timestamp index"/>
+        <INDEX NAME="daytotal_ix" UNIQUE="false" FIELDS="daystamp, totalid" COMMENT="Day timestamp and total index"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_la_time_hour" COMMENT="Per-hour learning time aggregates">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key"/>
+        <FIELD NAME="dayid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Parent day aggregate id"/>
+        <FIELD NAME="hour" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Hour of day 0-23"/>
+        <FIELD NAME="visits" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Visit count for the hour"/>
+        <FIELD NAME="timesec" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Tracked learning time in seconds for the hour"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key"/>
+        <KEY NAME="dayid_fk" TYPE="foreign" FIELDS="dayid" REFTABLE="local_la_time_day" REFFIELDS="id" COMMENT="Parent day foreign key"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="dayhour_uix" UNIQUE="true" FIELDS="dayid, hour" COMMENT="One hour aggregate per day"/>
+        <INDEX NAME="hour_ix" UNIQUE="false" FIELDS="hour" COMMENT="Hour index"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

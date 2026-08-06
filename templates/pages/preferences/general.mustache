@@ -1,0 +1,199 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/preferences/general
+
+    Renders general settings, licence details, plan status, and updates.
+
+    Classes required for JS:
+    * .alert - JavaScript selector hook.
+    * .d-none - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="toggle-license-key" - JavaScript data or selector hook.
+    * data-label-hide - JavaScript data or selector hook.
+    * data-label-show - JavaScript data or selector hook.
+    * data-region="license-key-full" - JavaScript data or selector hook.
+    * data-region="license-key-short" - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * license.hasplan - array|bool: Section data or visibility flag for license hasplan.
+    * license.haslastcheck - array|bool: Section data or visibility flag for license haslastcheck.
+    * license.lastcheck - string: Text for license lastcheck.
+    * license.planiconurl - string: URL for license planiconurl.
+    * license.planname - string: Text for license planname.
+    * license.planstatusclass - string: Text for license planstatusclass.
+    * license.planstatus - string: Text for license planstatus.
+    * license.plandescription - array|bool: Section data or visibility flag for license plandescription.
+    * license.planrighttop - string: Text for license planrighttop.
+    * license.planrightsuffix - array|bool: Section data or visibility flag for license planrightsuffix.
+    * license.planrightbottom - array|bool: Section data or visibility flag for license planrightbottom.
+    * license.notregistered - array|bool: Section data or visibility flag for license notregistered.
+    * license.haserror - array|bool: Section data or visibility flag for license haserror.
+    * license.error - string: Text for license error.
+    * license.showupdates - array|bool: Section data or visibility flag for license showupdates.
+    * license.hasupdates - array|bool: Section data or visibility flag for license hasupdates.
+    * license.updates - array: List of entries for license updates.
+    * text - string: Text for text.
+    * license.hasupdate - array|bool: Section data or visibility flag for license hasupdate.
+    * license.hasupdateurl - array|bool: Section data or visibility flag for license hasupdateurl.
+    * license.updateurl - string: URL for license updateurl.
+    * license.updatedetails - string: Text for license updatedetails.
+    * license.hasplandetails - array|bool: Section data or visibility flag for license hasplandetails.
+    * license.plandetails - array|bool: Section data or visibility flag for license plandetails.
+    * licensekey - array|bool: Section data or visibility flag for licensekey.
+    * label - string: Text for label.
+    * shortvalue - string: Text for shortvalue.
+    * fullvalue - string: Text for fullvalue.
+    * value - array|bool: Section data or visibility flag for value.
+    * textafter - array|bool: Section data or visibility flag for textafter.
+    * settings.pluginsettingsurl - string: URL for settings pluginsettingsurl.
+    * settings.hasaiproviders - array|bool: Section data or visibility flag for settings hasaiproviders.
+    * settings.aiprovidertext - string: Text for settings aiprovidertext.
+    * settings.aiproviderurl - string: URL for settings aiproviderurl.
+    * settings.aiproviderunsupportedmessage - string: Text for settings aiproviderunsupportedmessage.
+    * settings.docsurl - string: URL for settings docsurl.
+    * settings.hasprioritysupport - array|bool: Section data or visibility flag for settings hasprioritysupport.
+
+    Example context (json):
+    {
+        "head": "<title>General</title>",
+        "header": "<header></header>",
+        "licensekey": "example-key",
+        "shortvalue": "exam…",
+        "fullvalue": "example-key",
+        "license": {
+            "hasplan": true,
+            "planname": "Core",
+            "planstatus": "Active"
+        }
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main la-main-center pt-4 pb-4">
+        <div class="la-preferences container-fluid">
+            {{{head}}}
+
+            {{#license.hasplan}}
+                <p class="text-muted mb-2">
+                    {{#str}}lastsync, local_la{{/str}}
+                    {{#license.haslastcheck}}{{#userdate}}{{license.lastcheck}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}{{/license.haslastcheck}}
+                    {{^license.haslastcheck}}{{#str}}notset, local_la{{/str}}{{/license.haslastcheck}}
+                </p>
+                <div class="alert alert-info d-flex justify-content-between align-items-start" role="alert">
+                    <div class="d-flex align-items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" class="mt-1 me-3 flex-shrink-0" aria-hidden="true">
+                            <use href="{{license.planiconurl}}#icon"></use>
+                        </svg>
+                        <div>
+                            <strong>{{license.planname}}</strong>
+                            <span class="badge {{license.planstatusclass}} ms-2">{{license.planstatus}}</span>
+                            {{#license.plandescription}}<p class="mt-1 mb-0">{{license.plandescription}}</p>{{/license.plandescription}}
+                        </div>
+                    </div>
+                    <div class="text-end ms-3">
+                        <strong>{{license.planrighttop}} {{#license.planrightsuffix}} {{license.planrightsuffix}} {{/license.planrightsuffix}}</strong>
+                        {{#license.planrightbottom}}<br>{{license.planrightbottom}}{{/license.planrightbottom}}
+                    </div>
+                </div>
+            {{/license.hasplan}}
+
+            {{#license.notregistered}}
+                <div class="alert alert-danger" role="alert">
+                    {{#license.haserror}}{{license.error}}{{/license.haserror}}
+                    {{^license.haserror}}{{#str}}pluginnotregistered, local_la{{/str}}{{/license.haserror}}
+                </div>
+            {{/license.notregistered}}
+
+            {{#license.showupdates}}
+                <section class="mb-4">
+                    <h2 class="h5">{{#str}}updates, local_la{{/str}}</h2>
+                    {{#license.hasupdates}}
+                        <ul class="mb-3">
+                            {{#license.updates}}
+                                <li>{{text}}</li>
+                            {{/license.updates}}
+                        </ul>
+                    {{/license.hasupdates}}
+                    {{#license.hasupdate}}
+                        <div class="alert alert-warning mb-2" role="alert">
+                            {{#str}}updatereleased, local_la{{/str}}
+                            {{#license.hasupdateurl}}
+                                <a class="alert-link" href="{{license.updateurl}}">{{#str}}updatenow, local_la{{/str}}</a>
+                            {{/license.hasupdateurl}}
+                        </div>
+                        <p class="small text-muted mb-0">{{license.updatedetails}}</p>
+                    {{/license.hasupdate}}
+                </section>
+            {{/license.showupdates}}
+
+            {{#license.hasplandetails}}
+                <section class="mb-4">
+                    <h2 class="h5">{{#str}}plandetails, local_la{{/str}}</h2>
+                    <ul class="mb-0">
+                        {{#license.plandetails}}
+                            <li>
+                                {{#licensekey}}
+                                    {{label}}
+                                    <strong data-region="license-key-short">{{shortvalue}}</strong>
+                                    <strong data-region="license-key-full" class="d-none">{{fullvalue}}</strong>
+                                    <a href="#" class="ms-2" data-action="toggle-license-key" data-label-show="{{#str}}show, core{{/str}}" data-label-hide="{{#str}}hide, core{{/str}}">{{#str}}show, core{{/str}}</a>
+                                {{/licensekey}}
+                                {{#value}}
+                                    {{label}} <strong>{{value}}</strong>{{#textafter}} {{textafter}}{{/textafter}}
+                                {{/value}}
+                                {{^value}}
+                                    {{^licensekey}}
+                                        {{text}}
+                                    {{/licensekey}}
+                                {{/value}}
+                            </li>
+                        {{/license.plandetails}}
+                    </ul>
+                </section>
+            {{/license.hasplandetails}}
+
+            <section class="mb-4">
+                <h2 class="h5">{{#str}}settings, core{{/str}}</h2>
+                <ul class="mb-0">
+                    <li>
+                        {{#str}}pluginsettingsmessage, local_la{{/str}}
+                        <a href="{{settings.pluginsettingsurl}}">{{#str}}change, local_la{{/str}}</a>
+                    </li>
+                    <li>
+                        {{#settings.hasaiproviders}}
+                            {{settings.aiprovidertext}}.
+                            <a href="{{settings.aiproviderurl}}">{{#str}}change, local_la{{/str}}</a>
+                        {{/settings.hasaiproviders}}
+                        {{^settings.hasaiproviders}}
+                            {{settings.aiproviderunsupportedmessage}}
+                        {{/settings.hasaiproviders}}
+                    </li>
+                </ul>
+                <p class="mt-3 mb-1">
+                    <a href="{{settings.docsurl}}" target="_blank" rel="noopener">{{#str}}documentation, local_la{{/str}}</a>
+                </p>
+                {{#settings.hasprioritysupport}}
+                    <p class="text-muted mb-0">{{#str}}supportmessage, local_la{{/str}}</p>
+                {{/settings.hasprioritysupport}}
+            </section>
+        </div>
+    </main>
+</div>

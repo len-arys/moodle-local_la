@@ -1,0 +1,76 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/components/general_head
+
+    Renders a general page heading and tab navigation.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * homeurl - string: URL for homeurl.
+    * title - string: Text for title.
+    * tabs - array: List of entries for tabs.
+    * active - array|bool: Section data or visibility flag for active.
+    * url - string: URL for url.
+    * name - string: Text for name.
+    * badge - array|bool: Section data or visibility flag for badge.
+
+    Example context (json):
+    {
+        "title": "Settings",
+        "tabs": [
+            {
+                "name": "General",
+                "url": "#",
+                "active": true
+            }
+        ]
+    }
+}}
+<nav aria-label="Breadcrumb" class="mb-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="{{homeurl}}">{{#str}}pluginname, local_la{{/str}}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{title}}
+        </li>
+    </ol>
+</nav>
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
+    <h2 class="mb-0">{{title}}</h2>
+</div>
+
+<nav class="mb-4" aria-label="{{title}}">
+    <ul class="nav nav-tabs">
+        {{#tabs}}
+        <li class="nav-item">
+            <a class="nav-link position-relative {{#active}}active{{/active}}" href="{{url}}">
+                {{name}}
+                {{#badge}}
+                <span class="badge rounded-pill text-bg-light position-absolute top-0 start-50 translate-middle-y">{{badge}}</span>
+                {{/badge}}
+            </a>
+        </li>
+        {{/tabs}}
+    </ul>
+</nav>

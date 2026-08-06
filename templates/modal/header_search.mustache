@@ -1,0 +1,158 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/header_search
+
+    Renders global header search results.
+
+    Classes required for JS:
+    * .alert - JavaScript selector hook.
+    * .btn - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-bs-target - JavaScript data or selector hook.
+    * data-bs-toggle="collapse" - JavaScript data or selector hook.
+    * data-region="la-header-search-modal-form" - JavaScript data or selector hook.
+    * data-search-type - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * type - string: Text for type.
+    * query - string: Text for query.
+    * hasitems - array|bool: Section data or visibility flag for hasitems.
+    * items - array: List of entries for items.
+    * isuser - array|bool: Section data or visibility flag for isuser.
+    * url - string: URL for url.
+    * avatar - string: Text for avatar.
+    * name - string: Text for name.
+    * email - string: Text for email.
+    * iscourse - array|bool: Section data or visibility flag for iscourse.
+    * shortname - string: Text for shortname.
+    * category - string: Text for category.
+    * hasmenugroups - array|bool: Section data or visibility flag for hasmenugroups.
+    * linksid - int: Numeric value for linksid.
+    * menugroups - array: List of entries for menugroups.
+    * target - array|bool: Section data or visibility flag for target.
+    * label - string: Text for label.
+    * moodle - array|bool: Section data or visibility flag for moodle.
+    * haslimitmessage - array|bool: Section data or visibility flag for haslimitmessage.
+    * limitmessage - string: Text for limitmessage.
+    * notfound - string: Text for notfound.
+
+    Example context (json):
+    {
+        "query": "Richard",
+        "hasitems": true,
+        "items": [
+            {
+                "name": "Richard Burke",
+                "email": "richard@example.com",
+                "url": "#",
+                "isuser": true
+            }
+        ]
+    }
+}}
+<div class="la-header-search-modal" data-search-type="{{type}}">
+    <form class="mb-3" data-region="la-header-search-modal-form">
+        <label class="visually-hidden" for="la-header-search-modal-input">{{#str}}search, core{{/str}}</label>
+        <div class="input-group">
+            <input
+                id="la-header-search-modal-input"
+                class="form-control rounded-start border-end-0"
+                type="search"
+                name="query"
+                value="{{query}}"
+                placeholder="{{#str}}search, core{{/str}}"
+                autocomplete="off">
+            <button class="input-group-text ps-2 pe-2 bg-white border-start-0" type="submit" aria-label="{{#str}}search, core{{/str}}">
+                <i class="icon fa fa-search fa-fw" aria-hidden="true"></i>
+            </button>
+        </div>
+    </form>
+
+    {{#hasitems}}
+        <div class="d-flex flex-column gap-2">
+            {{#items}}
+                <div class="card">
+                    <div class="card-body la-header-search-card-body">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="la-header-search-result-main flex-grow-1">
+                                {{#isuser}}
+                                    <a href="{{url}}" class="d-inline-flex align-items-center gap-3 mw-100 text-decoration-none text-reset">
+                                        <div class="flex-shrink-0">{{{avatar}}}</div>
+                                        <div class="min-w-0">
+                                            <div class="fw-semibold text-truncate">{{name}}</div>
+                                            <div class="small text-muted text-truncate">{{email}}</div>
+                                        </div>
+                                    </a>
+                                {{/isuser}}
+                                {{#iscourse}}
+                                    <a href="{{url}}" class="la-header-search-result-link d-flex align-items-center gap-3 text-decoration-none text-reset">
+                                        <div class="la-header-search-course-icon flex-shrink-0">
+                                            <i class="fa fa-graduation-cap fa-fw" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="la-header-search-result-text flex-grow-1">
+                                            <div class="fw-semibold text-truncate" title="{{shortname}}">{{name}}</div>
+                                            <div class="small text-muted text-truncate">{{category}}</div>
+                                        </div>
+                                    </a>
+                                {{/iscourse}}
+                            </div>
+                            {{#hasmenugroups}}
+                                <button
+                                    type="button"
+                                    class="btn btn-link btn-sm p-1 text-muted"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#{{linksid}}"
+                                    aria-expanded="false"
+                                    aria-controls="{{linksid}}">
+                                    <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                                    <span class="visually-hidden">{{#str}}reports, local_la{{/str}}</span>
+                                </button>
+                            {{/hasmenugroups}}
+                        </div>
+                        {{#hasmenugroups}}
+                            <div id="{{linksid}}" class="collapse mt-3">
+                                <div>
+                                    {{#menugroups}}
+                                        {{#items}}
+                                            <a href="{{url}}" class="d-flex align-items-center gap-2 py-2 border-top text-decoration-none text-reset"{{#target}} target="{{target}}" rel="noopener noreferrer"{{/target}}>
+                                                <span>{{label}}</span>
+                                                <span class="ms-auto">
+                                                    {{#moodle}}<span class="opacity-25 small">m</span>{{/moodle}}
+                                                    {{^moodle}}<i class="fa-solid fa-angle-right opacity-25 small" aria-hidden="true"></i>{{/moodle}}
+                                                </span>
+                                            </a>
+                                        {{/items}}
+                                    {{/menugroups}}
+                                </div>
+                            </div>
+                        {{/hasmenugroups}}
+                    </div>
+                </div>
+            {{/items}}
+        </div>
+        {{#haslimitmessage}}
+            <div class="small text-muted text-center mt-3">{{{limitmessage}}}</div>
+        {{/haslimitmessage}}
+    {{/hasitems}}
+    {{^hasitems}}
+        <div class="alert alert-light border mb-0">{{notfound}}</div>
+    {{/hasitems}}
+</div>

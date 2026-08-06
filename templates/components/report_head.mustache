@@ -1,0 +1,192 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/components/report_head
+
+    Renders the report heading, metrics, navigation, and management actions.
+
+    Classes required for JS:
+    * .alert - JavaScript selector hook.
+    * .btn - JavaScript selector hook.
+    * .d-none - JavaScript selector hook.
+    * .dropdown - JavaScript selector hook.
+    * .dropdown-menu - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="bookmark-report" - JavaScript data or selector hook.
+    * data-action="delete-report" - JavaScript data or selector hook.
+    * data-action="duplicate-report" - JavaScript data or selector hook.
+    * data-action="edit-report-details" - JavaScript data or selector hook.
+    * data-action="reset-report" - JavaScript data or selector hook.
+    * data-action="toggle-report-summary" - JavaScript data or selector hook.
+    * data-bs-toggle="dropdown" - JavaScript data or selector hook.
+    * data-confirm-button-label - JavaScript data or selector hook.
+    * data-message - JavaScript data or selector hook.
+    * data-region="report-metric-avatars" - JavaScript data or selector hook.
+    * data-region="report-metric-values" - JavaScript data or selector hook.
+    * data-region="report-summary" - JavaScript data or selector hook.
+    * data-report-metric - JavaScript data or selector hook.
+    * data-reportid - JavaScript data or selector hook.
+    * data-return-url - JavaScript data or selector hook.
+    * data-title - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * homeurl - string: URL for homeurl.
+    * breadcrumbtitle - string: Text for breadcrumbtitle.
+    * title - string: Text for title.
+    * metrics - array: List of entries for metrics.
+    * avatars - array: List of entries for avatars.
+    * active - array|bool: Section data or visibility flag for active.
+    * label - string: Text for label.
+    * imageurl - string: URL for imageurl.
+    * values - array: List of entries for values.
+    * key - array|bool: Section data or visibility flag for key.
+    * value - string: Text for value.
+    * bookmark.reportid - int: Numeric value for bookmark reportid.
+    * bookmark.isfavorite - array|bool: Section data or visibility flag for bookmark isfavorite.
+    * can_manage - array|bool: Section data or visibility flag for can manage.
+    * reportid - int: Numeric value for reportid.
+    * reset.reportid - int: Numeric value for reset reportid.
+    * delete.reportid - int: Numeric value for delete reportid.
+    * delete.title - string: Text for delete title.
+    * delete.message - string: Text for delete message.
+    * delete.buttonlabel - string: Text for delete buttonlabel.
+    * delete.returnurl - string: URL for delete returnurl.
+    * summary - string: Text for summary.
+    * version - string: Text for version.
+    * tabs - array: List of entries for tabs.
+    * url - string: URL for url.
+    * name - string: Text for name.
+    * badge - array|bool: Section data or visibility flag for badge.
+
+    Example context (json):
+    {
+        "reportid": 1,
+        "title": "Users tracking",
+        "version": "1.0.0",
+        "summary": "User activity and learning time.",
+        "can_manage": true
+    }
+}}
+<nav aria-label="Breadcrumb" class="mb-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="{{homeurl}}">{{#str}}pluginname, local_la{{/str}}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {{breadcrumbtitle}}
+        </li>
+    </ol>
+</nav>
+<div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
+    <div class="d-flex align-items-center gap-3">
+        <h2 class="mb-0">{{title}}</h2>
+        <button type="button" class="btn p-0 border-0 text-muted opacity-25" data-action="toggle-report-summary" aria-label="{{#str}}show, core{{/str}}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-question-circle-fill" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"/>
+            </svg>
+        </button>
+    </div>
+    {{#metrics}}
+    <div class="d-flex align-items-center gap-2 ms-auto flex-nowrap">
+        <div class="d-flex align-items-center" data-region="report-metric-avatars">
+            {{#avatars}}
+            <a href="#" class="la-report-avatar {{#active}}active{{/active}}" title="{{label}}">
+                <img src="{{imageurl}}" alt="{{label}}">
+                <span>{{label}}</span>
+            </a>
+            {{/avatars}}
+        </div>
+        <div class="d-flex align-items-center gap-2" data-region="report-metric-values">
+            {{#values}}
+            <a href="#" class="la-report-metric-value {{#active}}active{{/active}}">
+                <span class="fw-bold fs-4">&bull;</span>
+                <span class="fw-bold fs-4" {{#key}}data-report-metric="{{key}}"{{/key}}>{{value}}</span>
+                <span class="la-report-metric-value-label">{{label}}</span>
+            </a>
+            {{/values}}
+        </div>
+        <div class="dropdown">
+            <button class="btn p-0 border-0 text-muted btn btn-icon no-caret icon-no-margin" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions, core{{/str}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                </svg>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end">
+                <button
+                    type="button"
+                    class="dropdown-item"
+                    data-action="bookmark-report"
+                    data-reportid="{{bookmark.reportid}}"
+                >{{#bookmark.isfavorite}}{{#str}}removebookmark, local_la{{/str}}{{/bookmark.isfavorite}}{{^bookmark.isfavorite}}{{#str}}bookmark, local_la{{/str}}{{/bookmark.isfavorite}}</button>
+                {{#can_manage}}
+                <button
+                    type="button"
+                    class="dropdown-item"
+                    data-action="edit-report-details"
+                    data-reportid="{{reportid}}"
+                >{{#str}}editreportdetails, local_la{{/str}}</button>
+                <button
+                    type="button"
+                    class="dropdown-item"
+                    data-action="duplicate-report"
+                    data-reportid="{{reportid}}"
+                >{{#str}}duplicatereport, local_la{{/str}}</button>
+                {{/can_manage}}
+                <button
+                    type="button"
+                    class="dropdown-item"
+                    data-action="reset-report"
+                    data-reportid="{{reset.reportid}}"
+                >{{#str}}resetreport, local_la{{/str}}</button>
+                <div class="dropdown-divider"></div>
+                <h6 class="dropdown-header">{{#str}}advancedsettings, local_la{{/str}}</h6>
+                <button
+                        type="button"
+                        class="dropdown-item"
+                        data-action="delete-report"
+                        data-reportid="{{delete.reportid}}"
+                        data-title="{{delete.title}}"
+                        data-message="{{delete.message}}"
+                        data-confirm-button-label="{{delete.buttonlabel}}"
+                        data-return-url="{{delete.returnurl}}"
+                >{{#str}}disablereport, local_la{{/str}}</button>
+            </div>
+        </div>
+    </div>
+    {{/metrics}}
+</div>
+
+<div class="alert border-0 bg-info-subtle text-body mb-4 d-none" data-region="report-summary">
+    <p class="mb-4">{{summary}}</p>
+    <p class="mb-0"><strong>{{#str}}version, core_plugin{{/str}}:</strong> {{version}}</p>
+</div>
+
+<nav class="mb-4" aria-label="{{title}}">
+    <ul class="nav nav-tabs">
+        {{#tabs}}
+            <li class="nav-item position-relative">
+                <a class="nav-link {{#active}}active{{/active}}" href="{{url}}">
+                    {{name}}
+                </a>
+                {{#badge}}
+                <span class="badge rounded-pill text-bg-light position-absolute top-0 start-50 translate-middle-y">{{badge}}</span>
+                {{/badge}}
+            </li>
+        {{/tabs}}
+    </ul>
+</nav>

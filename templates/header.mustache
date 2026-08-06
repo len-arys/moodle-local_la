@@ -1,0 +1,226 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/header
+
+    Renders the Lenarys Analytics application header and navigation.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .d-none - JavaScript selector hook.
+    * .dropdown - JavaScript selector hook.
+    * .dropdown-menu - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-check - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-append-query - JavaScript data or selector hook.
+    * data-bs-toggle="dropdown" - JavaScript data or selector hook.
+    * data-disableactive="true" - JavaScript data or selector hook.
+    * data-full-name - JavaScript data or selector hook.
+    * data-icon="fa-graduation-cap" - JavaScript data or selector hook.
+    * data-icon="fa-star" - JavaScript data or selector hook.
+    * data-icon="fa-users" - JavaScript data or selector hook.
+    * data-label - JavaScript data or selector hook.
+    * data-loading - JavaScript data or selector hook.
+    * data-region="la-company-name" - JavaScript data or selector hook.
+    * data-region="la-search-form" - JavaScript data or selector hook.
+    * data-region="la-search-menu" - JavaScript data or selector hook.
+    * data-region="la-search-scope" - JavaScript data or selector hook.
+    * data-region="la-search-scope-button" - JavaScript data or selector hook.
+    * data-region="la-search-scope-icon" - JavaScript data or selector hook.
+    * data-region="la-search-scope-label" - JavaScript data or selector hook.
+    * data-search-type="courses" - JavaScript data or selector hook.
+    * data-search-type="users" - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * is_darkmode - array|bool: Section data or visibility flag for is darkmode.
+    * darkstylesurl - string: URL for darkstylesurl.
+    * is_darkmode_auto - array|bool: Section data or visibility flag for is darkmode auto.
+    * homeurl - string: URL for homeurl.
+    * companyname - string: Text for companyname.
+    * canmanage - array|bool: Section data or visibility flag for canmanage.
+    * is_home - array|bool: Section data or visibility flag for is home.
+    * has_reports_menu - array|bool: Section data or visibility flag for has reports menu.
+    * is_reports - array|bool: Section data or visibility flag for is reports.
+    * reports_has_recent - array|bool: Section data or visibility flag for reports has recent.
+    * reports.recent - array|bool: Section data or visibility flag for reports recent.
+    * url - string: URL for url.
+    * name - string: Text for name.
+    * reports_has_favorite - array|bool: Section data or visibility flag for reports has favorite.
+    * reports.favorite - array|bool: Section data or visibility flag for reports favorite.
+    * libraryurl - string: URL for libraryurl.
+    * has_apps_menu - array|bool: Section data or visibility flag for has apps menu.
+    * is_apps - array|bool: Section data or visibility flag for is apps.
+    * apps - array: List of entries for apps.
+    * is_library - array|bool: Section data or visibility flag for is library.
+    * searchurl - string: URL for searchurl.
+    * query - string: Text for query.
+    * id - int: Numeric value for id.
+    * hassearchurl - array|bool: Section data or visibility flag for hassearchurl.
+    * preferencesurl - string: URL for preferencesurl.
+    * closeurl - string: URL for closeurl.
+
+    Example context (json):
+    {
+        "companyname": "lenArys",
+        "homeurl": "#",
+        "libraryurl": "#",
+        "preferencesurl": "#",
+        "closeurl": "#",
+        "is_home": true
+    }
+}}
+{{#is_darkmode}}
+    <link rel="stylesheet" href="{{darkstylesurl}}">
+{{/is_darkmode}}
+{{#is_darkmode_auto}}
+    <link rel="stylesheet" href="{{darkstylesurl}}" media="(prefers-color-scheme: dark)">
+{{/is_darkmode_auto}}
+
+<nav class="navbar fixed-top navbar-expand bg-white" aria-label="{{#str}}pluginname, local_la{{/str}}">
+    <div class="container-fluid la-header-grid">
+        <div class="d-flex align-items-center la-header-left">
+            <a href="{{homeurl}}" class="d-none d-md-flex align-items-center me-4 px-3 py-2 text-decoration-none aabtn">
+                <span class="d-block font-monospace fw-bold text-dark la-company-name" data-region="la-company-name" data-full-name="{{companyname}}">{{companyname}}</span>
+            </a>
+
+            <div class="primary-navigation">
+                <nav class="moremenu navigation observed">
+                    <ul id="moremenu-{{uniqid}}-navbar-nav" role="menubar" class="nav more-nav navbar-nav">
+                        {{#canmanage}}
+                        <li class="nav-item px-2" role="none">
+                            <a role="menuitem" class="nav-link {{#is_home}}active{{/is_home}}" href="{{homeurl}}" aria-current="{{#is_home}}true{{/is_home}}" data-disableactive="true">
+                                {{#str}}home, core{{/str}}
+                            </a>
+                        </li>
+                        {{/canmanage}}
+                        {{#has_reports_menu}}
+                        <li class="nav-item dropdown px-2" role="none">
+                            <a role="menuitem" class="nav-link dropdown-toggle {{#is_reports}}active{{/is_reports}}" href="#" id="la-reports-dropdown-{{uniqid}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{#str}}reports, core{{/str}}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="la-reports-dropdown-{{uniqid}}">
+                                {{#reports_has_recent}}
+                                <li><h6 class="dropdown-header"><i class="fa-solid fa-clock"></i> {{#str}}recent, local_la{{/str}}</h6></li>
+                                {{/reports_has_recent}}
+                                {{#reports.recent}}
+                                <li><a class="dropdown-item" href="{{url}}">{{name}}</a></li>
+                                {{/reports.recent}}
+                                {{#reports_has_recent}}
+                                {{#reports_has_favorite}}
+                                <li><hr class="dropdown-divider"></li>
+                                {{/reports_has_favorite}}
+                                {{/reports_has_recent}}
+                                {{#reports_has_favorite}}
+                                <li><h6 class="dropdown-header"><i class="fa-solid fa-star"></i> {{#str}}favorite, local_la{{/str}}</h6></li>
+                                {{/reports_has_favorite}}
+                                {{#reports.favorite}}
+                                <li><a class="dropdown-item" href="{{url}}">{{name}}</a></li>
+                                {{/reports.favorite}}
+                                {{#reports_has_recent}}
+                                <div class="dropdown-divider"></div>
+                                {{/reports_has_recent}}
+                                {{^reports_has_recent}}
+                                {{#reports_has_favorite}}
+                                <div class="dropdown-divider"></div>
+                                {{/reports_has_favorite}}
+                                {{/reports_has_recent}}
+                                <li><a href="{{libraryurl}}?tab=reports" class="dropdown-item" role="menuitem" tabindex="-1">{{#str}}more, local_la{{/str}}</a></li>
+                            </ul>
+                        </li>
+                        {{/has_reports_menu}}
+
+                        {{#canmanage}}
+                        {{#has_apps_menu}}
+                        <li class="nav-item dropdown px-2" role="none">
+                            <a role="menuitem" class="nav-link dropdown-toggle {{#is_apps}}active{{/is_apps}}" href="#" id="la-apps-dropdown-{{uniqid}}" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{#str}}apps, local_la{{/str}}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="la-apps-dropdown-{{uniqid}}">
+                                {{#apps}}
+                                <li><a class="dropdown-item" href="{{url}}">{{name}}</a></li>
+                                {{/apps}}
+                                <div class="dropdown-divider"></div>
+                                <li><a href="{{libraryurl}}?tab=apps" class="dropdown-item" role="menuitem" tabindex="-1">{{#str}}more, local_la{{/str}}</a></li>
+                            </ul>
+                        </li>
+                        {{/has_apps_menu}}
+                        {{/canmanage}}
+                        <li class="nav-item px-2" role="none">
+                            <a role="menuitem" class="nav-link {{#is_library}}active{{/is_library}}" href="{{libraryurl}}" aria-current="{{#is_library}}true{{/is_library}}" data-disableactive="true">
+                                {{#str}}library, local_la{{/str}}
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+
+        {{#canmanage}}
+        <div class="d-lg-flex justify-content-center la-header-search" role="search">
+            <form method="get" action="{{searchurl}}" autocomplete="off" data-region="la-search-form" data-loading="{{#str}}loading, local_la{{/str}}">
+                <div class="input-group">
+                    <label class="visually-hidden" for="la-search-{{uniqid}}">{{#str}}search, core{{/str}}</label>
+                    <input class="form-control rounded-start-pill" id="la-search-{{uniqid}}" type="text" name="query" value="{{query}}" placeholder="{{#str}}typeslashtosearch, local_la{{/str}}" autocomplete="off">
+
+                    <div class="dropdown" id="la-search-menu-{{uniqid}}" data-region="la-search-menu">
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle rounded-end-pill" title="{{#str}}search, core{{/str}}" id="la-search-menu-toggle-{{uniqid}}" data-bs-toggle="dropdown" aria-expanded="false" data-region="la-search-scope-button">
+                            <i class="icon fa fa-users fa-fw" aria-hidden="true" data-region="la-search-scope-icon"></i>
+                            <span data-region="la-search-scope-label">{{#str}}users, core{{/str}}</span>
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-start p-3 py-2 w-auto" aria-labelledby="la-search-menu-toggle-{{uniqid}}">
+                            <div class="form-check d-flex align-items-center gap-2 ps-4 pe-2 py-1">
+                                <input class="form-check-input" type="radio" name="searchscope" checked value="" id="la-search-users-{{uniqid}}" data-region="la-search-scope" data-icon="fa-users" data-label="{{#str}}users, core{{/str}}" data-search-type="users">
+                                <label class="form-check-label flex-grow-1 mb-0 text-nowrap" for="la-search-users-{{uniqid}}">
+                                    {{#str}}users, core{{/str}}</label>
+                                <i class="fa-solid fa-users text-muted"></i>
+                            </div>
+                            <div class="form-check d-flex align-items-center gap-2 ps-4 pe-2 py-1">
+                                <input class="form-check-input" type="radio" name="searchscope" value="" id="la-search-courses-{{uniqid}}" data-region="la-search-scope" data-icon="fa-graduation-cap" data-label="{{#str}}courses, core{{/str}}" data-search-type="courses">
+                                <label class="form-check-label flex-grow-1 mb-0 text-nowrap" for="la-search-courses-{{uniqid}}">
+                                    {{#str}}courses, core{{/str}}</label>
+                                <i class="fa-solid fa-graduation-cap text-muted"></i>
+                            </div>
+
+                            {{#reports_has_favorite}}
+                                <h6 class="dropdown-header text-nowrap"><i class="fa-solid fa-star"></i> {{#str}}favorite, local_la{{/str}}</h6>
+                                {{#reports.favorite}}
+                                    <div class="form-check ps-4 pe-2 py-1">
+                                        <input class="form-check-input" type="radio" name="searchscope" value="{{searchurl}}" id="la-search-report-{{id}}-{{uniqid}}" data-region="la-search-scope" data-icon="fa-star" data-label="{{name}}" data-append-query="{{#hassearchurl}}1{{/hassearchurl}}{{^hassearchurl}}0{{/hassearchurl}}">
+                                        <label class="form-check-label mb-0 text-nowrap" for="la-search-report-{{id}}-{{uniqid}}">{{name}}</label>
+                                    </div>
+                                {{/reports.favorite}}
+                            {{/reports_has_favorite}}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {{/canmanage}}
+
+        <div class="d-flex align-items-center h-100 la-header-actions">
+            {{#canmanage}}
+            <a class="btn btn-outline-secondary me-2" href="{{preferencesurl}}">{{#str}}preferences, core{{/str}}</a>
+            {{/canmanage}}
+            <a class="btn btn-secondary" href="{{closeurl}}">{{#str}}close, local_la{{/str}}</a>
+        </div>
+    </div>
+</nav>

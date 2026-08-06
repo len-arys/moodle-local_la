@@ -1,0 +1,310 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/library/reports
+
+    Renders the installed reports library.
+
+    Classes required for JS:
+    * .dropdown - JavaScript selector hook.
+    * .dropdown-menu - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-check - JavaScript selector hook.
+    * .table - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="delete-library-item" - JavaScript data or selector hook.
+    * data-action="edit-report-details" - JavaScript data or selector hook.
+    * data-action="library-report-action" - JavaScript data or selector hook.
+    * data-action="open-report-preview" - JavaScript data or selector hook.
+    * data-action="show-sql-modal" - JavaScript data or selector hook.
+    * data-action="toggle-library-report" - JavaScript data or selector hook.
+    * data-bs-toggle="dropdown" - JavaScript data or selector hook.
+    * data-confirm-button-label - JavaScript data or selector hook.
+    * data-disable-action="delete" - JavaScript data or selector hook.
+    * data-enable-action="addreport" - JavaScript data or selector hook.
+    * data-enhance="moodle-core-actionmenu" - JavaScript data or selector hook.
+    * data-initial-checked - JavaScript data or selector hook.
+    * data-library-action="duplicate" - JavaScript data or selector hook.
+    * data-library-action="favorite" - JavaScript data or selector hook.
+    * data-library-action="hide" - JavaScript data or selector hook.
+    * data-library-action="reset" - JavaScript data or selector hook.
+    * data-library-action="show" - JavaScript data or selector hook.
+    * data-library-action="uninstallreport" - JavaScript data or selector hook.
+    * data-message - JavaScript data or selector hook.
+    * data-rel="menu-content" - JavaScript data or selector hook.
+    * data-report - JavaScript data or selector hook.
+    * data-reportid - JavaScript data or selector hook.
+    * data-title - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * controls - string: Text for controls.
+    * can_manage - array|bool: Section data or visibility flag for can manage.
+    * items - array: List of entries for items.
+    * ishidden - array|bool: Section data or visibility flag for ishidden.
+    * icon_class - string: Text for icon class.
+    * icon - string: Text for icon.
+    * isavailable - array|bool: Section data or visibility flag for isavailable.
+    * url - string: URL for url.
+    * name - string: Text for name.
+    * lockmessage - string: Text for lockmessage.
+    * reportid - int: Numeric value for reportid.
+    * delete_title - string: Text for delete title.
+    * delete_message - string: Text for delete message.
+    * isadded - array|bool: Section data or visibility flag for isadded.
+    * islocked - array|bool: Section data or visibility flag for islocked.
+    * isfavorite - array|bool: Section data or visibility flag for isfavorite.
+    * version - string: Text for version.
+    * sql_name - array|bool: Section data or visibility flag for sql name.
+    * timesync - array|bool: Section data or visibility flag for timesync.
+    * id - int: Numeric value for id.
+    * view_url - string: URL for view url.
+    * shortname - string: Text for shortname.
+    * pagingbar - array|bool: Section data or visibility flag for pagingbar.
+
+    Example context (json):
+    {
+        "head": "<title>Reports</title>",
+        "header": "<header></header>",
+        "controls": "<form></form>",
+        "can_manage": true,
+        "items": [
+            {
+                "id": 1,
+                "name": "Users tracking",
+                "version": "1.0.0",
+                "isavailable": true,
+                "view_url": "#"
+            }
+        ]
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main la-main-center pt-4 pb-4">
+        <section class="la-reports container-fluid">
+            {{{head}}}
+            {{{controls}}}
+
+            <div class="table-responsive">
+                <table class="table border-top-0 align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="border-top-0 text-nowrap">{{#str}}name, core{{/str}}</th>
+                        <th scope="col" class="text-center border-top-0 text-nowrap">{{#str}}enabled, local_la{{/str}}</th>
+                        <th scope="col" class="text-center border-top-0 text-nowrap">{{#str}}favorite, local_la{{/str}}</th>
+                        <th scope="col" class="border-top-0 text-nowrap">{{#str}}version, core_plugin{{/str}}</th>
+                        {{#can_manage}}
+                            <th scope="col" class="border-top-0 text-nowrap">Params</th>
+                        {{/can_manage}}
+                        <th scope="col" class="border-top-0 text-nowrap">{{#str}}timesync, local_la{{/str}}</th>
+
+                        <th scope="col" class="text-end border-top-0"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#items}}
+                        <tr>
+                            <td class="{{#ishidden}}opacity-25{{/ishidden}}">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge {{icon_class}} la-reports-icon p-2">
+                                        <i class="fa-solid fa-{{icon}}"></i>
+                                    </span>
+                                    {{#isavailable}}
+                                        <a href="{{url}}">{{name}}</a>
+                                    {{/isavailable}}
+                                    {{^isavailable}}
+                                        <span title="{{lockmessage}}">{{name}}</span>
+                                        <span class="badge text-bg-light" title="{{lockmessage}}">{{#str}}upgrade, local_la{{/str}}</span>
+                                    {{/isavailable}}
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="form-check form-switch d-inline-flex justify-content-center mb-0">
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        role="switch"
+                                        autocomplete="off"
+                                        data-action="toggle-library-report"
+                                        data-reportid="{{reportid}}"
+                                        data-enable-action="addreport"
+                                        data-disable-action="delete"
+                                        data-title="{{delete_title}}"
+                                        data-message="{{delete_message}}"
+                                        data-confirm-button-label="{{#str}}disable, local_la{{/str}}"
+                                        data-initial-checked="{{#isadded}}1{{/isadded}}{{^isadded}}0{{/isadded}}"
+                                        aria-label="{{#str}}enabled, local_la{{/str}}"
+                                        {{#islocked}}disabled title="{{lockmessage}}"{{/islocked}}
+                                        {{#isadded}}checked{{/isadded}}>
+                                </div>
+                            </td>
+                            <td class="text-center {{#ishidden}}opacity-25{{/ishidden}}">
+                                {{#isadded}}
+                                <a href="#" class="text-decoration-none" aria-label="{{#str}}favorite, local_la{{/str}}" data-action="library-report-action" data-library-action="favorite" data-reportid="{{reportid}}">
+                                    {{#isfavorite}}
+                                        <i class="fa-solid fa-star text-warning"></i>
+                                    {{/isfavorite}}
+                                    {{^isfavorite}}
+                                        <i class="fa-regular fa-star"></i>
+                                    {{/isfavorite}}
+                                </a>
+                                {{/isadded}}
+                                {{^isadded}}
+                                <span class="text-decoration-none opacity-25" aria-label="{{#str}}favorite, local_la{{/str}}">
+                                    <i class="fa-regular fa-star"></i>
+                                </span>
+                                {{/isadded}}
+                            </td>
+                            <td class="{{#ishidden}}opacity-25{{/ishidden}}">{{version}}</td>
+                            {{#can_manage}}
+                                <td class="{{#ishidden}}opacity-25{{/ishidden}}">
+                                    {{#sql_name}}
+                                        <a href="#" data-action="show-sql-modal" data-reportid="{{reportid}}" data-title="{{sql_name}}" title="{{sql_name}}" aria-label="{{sql_name}}">
+                                            <i class="fa-solid fa-code"></i>
+                                        </a>
+                                    {{/sql_name}}
+                                </td>
+                            {{/can_manage}}
+                            <td class="text-nowrap {{#ishidden}}opacity-25{{/ishidden}}">
+                                {{#timesync}}
+                                    {{#userdate}}{{timesync}}, {{#str}}strftimedatetime, langconfig{{/str}}{{/userdate}}
+                                {{/timesync}}
+                            </td>
+                            <td class="text-end">
+                                {{#isadded}}
+                                <div class="d-inline-flex justify-content-end w-100">
+                                <div class="action-menu moodle-actionmenu" id="action-menu-{{id}}" data-enhance="moodle-core-actionmenu">
+                                    <div class="menubar d-flex" id="action-menu-{{id}}-menubar">
+                                        <div class="action-menu-trigger">
+                                            <div class="dropdown">
+                                                <a href="#" tabindex="0" class="dropdown-toggle icon-no-margin text-decoration-none" id="action-menu-toggle-{{id}}" aria-label="{{#str}}actions, core{{/str}}" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="action-menu-{{id}}-menu">
+                                                    <i class="icon fa fa-ellipsis-vertical fa-fw " title="{{#str}}actions, core{{/str}}" role="img" aria-label="{{#str}}actions, core{{/str}}"></i>
+                                                    <b class="caret"></b>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end" id="action-menu-{{id}}-menu" data-rel="menu-content" aria-labelledby="action-menu-toggle-{{id}}" role="menu">
+                                                    {{#isavailable}}
+                                                        <a href="{{view_url}}" class="dropdown-item menu-action" role="menuitem">
+                                                            <i class="icon fa fa-search fa-fw" aria-hidden="true"></i>
+                                                            <span class="menu-action-text">{{#str}}view, core{{/str}}</span>
+                                                        </a>
+                                                    {{/isavailable}}
+                                                    {{^ishidden}}
+                                                        {{#isavailable}}
+                                                            <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="library-report-action" data-library-action="hide" data-reportid="{{reportid}}">
+                                                                <i class="icon fa fa-eye-slash fa-fw" aria-hidden="true"></i>
+                                                                <span class="menu-action-text">{{#str}}hide, core{{/str}}</span>
+                                                            </a>
+                                                        {{/isavailable}}
+                                                    {{/ishidden}}
+                                                    {{#ishidden}}
+                                                        {{#isavailable}}
+                                                            <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="library-report-action" data-library-action="show" data-reportid="{{reportid}}">
+                                                                <i class="icon fa fa-eye fa-fw" aria-hidden="true"></i>
+                                                                <span class="menu-action-text">{{#str}}show, core{{/str}}</span>
+                                                            </a>
+                                                        {{/isavailable}}
+                                                    {{/ishidden}}
+                                                    {{#can_manage}}
+                                                        {{#isavailable}}
+                                                            <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="edit-report-details" data-reportid="{{reportid}}">
+                                                                <i class="icon fa fa-cog fa-fw" aria-hidden="true"></i>
+                                                                <span class="menu-action-text">{{#str}}editreportdetails, local_la{{/str}}</span>
+                                                            </a>
+                                                            <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="library-report-action" data-library-action="duplicate" data-reportid="{{reportid}}">
+                                                                <i class="icon fa fa-copy fa-fw" aria-hidden="true"></i>
+                                                                <span class="menu-action-text">{{#str}}duplicatereport, local_la{{/str}}</span>
+                                                            </a>
+                                                        {{/isavailable}}
+                                                    {{/can_manage}}
+                                                    {{#isavailable}}
+                                                        <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="library-report-action" data-library-action="reset" data-reportid="{{reportid}}">
+                                                            <i class="icon fa fa-rotate-left fa-fw" aria-hidden="true"></i>
+                                                            <span class="menu-action-text">{{#str}}resetreport, local_la{{/str}}</span>
+                                                        </a>
+                                                    {{/isavailable}}
+                                                    <div class="dropdown-divider"></div>
+                                                    <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="delete-library-item" data-library-action="uninstallreport" data-reportid="{{reportid}}" data-title="{{#str}}uninstall, local_la{{/str}}" data-message="{{#str}}uninstallreportconfirm, local_la{{/str}}" data-confirm-button-label="{{#str}}uninstall, local_la{{/str}}">
+                                                        <i class="icon fa fa-trash fa-fw" aria-hidden="true"></i>
+                                                        <span class="menu-action-text">{{#str}}uninstall, local_la{{/str}}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                {{/isadded}}
+                                {{^isadded}}
+                                <div class="d-inline-flex justify-content-end w-100">
+                                <div class="action-menu moodle-actionmenu" id="action-menu-{{id}}" data-enhance="moodle-core-actionmenu">
+                                    <div class="menubar d-flex" id="action-menu-{{id}}-menubar">
+                                        <div class="action-menu-trigger">
+                                            <div class="dropdown">
+                                                <a href="#" tabindex="0" class="dropdown-toggle icon-no-margin text-decoration-none" id="action-menu-toggle-{{id}}" aria-label="{{#str}}actions, core{{/str}}" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" aria-controls="action-menu-{{id}}-menu">
+                                                    <i class="icon fa fa-ellipsis-vertical fa-fw" title="{{#str}}actions, core{{/str}}" role="img" aria-label="{{#str}}actions, core{{/str}}"></i>
+                                                    <b class="caret"></b>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end" id="action-menu-{{id}}-menu" data-rel="menu-content" aria-labelledby="action-menu-toggle-{{id}}" role="menu">
+                                                    {{#isavailable}}
+                                                        <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="open-report-preview" data-report="{{shortname}}" data-title="{{name}}">
+                                                            <i class="icon fa fa-search fa-fw" aria-hidden="true"></i>
+                                                            <span class="menu-action-text">{{#str}}preview, local_la{{/str}}</span>
+                                                        </a>
+                                                    {{/isavailable}}
+                                                    {{#can_manage}}
+                                                        {{#isavailable}}
+                                                            <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="library-report-action" data-library-action="duplicate" data-reportid="{{reportid}}">
+                                                                <i class="icon fa fa-copy fa-fw" aria-hidden="true"></i>
+                                                                <span class="menu-action-text">{{#str}}duplicatereport, local_la{{/str}}</span>
+                                                            </a>
+                                                        {{/isavailable}}
+                                                    {{/can_manage}}
+                                                    <div class="dropdown-divider"></div>
+                                                    <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="delete-library-item" data-library-action="uninstallreport" data-reportid="{{reportid}}" data-title="{{#str}}uninstall, local_la{{/str}}" data-message="{{#str}}uninstallreportconfirm, local_la{{/str}}" data-confirm-button-label="{{#str}}uninstall, local_la{{/str}}">
+                                                        <i class="icon fa fa-trash fa-fw" aria-hidden="true"></i>
+                                                        <span class="menu-action-text">{{#str}}uninstall, local_la{{/str}}</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                {{/isadded}}
+                            </td>
+                        </tr>
+                    {{/items}}
+                    {{^items}}
+                        <tr>
+                            <td colspan="7" class="text-muted text-center py-4">{{#str}}notfound, local_la{{/str}}</td>
+                        </tr>
+                    {{/items}}
+                    </tbody>
+                </table>
+            </div>
+
+            {{#pagingbar}}
+            <div class="d-flex justify-content-end mt-4">
+                {{{pagingbar}}}
+            </div>
+            {{/pagingbar}}
+        </section>
+    </main>
+</div>

@@ -1,0 +1,111 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/report/schedules
+
+    Renders report delivery schedules.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .btn-primary - JavaScript selector hook.
+    * .dropdown - JavaScript selector hook.
+    * .dropdown-menu - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="open-schedule-modal" - JavaScript data or selector hook.
+    * data-bs-auto-close="true" - JavaScript data or selector hook.
+    * data-bs-toggle="dropdown" - JavaScript data or selector hook.
+    * data-for="dropdowndialog_button" - JavaScript data or selector hook.
+    * data-for="dropdowndialog_content" - JavaScript data or selector hook.
+    * data-for="dropdowndialog_dialog" - JavaScript data or selector hook.
+    * data-for="uncheckedIcon" - JavaScript data or selector hook.
+    * data-report-id - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * schedules - array: List of entries for schedules.
+    * reportid - int: Numeric value for reportid.
+    * search - string: Text for search.
+    * can_manage - array|bool: Section data or visibility flag for can manage.
+    * table - string: Rendered HTML for table.
+
+    Example context (json):
+    {
+        "head": "<title>Schedules</title>",
+        "header": "<header></header>",
+        "reportid": 1,
+        "can_manage": true,
+        "table": "<table></table>"
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main p-1 pt-4 pb-4">
+        <section class="container-fluid">
+            {{{head}}}
+            {{#schedules}}
+                <div class="d-flex justify-content-between align-items-start gap-3 mt-4">
+                    <form method="get" action="" class="d-flex justify-content-start">
+                        <input type="hidden" name="id" value="{{reportid}}">
+                        <input type="hidden" name="tab" value="schedules">
+                        <div class="input-group mb-3 w-auto">
+                            <label for="la-schedule-search">
+                                <span class="visually-hidden">{{#str}}search, core{{/str}}</span>
+                            </label>
+                            <input id="la-schedule-search" name="schedule_search" type="text" class="form-control rounded-start border-end-0" placeholder="{{#str}}search, core{{/str}}" aria-label="{{#str}}search, core{{/str}}" value="{{search}}" size="28">
+                            <button class="input-group-text ps-2 pe-2 bg-white border-start-0" type="submit" aria-label="{{#str}}search, core{{/str}}">
+                                <i class="icon fa fa-search fa-fw" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                    {{#can_manage}}
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" role="button" id="la-schedule-create-menu" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-haspopup="true" aria-expanded="false" data-for="dropdowndialog_button">
+                                {{#str}}newschedule, local_la{{/str}}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end dialog-small" aria-labelledby="la-schedule-create-menu" data-for="dropdowndialog_dialog">
+                                <div class="p-2" data-for="dropdowndialog_content">
+                                    <div class="d-flex flex-column choicelist p-1" role="listbox">
+                                        <div class="d-flex flex-row align-items-start p-2 mb-1 position-relative rounded dropdown-item-outline">
+                                            <div class="option-select-indicator">
+                                                <span data-for="uncheckedIcon">
+                                                    <i class="icon fa-regular fa-circle fa-fw" aria-hidden="true"></i>
+                                                </span>
+                                            </div>
+                                            <div class="option-name">
+                                                <a class="stretched-link text-wrap fw-bold text-dark" role="option" aria-describedby="la-schedule-email-desc" href="#" data-action="open-schedule-modal" data-report-id="{{reportid}}">
+                                                    {{#str}}scheduleanemail, local_la{{/str}}
+                                                </a>
+                                                <div id="la-schedule-email-desc" class="option-description small text-muted text-wrap">
+                                                    {{#str}}scheduleemaildesc, local_la{{/str}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/can_manage}}
+                </div>
+                {{{table}}}
+            {{/schedules}}
+        </section>
+    </main>
+</div>

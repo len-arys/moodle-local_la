@@ -1,0 +1,143 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/calendar/header
+
+    Renders calendar navigation and active filter tags.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="calendar-load" - JavaScript data or selector hook.
+    * data-activityid - JavaScript data or selector hook.
+    * data-courseid - JavaScript data or selector hook.
+    * data-day - JavaScript data or selector hook.
+    * data-month - JavaScript data or selector hook.
+    * data-scope - JavaScript data or selector hook.
+    * data-userid - JavaScript data or selector hook.
+    * data-view - JavaScript data or selector hook.
+    * data-year - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * prevview - string: Text for prevview.
+    * prevyear - int: Numeric value for prevyear.
+    * prevmonth - int: Numeric value for prevmonth.
+    * prevday - int: Numeric value for prevday.
+    * headerclickable - array|bool: Section data or visibility flag for headerclickable.
+    * headertargetview - string: Text for headertargetview.
+    * headertargetyear - int: Numeric value for headertargetyear.
+    * headertargetmonth - int: Numeric value for headertargetmonth.
+    * headertargetday - int: Numeric value for headertargetday.
+    * headerlabel - string: Text for headerlabel.
+    * nextview - string: Text for nextview.
+    * nextyear - int: Numeric value for nextyear.
+    * nextmonth - int: Numeric value for nextmonth.
+    * nextday - int: Numeric value for nextday.
+    * filtertags - array: List of entries for filtertags.
+    * label - string: Text for label.
+    * value - string: Text for value.
+    * removable - array|bool: Section data or visibility flag for removable.
+    * targetscope - string: Text for targetscope.
+    * targetuserid - int: Numeric value for targetuserid.
+    * targetcourseid - int: Numeric value for targetcourseid.
+    * targetactivityid - int: Numeric value for targetactivityid.
+
+    Example context (json):
+    {
+        "headerlabel": "August 2026",
+        "prevview": "month",
+        "prevyear": 2026,
+        "prevmonth": 7,
+        "nextview": "month",
+        "nextyear": 2026,
+        "nextmonth": 9
+    }
+}}
+<div class="la-calendar-header">
+    <div class="la-calendar-toolbar">
+        <button
+            type="button"
+            class="btn btn-icon la-calendar-nav-button"
+            data-action="calendar-load"
+            data-view="{{prevview}}"
+            data-year="{{prevyear}}"
+            data-month="{{prevmonth}}"
+            data-day="{{prevday}}"
+            aria-label="Previous"
+            title="Previous"
+        >
+            <i class="icon fa fa-chevron-left fa-fw" aria-hidden="true"></i>
+        </button>
+
+        {{#headerclickable}}
+        <button
+            type="button"
+            class="btn la-calendar-title-button"
+            data-action="calendar-load"
+            data-view="{{headertargetview}}"
+            data-year="{{headertargetyear}}"
+            data-month="{{headertargetmonth}}"
+            data-day="{{headertargetday}}"
+        >
+            {{headerlabel}}
+        </button>
+        {{/headerclickable}}
+        {{^headerclickable}}
+        <div class="la-calendar-title-static">{{headerlabel}}</div>
+        {{/headerclickable}}
+
+        <button
+            type="button"
+            class="btn btn-icon la-calendar-nav-button"
+            data-action="calendar-load"
+            data-view="{{nextview}}"
+            data-year="{{nextyear}}"
+            data-month="{{nextmonth}}"
+            data-day="{{nextday}}"
+            aria-label="Next"
+            title="Next"
+        >
+            <i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="la-calendar-filters">
+        {{#filtertags}}
+        <span class="la-calendar-filter-tag">
+            <span class="la-calendar-filter-tag-label">{{label}}</span>
+            <span class="la-calendar-filter-tag-value">{{value}}</span>
+            {{#removable}}
+            <button
+                type="button"
+                class="btn la-calendar-filter-tag-remove"
+                data-action="calendar-load"
+                data-scope="{{targetscope}}"
+                data-userid="{{targetuserid}}"
+                data-courseid="{{targetcourseid}}"
+                data-activityid="{{targetactivityid}}"
+                aria-label="Remove {{label}} filter"
+                title="Remove {{label}} filter"
+            >
+                <i class="fa fa-xmark fa-fw" aria-hidden="true"></i>
+            </button>
+            {{/removable}}
+        </span>
+        {{/filtertags}}
+    </div>
+</div>

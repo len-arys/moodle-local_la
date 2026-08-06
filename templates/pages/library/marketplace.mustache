@@ -1,0 +1,64 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/library/marketplace
+
+    Renders the marketplace page shell and controls.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * data-plan - JavaScript data or selector hook.
+    * data-region="la-marketplace-items" - JavaScript data or selector hook.
+    * data-search - JavaScript data or selector hook.
+    * data-sort - JavaScript data or selector hook.
+    * data-type - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * controls - string: Text for controls.
+    * marketplacecontrols.currentfiltervalue - string: Text for marketplacecontrols currentfiltervalue.
+    * marketplacecontrols.currentsecondaryfiltervalue - string: Text for marketplacecontrols currentsecondaryfiltervalue.
+    * marketplacecontrols.search - string: Text for marketplacecontrols search.
+    * marketplacecontrols.currentsortvalue - string: Text for marketplacecontrols currentsortvalue.
+
+    Example context (json):
+    {
+        "head": "<title>Marketplace</title>",
+        "header": "<header></header>",
+        "controls": "<form></form>"
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main la-main-center pt-4 pb-4">
+        <section class="la-library container-fluid">
+            {{{head}}}
+            {{{controls}}}
+            <div
+                data-region="la-marketplace-items"
+                data-plan="{{marketplacecontrols.currentfiltervalue}}"
+                data-type="{{marketplacecontrols.currentsecondaryfiltervalue}}"
+                data-search="{{marketplacecontrols.search}}"
+                data-sort="{{marketplacecontrols.currentsortvalue}}">
+                <div class="text-muted text-center py-4">{{#str}}loading, core{{/str}}</div>
+            </div>
+        </section>
+    </main>
+</div>

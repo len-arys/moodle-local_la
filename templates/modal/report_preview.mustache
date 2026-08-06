@@ -1,0 +1,96 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/report_preview
+
+    Renders a report preview and summary metrics.
+
+    Classes required for JS:
+    * .alert - JavaScript selector hook.
+    * .btn - JavaScript selector hook.
+    * .la-report-modal - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="change-report-preview-limit" - JavaScript data or selector hook.
+    * data-action="open-full-report" - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * showsubheader - array|bool: Section data or visibility flag for showsubheader.
+    * summary.hasprimary - array|bool: Section data or visibility flag for summary hasprimary.
+    * summary.primary - string: Text for summary primary.
+    * summary.hassecondary - array|bool: Section data or visibility flag for summary hassecondary.
+    * summary.secondary - string: Text for summary secondary.
+    * metrics - array: List of entries for metrics.
+    * value - string: Text for value.
+    * label - string: Text for label.
+    * hastablehtml - array|bool: Section data or visibility flag for hastablehtml.
+    * tablehtml - string: Rendered HTML for tablehtml.
+    * empty - bool: Whether empty is enabled.
+    * fullreporturl - array|bool: Section data or visibility flag for fullreporturl.
+    * fullreportname - string: Text for fullreportname.
+
+    Example context (json):
+    {
+        "fullreportname": "Open full report",
+        "fullreporturl": "#",
+        "showsubheader": true,
+        "summary": {
+            "primary": "Users tracking",
+            "secondary": "120 users"
+        },
+        "hastablehtml": true,
+        "tablehtml": "<table></table>"
+    }
+}}
+<div class="la-report-modal">
+    {{#showsubheader}}
+    <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+        <div>
+            {{#summary.hasprimary}}<div class="h5 mb-1">{{summary.primary}}</div>{{/summary.hasprimary}}
+            {{#summary.hassecondary}}<div class="text-muted small">{{summary.secondary}}</div>{{/summary.hassecondary}}
+        </div>
+        <div class="la-report-modal-metrics text-end">
+            {{#metrics}}
+            <div class="la-report-modal-metric">
+                <div class="la-report-modal-metric-value">{{value}}</div>
+                <div class="la-report-modal-metric-label">{{label}}</div>
+            </div>
+            {{/metrics}}
+        </div>
+    </div>
+    {{/showsubheader}}
+    {{#hastablehtml}}
+    {{{tablehtml}}}
+    {{/hastablehtml}}
+    {{^hastablehtml}}
+    <div class="alert alert-light border mb-0">{{empty}}</div>
+    {{/hastablehtml}}
+    {{#fullreporturl}}
+    <div class="d-flex justify-content-between align-items-center gap-3 mt-3">
+        <div class="d-flex align-items-center gap-2">
+            <div class="form-label small text-muted mb-0">Rows</div>
+            <select class="form-select form-select-sm w-auto" data-action="change-report-preview-limit">
+                <option value="100" selected>100</option>
+                <option value="-1">All</option>
+            </select>
+        </div>
+        <a href="{{fullreporturl}}" class="btn btn-secondary" data-action="open-full-report">
+            {{fullreportname}}&nbsp;&nbsp;<i class="fa-classic fa-solid fa-angles-right"></i>
+        </a>
+    </div>
+    {{/fullreporturl}}
+</div>

@@ -1,0 +1,413 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/home
+
+    Renders the Lenarys Analytics home and report-generation interface.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .btn-primary - JavaScript selector hook.
+    * .d-none - JavaScript selector hook.
+    * .dropdown-menu - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+    * .la-home-context-option - JavaScript selector hook.
+    * .la-home-prompt - JavaScript selector hook.
+    * .la-home-prompt-send - JavaScript selector hook.
+    * .la-welcome-card - JavaScript selector hook.
+    * .la-welcome-slides - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="agent-check" - JavaScript data or selector hook.
+    * data-action="agent-complete" - JavaScript data or selector hook.
+    * data-action="agent-finish" - JavaScript data or selector hook.
+    * data-action="agent-next" - JavaScript data or selector hook.
+    * data-action="agent-prev" - JavaScript data or selector hook.
+    * data-action="agent-skip" - JavaScript data or selector hook.
+    * data-action="ai-install-report" - JavaScript data or selector hook.
+    * data-bs-auto-close="outside" - JavaScript data or selector hook.
+    * data-bs-toggle="dropdown" - JavaScript data or selector hook.
+    * data-definition - JavaScript data or selector hook.
+    * data-error-text - JavaScript data or selector hook.
+    * data-library-url - JavaScript data or selector hook.
+    * data-loading-text - JavaScript data or selector hook.
+    * data-only-text - JavaScript data or selector hook.
+    * data-placeholder-1 - JavaScript data or selector hook.
+    * data-placeholder-2 - JavaScript data or selector hook.
+    * data-placeholder-3 - JavaScript data or selector hook.
+    * data-region="agent-dots" - JavaScript data or selector hook.
+    * data-region="agent-guide" - JavaScript data or selector hook.
+    * data-region="agent-setup" - JavaScript data or selector hook.
+    * data-region="agent-setup-label" - JavaScript data or selector hook.
+    * data-region="agent-setup-list" - JavaScript data or selector hook.
+    * data-region="agent-setup-subtitle" - JavaScript data or selector hook.
+    * data-region="agent-setup-title" - JavaScript data or selector hook.
+    * data-region="agent-slide" - JavaScript data or selector hook.
+    * data-remove-report-text - JavaScript data or selector hook.
+    * data-remove-table-text - JavaScript data or selector hook.
+    * data-report-description - JavaScript data or selector hook.
+    * data-report-text - JavaScript data or selector hook.
+    * data-review-text - JavaScript data or selector hook.
+    * data-stop-text - JavaScript data or selector hook.
+    * data-stopped-text - JavaScript data or selector hook.
+    * data-success-text - JavaScript data or selector hook.
+    * data-table-only-text - JavaScript data or selector hook.
+    * data-table-text - JavaScript data or selector hook.
+    * data-tables-text - JavaScript data or selector hook.
+    * data-task - JavaScript data or selector hook.
+    * data-title - JavaScript data or selector hook.
+    * data-view-text - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * messages - array|bool: Section data or visibility flag for messages.
+    * contextitems - array: List of entries for contextitems.
+    * icon - string: Text for icon.
+    * name - string: Text for name.
+    * type - string: Text for type.
+    * class - string: Text for class.
+    * emptyhistory - array|bool: Section data or visibility flag for emptyhistory.
+    * html - array|bool: Section data or visibility flag for html.
+    * text - string: Text for text.
+    * installable - array|bool: Section data or visibility flag for installable.
+    * title - string: Text for title.
+    * viewurl - array|bool: Section data or visibility flag for viewurl.
+    * definition - string: Text for definition.
+    * time - array|bool: Section data or visibility flag for time.
+    * has_reports - array|bool: Section data or visibility flag for has reports.
+    * reports - array: List of entries for reports.
+    * url - string: URL for url.
+    * promptreports - array|bool: Section data or visibility flag for promptreports.
+    * id - int: Numeric value for id.
+    * prompttables - array|bool: Section data or visibility flag for prompttables.
+    * selected - array|bool: Section data or visibility flag for selected.
+    * show_agent - array|bool: Section data or visibility flag for show agent.
+    * libraryurl - string: URL for libraryurl.
+    * agent.slides - array: List of entries for agent slides.
+    * active - array|bool: Section data or visibility flag for active.
+    * visualclass - string: Text for visualclass.
+    * visualicon - string: Text for visualicon.
+    * eyebrow - string: Text for eyebrow.
+    * items - array: List of entries for items.
+    * todo - array|bool: Section data or visibility flag for todo.
+    * task - array|bool: Section data or visibility flag for task.
+    * checked - array|bool: Section data or visibility flag for checked.
+
+    Example context (json):
+    {
+        "header": "<header></header>",
+        "has_reports": true,
+        "reports": [
+            {
+                "id": 1,
+                "name": "Users tracking",
+                "url": "#"
+            }
+        ],
+        "promptreports": true,
+        "prompttables": false,
+        "contextitems": [
+            {
+                "name": "Reports",
+                "selected": true
+            }
+        ]
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+
+    <main class="la-main-center p-2">
+        <section class="px-1 py-4 pb-5 overflow-auto" id="la-home">
+            <div class="w-100 text-center">
+                <div class="mx-auto mb-3 d-flex justify-content-center" id="la-ai-report-waves-wrap">
+                    <canvas id="la-ai-report-waves" class="la-ai-report-waves" width="600" height="150" aria-hidden="true"></canvas>
+                </div>
+
+                <div>
+                    <div class="la-ai-report-chat d-none pb-5" id="la-ai-report-chat">
+                        <div class="la-ai-report-messages mx-auto" id="la-ai-report-messages" aria-live="polite">
+                            {{#messages}}
+                            {{#contextitems}}
+                            <div class="la-ai-report-context-item">
+                                <div class="la-ai-report-context-icon">
+                                    <i class="{{icon}}" aria-hidden="true"></i>
+                                </div>
+                                <div>
+                                    <strong>{{name}}</strong>
+                                    <div>{{type}}</div>
+                                </div>
+                            </div>
+                            {{/contextitems}}
+                            <div class="la-ai-report-message {{class}}"{{#emptyhistory}} id="la-ai-report-empty-history"{{/emptyhistory}}>
+                                <div>{{#html}}{{{html}}}{{/html}}{{^html}}{{text}}{{/html}}</div>
+                                {{#installable}}
+                                <div class="la-ai-report-review-card mt-2 mb-2">
+                                    <div class="la-ai-report-review-icon">
+                                        <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="la-ai-report-review-text">
+                                        <strong>{{title}}</strong>
+                                        <div>{{#str}}generatedreportdefinition, local_la{{/str}}</div>
+                                    </div>
+                                    {{#viewurl}}
+                                    <a href="{{viewurl}}" class="btn btn-outline-secondary btn-sm ms-auto">
+                                        {{#str}}view{{/str}}
+                                    </a>
+                                    {{/viewurl}}
+                                    {{^viewurl}}
+                                    <button type="button" class="btn btn-outline-secondary btn-sm ms-auto" data-action="ai-install-report" data-definition="{{definition}}" data-title="{{title}}">
+                                        {{#str}}review, local_la{{/str}}
+                                    </button>
+                                    {{/viewurl}}
+                                </div>
+                                {{/installable}}
+                                {{#time}}
+                                <div class="la-ai-report-message-time">{{time}}</div>
+                                {{/time}}
+                            </div>
+                            {{/messages}}
+                        </div>
+                        <div class="la-ai-report-spacer" id="la-ai-report-spacer" aria-hidden="true"></div>
+                    </div>
+
+                    <div class="pb-5" id="la-ai-report-container">
+                        <h2>
+                            {{#str}}welcomehome, local_la{{/str}}
+                        </h2>
+
+                        <p>
+                            {{#str}}homepromptintro, local_la{{/str}}
+                        </p>
+
+                        {{#has_reports}}
+                        <strong>{{#str}}continuewhereleft, local_la{{/str}}</strong>
+
+                        <ul class="la-home-reports list-unstyled p-0 my-2">
+                            {{#reports}}
+                            <li class="d-inline-block m-1">
+                                <a href="{{url}}" class="btn btn-secondary">{{name}}</a>
+                            </li>
+                            {{/reports}}
+                        </ul>
+                        {{/has_reports}}
+
+                        {{#has_reports}}
+                        <h5 class="mb-3 small fw-bold opacity-25 text-uppercase">{{#str}}or, local_la{{/str}}</h5>
+                        {{/has_reports}}
+                        <button type="button" class="btn btn-outline-secondary" id="la-ai-report-history">
+                            {{#str}}chathistory, local_la{{/str}}
+                        </button>
+                    </div>
+
+
+                    <div class="la-home-prompt-dock fixed-bottom start-0 w-100 pb-3">
+                        <div class="la-main-center px-3">
+                        <button type="button" class="la-ai-scroll-latest d-none" id="la-ai-scroll-latest" aria-label="{{#str}}scrolltolatest, local_la{{/str}}">
+                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                        </button>
+                        <form
+                                class="la-home-prompt position-relative mx-auto"
+                                id="la-ai-report-form"
+                                data-loading-text="{{#str}}thinking, local_la{{/str}}"
+                                data-success-text="{{#str}}reportgenerated, local_la{{/str}}"
+                                data-error-text="{{#str}}unabletogeneratereport, local_la{{/str}}"
+                                data-review-text="{{#str}}review, local_la{{/str}}"
+                                data-view-text="{{#str}}view{{/str}}"
+                                data-report-description="{{#str}}generatedreportdefinition, local_la{{/str}}"
+                                data-stopped-text="{{#str}}stopped, local_la{{/str}}"
+                                data-stop-text="{{#str}}stop, local_la{{/str}}"
+                                data-remove-report-text="{{#str}}removecontextreport, local_la{{/str}}"
+                                data-remove-table-text="{{#str}}removecontexttable, local_la{{/str}}"
+                                data-table-text="{{#str}}table, local_la{{/str}}"
+                                data-tables-text="{{#str}}tables, local_la{{/str}}"
+                                data-only-text="{{#str}}only, local_la{{/str}}"
+                                data-report-text="{{#str}}report, local_la{{/str}}"
+                                data-table-only-text="{{#str}}tableonly, local_la{{/str}}"
+                                data-placeholder-1="{{#str}}aipromptnewreport, local_la{{/str}}"
+                                data-placeholder-2="{{#str}}aiprompteditreport, local_la{{/str}}"
+                                data-placeholder-3="{{#str}}aiprompttablesreport, local_la{{/str}}">
+                            <textarea
+                                    class="form-control la-home-prompt-input"
+                                    id="la-ai-report-prompt"
+                                    rows="3"
+                                    placeholder="{{#str}}aipromptnewreport, local_la{{/str}}"
+                                    aria-label="{{#str}}describeaireport, local_la{{/str}}"></textarea>
+
+                            <div class="position-absolute bottom-0 start-0 px-2 pb-2 d-flex align-items-center gap-2">
+                                <div class="dropup">
+                                    <button type="button" class="la-home-prompt-action" id="la-ai-chat-add" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="{{#str}}chatadd, local_la{{/str}}">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="dropdown-menu la-home-context-menu" aria-labelledby="la-ai-chat-add">
+                                        <div class="dropend la-home-context-item">
+                                            <button type="button" class="dropdown-item la-home-context-parent d-flex align-items-center justify-content-between">
+                                                <span>{{#str}}reports, core{{/str}}</span>
+                                                <i class="fa fa-chevron-right ms-3" aria-hidden="true"></i>
+                                            </button>
+                                            <div class="dropdown-menu la-home-context-submenu">
+                                                {{#promptreports}}
+                                                <label class="dropdown-item la-home-context-option">
+                                                    <input type="radio" class="visually-hidden" name="la_ai_report_context" value="{{id}}">
+                                                    <i class="fa-solid fa-bars la-home-context-icon" aria-hidden="true"></i>
+                                                    <span>{{name}}</span>
+                                                    <i class="fa fa-check la-home-context-check" aria-hidden="true"></i>
+                                                </label>
+                                                {{/promptreports}}
+                                            </div>
+                                        </div>
+                                        <div class="dropend la-home-context-item">
+                                            <button type="button" class="dropdown-item la-home-context-parent d-flex align-items-center justify-content-between">
+                                                <span>{{#str}}tables, local_la{{/str}}</span>
+                                                <i class="fa fa-chevron-right ms-3" aria-hidden="true"></i>
+                                            </button>
+                                            <div class="dropdown-menu la-home-context-submenu">
+                                                <div class="la-home-table-mode" role="radiogroup" aria-label="{{#str}}tablemode, local_la{{/str}}">
+                                                    <label>
+                                                        <input type="radio" class="visually-hidden" name="la_ai_table_mode" value="context" checked>
+                                                        <span><i class="fa-regular fa-circle-dot" aria-hidden="true"></i> {{#str}}tablemodecontext, local_la{{/str}}</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" class="visually-hidden" name="la_ai_table_mode" value="only">
+                                                        <span><i class="fa-solid fa-circle-dot" aria-hidden="true"></i> {{#str}}tablemodeonly, local_la{{/str}}</span>
+                                                    </label>
+                                                </div>
+                                                {{#prompttables}}
+                                                <label class="dropdown-item la-home-context-option">
+                                                    <input type="checkbox" class="visually-hidden" name="la_ai_table_context[]" value="{{name}}" {{#selected}}checked{{/selected}}>
+                                                    <i class="fa-solid fa-table-cells-large la-home-context-icon" aria-hidden="true"></i>
+                                                    <span>{{name}}</span>
+                                                    <i class="fa fa-check la-home-context-check" aria-hidden="true"></i>
+                                                </label>
+                                                {{/prompttables}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="la-home-context-chips d-flex align-items-center gap-2" id="la-ai-context-chips"></div>
+                            </div>
+
+                            <div class="position-absolute bottom-0 end-0 px-2 pb-2 d-flex align-items-center gap-2">
+                                <button type="button" class="la-home-prompt-dots" id="la-ai-prompt-dots" aria-label="{{#str}}nextprompt, local_la{{/str}}">
+                                    <span class="active">
+                                        <svg viewBox="0 0 40 40" aria-hidden="true">
+                                            <circle cx="20" cy="20" r="16"></circle>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        <svg viewBox="0 0 40 40" aria-hidden="true">
+                                            <circle cx="20" cy="20" r="16"></circle>
+                                        </svg>
+                                    </span>
+                                    <span>
+                                        <svg viewBox="0 0 40 40" aria-hidden="true">
+                                            <circle cx="20" cy="20" r="16"></circle>
+                                        </svg>
+                                    </span>
+                                </button>
+                                <div class="dropup">
+                                    <button type="button" class="la-home-prompt-action" id="la-ai-chat-settings" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}chatsettings, local_la{{/str}}">
+                                        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end la-home-context-menu" aria-labelledby="la-ai-chat-settings">
+                                        <button type="button" class="dropdown-item la-home-context-parent text-start" id="la-ai-clear-history">
+                                            {{#str}}clearchathistory, local_la{{/str}}
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="la-home-prompt-send" aria-label="{{#str}}generateaireport, local_la{{/str}}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24">
+                                        <path d="M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <path d="M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+{{#show_agent}}
+<div class="la-welcome-backdrop" data-region="agent-guide" data-library-url="{{libraryurl}}" role="dialog" aria-modal="true" aria-label="{{#str}}welcomeguide, local_la{{/str}}">
+    <div class="la-welcome-card">
+        <button type="button" class="btn btn-light la-welcome-arrow la-welcome-arrow-prev" data-action="agent-prev" aria-label="{{#str}}previous{{/str}}">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-light la-welcome-arrow la-welcome-arrow-next" data-action="agent-next" aria-label="{{#str}}next{{/str}}">
+            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+        </button>
+
+        <div class="la-welcome-slides">
+            {{#agent.slides}}
+            <section class="la-welcome-slide{{#active}} is-active{{/active}}" data-region="agent-slide"{{^active}} hidden{{/active}}>
+                <div class="la-welcome-visual {{visualclass}}" aria-hidden="true">
+                    <div class="la-welcome-visual-panel">
+                        <i class="{{visualicon}}" aria-hidden="true"></i>
+                    </div>
+                    <span class="la-welcome-visual-chip la-welcome-visual-chip-one"></span>
+                    <span class="la-welcome-visual-chip la-welcome-visual-chip-two"></span>
+                    <span class="la-welcome-visual-chip la-welcome-visual-chip-three"></span>
+                </div>
+                <div class="la-welcome-copy">
+                    <p class="la-welcome-label">{{eyebrow}}</p>
+                    <h2>{{title}}</h2>
+                    <ul class="list-unstyled la-welcome-list">
+                        {{#items}}
+                        <li{{#todo}} class="la-welcome-check-todo" data-action="agent-check"{{#task}} data-task="{{task}}"{{/task}}{{/todo}}>
+                            <i class="fa-regular {{#checked}}fa-square-check{{/checked}}{{#todo}}fa-square{{/todo}}" aria-hidden="true"></i>
+                            <span>{{text}}</span>
+                        </li>
+                        {{/items}}
+                    </ul>
+                </div>
+            </section>
+            {{/agent.slides}}
+        </div>
+
+        <div class="la-welcome-setup d-none" data-region="agent-setup">
+            <p class="la-welcome-label" data-region="agent-setup-label">{{#str}}setup, local_la{{/str}}</p>
+            <h2 data-region="agent-setup-title">{{#str}}agentcheckinglicense, local_la{{/str}}</h2>
+            <p data-region="agent-setup-subtitle">{{#str}}agentcheckinglicensedesc, local_la{{/str}}</p>
+            <ul class="list-unstyled la-welcome-setup-list" data-region="agent-setup-list"></ul>
+        </div>
+
+        <div class="la-welcome-footer">
+            <div class="la-welcome-dots" data-region="agent-dots" aria-hidden="true">
+                {{#agent.slides}}
+                <span{{#active}} class="is-active"{{/active}}></span>
+                {{/agent.slides}}
+            </div>
+            <div class="la-welcome-actions">
+                <button type="button" class="btn btn-link text-secondary" data-action="agent-skip">
+                    {{#str}}skip, local_la{{/str}}
+                </button>
+                <button type="button" class="btn btn-primary d-none" data-action="agent-complete">
+                    {{#str}}complete, local_la{{/str}}
+                </button>
+                <button type="button" class="btn btn-primary d-none" data-action="agent-finish">
+                    {{#str}}finish, local_la{{/str}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{{/show_agent}}

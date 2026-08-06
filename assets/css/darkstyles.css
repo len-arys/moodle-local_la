@@ -1,0 +1,629 @@
+body.path-local-la {
+    color-scheme: dark;
+
+    --la-dark-bg: #242427;
+    --la-dark-surface: #2e2e31;
+    --la-dark-surface-elevated: #333338;
+    --la-dark-border: rgba(255, 255, 255, 0.12);
+    --la-dark-border-strong: rgba(255, 255, 255, 0.18);
+    --la-dark-text: rgba(255, 255, 255, 0.88);
+    --la-dark-text-muted: rgba(255, 255, 255, 0.64);
+    --la-dark-text-faint: rgba(255, 255, 255, 0.48);
+    --la-dark-accent: #8ab4ff;
+    --la-dark-warning-bg: rgba(255, 193, 7, 0.18);
+    --la-dark-warning-border: rgba(255, 193, 7, 0.3);
+    --la-dark-info-bg: rgba(13, 202, 240, 0.16);
+    --la-dark-info-border: rgba(13, 202, 240, 0.28);
+    --la-surface-base: var(--la-dark-surface);
+    --la-surface-panel: var(--la-dark-surface);
+    --la-surface-muted: rgba(255, 255, 255, 0.06);
+    --la-surface-muted-strong: rgba(138, 180, 255, 0.12);
+    --la-surface-accent: rgba(138, 180, 255, 0.14);
+    --la-surface-accent-hero: linear-gradient(135deg, rgba(138, 180, 255, 0.12) 0%, rgba(138, 180, 255, 0.06) 100%);
+    --la-border-soft: var(--la-dark-border);
+    --la-text-strong: var(--la-dark-text);
+    --la-text-muted: var(--la-dark-text-muted);
+    --la-text-soft: var(--la-dark-text-muted);
+    --la-text-accent: var(--la-dark-accent);
+    --la-shadow-soft: 0 -4px 14px rgba(0, 0, 0, 0.32);
+    --la-scroll-track: var(--la-dark-surface);
+    --la-scroll-thumb: rgba(255, 255, 255, 0.28);
+    --la-scroll-thumb-hover: rgba(255, 255, 255, 0.38);
+    --la-scroll-shadow-top: linear-gradient(var(--la-dark-surface) 30%, rgba(46, 46, 49, 0)) center top;
+    --la-scroll-shadow-bottom: linear-gradient(rgba(46, 46, 49, 0), var(--la-dark-surface) 70%) center bottom;
+    --la-scroll-shadow-ambient-top: radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0)) center top;
+    --la-scroll-shadow-ambient-bottom: radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0)) center bottom;
+}
+
+body.path-local-la,
+body.path-local-la #page.drawers,
+body.path-local-la #page.drawers .main-inner,
+body.path-local-la #region-main {
+    background-color: var(--la-dark-bg) !important;
+    color: var(--la-dark-text);
+}
+
+body.path-local-la a {
+    color: var(--la-dark-accent);
+}
+
+body.path-local-la a:hover,
+body.path-local-la a:focus {
+    color: #c2d7ff;
+}
+
+body.path-local-la .navbar.bg-white,
+body.path-local-la .card,
+body.path-local-la .dropdown-menu,
+body.path-local-la .modal-content,
+body.path-local-la .popover,
+body.path-local-la .navbar .form-control,
+body.path-local-la .navbar .input-group-text,
+body.path-local-la .la-main .alert,
+body.path-local-la .la-main .list-group-item,
+body.path-local-la .la-main .form-control,
+body.path-local-la .la-main .form-select,
+body.path-local-la .la-main .input-group-text,
+body.path-local-la .la-main .page-link {
+    background-color: var(--la-dark-surface) !important;
+    color: var(--la-dark-text) !important;
+    border-color: var(--la-dark-border) !important;
+}
+
+body.path-local-la .navbar .nav-link,
+body.path-local-la .navbar .dropdown-toggle,
+body.path-local-la .navbar .form-check-label,
+body.path-local-la .navbar .btn-link,
+body.path-local-la .navbar .btn-outline-secondary,
+body.path-local-la .navbar .btn-secondary,
+body.path-local-la .breadcrumb,
+body.path-local-la .breadcrumb a,
+body.path-local-la .dropdown-item,
+body.path-local-la .dropdown-header,
+body.path-local-la .nav-tabs .nav-link,
+body.path-local-la .text-muted,
+body.path-local-la .la-main .text-muted {
+    color: var(--la-dark-text-muted) !important;
+}
+
+body.path-local-la .navbar .nav-link:hover,
+body.path-local-la .navbar .nav-link:focus,
+body.path-local-la .navbar .nav-link.active,
+body.path-local-la .navbar .dropdown-toggle:hover,
+body.path-local-la .navbar .dropdown-toggle:focus,
+body.path-local-la .navbar .btn-outline-secondary:hover,
+body.path-local-la .navbar .btn-outline-secondary:focus,
+body.path-local-la .navbar .btn-secondary:hover,
+body.path-local-la .navbar .btn-secondary:focus,
+body.path-local-la .navbar .dropdown-item:hover,
+body.path-local-la .navbar .dropdown-item:focus,
+body.path-local-la .dropdown-item:hover,
+body.path-local-la .dropdown-item:focus,
+body.path-local-la .breadcrumb-item.active,
+body.path-local-la .breadcrumb-item + .breadcrumb-item::before,
+body.path-local-la .nav-tabs .nav-link:hover,
+body.path-local-la .nav-tabs .nav-link:focus,
+body.path-local-la .nav-tabs .nav-link.active {
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .dropdown-item:hover,
+body.path-local-la .dropdown-item:focus,
+body.path-local-la .navbar .nav-link:hover,
+body.path-local-la .navbar .nav-link:focus,
+body.path-local-la .navbar .dropdown-toggle:hover,
+body.path-local-la .navbar .dropdown-toggle:focus,
+body.path-local-la .nav-tabs .nav-link.active,
+body.path-local-la .nav-tabs .nav-item.show .nav-link,
+body.path-local-la .page-link:hover,
+body.path-local-la .page-link:focus {
+    background-color: var(--la-dark-surface-elevated) !important;
+    border-color: var(--la-dark-border-strong) !important;
+}
+
+body.path-local-la .navbar .form-control,
+body.path-local-la .navbar .form-control:focus {
+    background-color: var(--la-dark-surface) !important;
+    color: var(--la-dark-text) !important;
+    border-color: var(--la-dark-border-strong) !important;
+}
+
+body.path-local-la .navbar .form-control::placeholder {
+    color: var(--la-dark-text-faint) !important;
+}
+
+body.path-local-la .dropdown-divider,
+body.path-local-la hr,
+body.path-local-la .nav-tabs,
+body.path-local-la .table thead th,
+body.path-local-la .table thead td,
+body.path-local-la .generaltable thead th,
+body.path-local-la .generaltable thead td,
+body.path-local-la .table th,
+body.path-local-la .table td,
+body.path-local-la .generaltable th,
+body.path-local-la .generaltable td {
+    border-color: var(--la-dark-border) !important;
+}
+
+body.path-local-la .form-control,
+body.path-local-la .form-select,
+body.path-local-la .input-group-text {
+    box-shadow: none;
+}
+
+body.path-local-la .form-control::placeholder {
+    color: var(--la-dark-text-faint);
+}
+
+body.path-local-la .modal-content .form-control,
+body.path-local-la .modal-content .form-select,
+body.path-local-la .modal-content .input-group-text {
+    background-color: var(--la-dark-surface-elevated) !important;
+    color: var(--la-dark-text) !important;
+    border-color: var(--la-dark-border-strong) !important;
+}
+
+body.path-local-la .modal-content .form-control::placeholder {
+    color: var(--la-dark-text-faint) !important;
+}
+
+body.path-local-la .modal-header,
+body.path-local-la .modal-footer {
+    border-color: var(--la-dark-border) !important;
+}
+
+body.path-local-la .la-welcome-backdrop {
+    background: rgba(0, 0, 0, 0.62);
+}
+
+body.path-local-la .la-welcome-card {
+    background: var(--la-dark-surface) !important;
+    color: var(--la-dark-text);
+    box-shadow: 0 1.25rem 4rem rgba(0, 0, 0, 0.42);
+}
+
+body.path-local-la .la-welcome-label,
+body.path-local-la .la-welcome-list,
+body.path-local-la .la-welcome-setup p,
+body.path-local-la .la-welcome-setup-list small {
+    color: var(--la-dark-text-muted);
+}
+
+body.path-local-la .la-welcome-copy h2,
+body.path-local-la .la-welcome-setup h2,
+body.path-local-la .la-welcome-check-todo[data-task="installreports"] span {
+    color: var(--la-dark-text);
+}
+
+body.path-local-la .la-welcome-setup-list li {
+    border-color: var(--la-dark-border);
+}
+
+body.path-local-la .la-welcome-setup-list [data-region="agent-report-status"] {
+    color: #75b798;
+}
+
+body.path-local-la .la-agent-details {
+    color: var(--la-dark-text-muted);
+    background: var(--la-dark-surface-elevated);
+    border-color: var(--la-dark-border-strong);
+}
+
+body.path-local-la .la-welcome-actions .btn-link {
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-welcome-arrow {
+    background: var(--la-dark-surface-elevated) !important;
+    color: var(--la-dark-text) !important;
+    border-color: var(--la-dark-border) !important;
+}
+
+body.path-local-la .la-welcome-dots span {
+    background: var(--la-dark-text-faint);
+}
+
+body.path-local-la .modal .btn-close,
+body.path-local-la .modal .close {
+    filter: invert(1) grayscale(100%);
+    opacity: 0.72;
+}
+
+body.path-local-la .modal .btn-close:hover,
+body.path-local-la .modal .btn-close:focus,
+body.path-local-la .modal .close:hover,
+body.path-local-la .modal .close:focus {
+    opacity: 1;
+}
+
+body.path-local-la .mform .fheader.btn-icon,
+body.path-local-la .mform .icons-collapse-expand.btn-icon {
+    background: transparent !important;
+    color: var(--la-dark-text-muted) !important;
+}
+
+body.path-local-la .mform .fheader.btn-icon:hover,
+body.path-local-la .mform .fheader.btn-icon:focus,
+body.path-local-la .mform .icons-collapse-expand.btn-icon:hover,
+body.path-local-la .mform .icons-collapse-expand.btn-icon:focus {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .table thead th,
+body.path-local-la .table thead td,
+body.path-local-la .generaltable thead th,
+body.path-local-la .generaltable thead td {
+    color: var(--la-dark-text-muted) !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+body.path-local-la .form-control:focus,
+body.path-local-la .form-select:focus,
+body.path-local-la .btn:focus,
+body.path-local-la .btn-check:focus + .btn,
+body.path-local-la .page-link:focus,
+body.path-local-la .nav-link:focus {
+    border-color: rgba(138, 180, 255, 0.45) !important;
+    box-shadow: 0 0 0 0.2rem rgba(138, 180, 255, 0.18) !important;
+}
+
+body.path-local-la .btn-secondary,
+body.path-local-la .btn-outline-secondary,
+body.path-local-la .btn-outline-secondary:hover,
+body.path-local-la .btn-outline-secondary:focus,
+body.path-local-la .btn-outline-secondary:active,
+body.path-local-la .btn-secondary:hover,
+body.path-local-la .btn-secondary:focus,
+body.path-local-la .btn-secondary:active {
+    background-color: var(--la-dark-surface-elevated) !important;
+    color: var(--la-dark-text) !important;
+    border-color: var(--la-dark-border-strong) !important;
+}
+
+body.path-local-la .btn-primary {
+    border-color: transparent !important;
+}
+
+body.path-local-la .alert-warning {
+    background-color: var(--la-dark-warning-bg) !important;
+    border-color: var(--la-dark-warning-border) !important;
+    color: #ffe69c !important;
+}
+
+body.path-local-la .alert-info {
+    background-color: var(--la-dark-info-bg) !important;
+    border-color: var(--la-dark-info-border) !important;
+    color: #9eeaf9 !important;
+}
+
+body.path-local-la .badge.text-bg-warning {
+    color: #1f1600 !important;
+}
+
+body.path-local-la .badge.text-bg-light,
+body.path-local-la .bg-light {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .text-dark,
+body.path-local-la .navbar.bg-white .text-dark {
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .border-start,
+body.path-local-la .border,
+body.path-local-la .border-top,
+body.path-local-la .border-bottom,
+body.path-local-la .border-end {
+    border-color: var(--la-dark-border) !important;
+}
+
+body.path-local-la canvas {
+    opacity: 0.9;
+}
+
+body.path-local-la .la-calendar-panel {
+    background: var(--la-dark-surface) !important;
+}
+
+body.path-local-la .la-calendar-month-grid,
+body.path-local-la .la-calendar-selection-grid,
+body.path-local-la .la-calendar-week-grid {
+    background: transparent !important;
+}
+
+body.path-local-la .la-calendar-header,
+body.path-local-la .la-calendar-footer {
+    border-color: var(--la-dark-border) !important;
+}
+
+body.path-local-la .la-calendar-title-button,
+body.path-local-la .la-calendar-title-static {
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-calendar-title-button:hover,
+body.path-local-la .la-calendar-title-button:focus {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-calendar-nav-button,
+body.path-local-la .la-calendar-legend,
+body.path-local-la .la-calendar-weekday,
+body.path-local-la .la-calendar-week-hour-label {
+    color: var(--la-dark-text-muted) !important;
+}
+
+body.path-local-la .la-calendar-nav-button:hover,
+body.path-local-la .la-calendar-nav-button:focus {
+    background: var(--la-dark-surface-elevated) !important;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-calendar-legend-label,
+body.path-local-la .la-calendar-filter-tag-value,
+body.path-local-la .la-calendar-cell-label,
+body.path-local-la .la-calendar-cell-value {
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-calendar-cell-label {
+    opacity: 0.7;
+}
+
+body.path-local-la .la-calendar-filter-tag {
+    background: var(--la-dark-surface-elevated) !important;
+    border-color: var(--la-dark-border) !important;
+}
+
+body.path-local-la .la-calendar-filter-tag-label,
+body.path-local-la .la-calendar-filter-tag-remove {
+    color: var(--la-dark-text-muted) !important;
+}
+
+body.path-local-la .la-calendar-filter-tag-remove:hover,
+body.path-local-la .la-calendar-filter-tag-remove:focus {
+    color: var(--la-dark-text) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.path-local-la .la-calendar-cell {
+    --la-calendar-cell-bg: #2b313a;
+}
+
+body.path-local-la .la-calendar-day-outside,
+body.path-local-la .la-calendar-selection.is-outside {
+    --la-calendar-cell-bg: #242931;
+}
+
+body.path-local-la .la-calendar-day-outside .la-calendar-cell-label,
+body.path-local-la .la-calendar-day-outside .la-calendar-cell-value,
+body.path-local-la .la-calendar-selection.is-outside .la-calendar-cell-label,
+body.path-local-la .la-calendar-selection.is-outside .la-calendar-cell-value {
+    color: var(--la-dark-text-faint) !important;
+}
+
+body.path-local-la .la-calendar-selection.is-selected {
+    outline-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+body.path-local-la .la-calendar-level-0 {
+    --la-calendar-cell-bg: #2b313a;
+}
+
+body.path-local-la .la-calendar-level-1 {
+    --la-calendar-cell-bg: #223049;
+}
+
+body.path-local-la .la-calendar-level-2 {
+    --la-calendar-cell-bg: #2d4270;
+}
+
+body.path-local-la .la-calendar-level-3 {
+    --la-calendar-cell-bg: #3a5ca4;
+}
+
+body.path-local-la .la-calendar-level-4 {
+    --la-calendar-cell-bg: #5573e8;
+}
+
+body.path-local-la .la-calendar-level-3 .la-calendar-cell-label,
+body.path-local-la .la-calendar-level-4 .la-calendar-cell-label,
+body.path-local-la .la-calendar-level-3 .la-calendar-cell-value,
+body.path-local-la .la-calendar-level-4 .la-calendar-cell-value {
+    color: #ffffff !important;
+    opacity: 1;
+}
+
+body.path-local-la .la-calendar-week-column-head {
+    background: #242931 !important;
+}
+
+body.path-local-la .la-app-card {
+    background: var(--la-dark-surface) !important;
+    border-color: var(--la-dark-border) !important;
+    color: var(--la-dark-text) !important;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.24);
+}
+
+body.path-local-la .la-app-card.is-active,
+body.path-local-la .la-app-card.is-maximized {
+    border-color: var(--la-dark-border-strong) !important;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.32);
+}
+
+body.path-local-la .la-app-donut::before {
+    background: var(--la-dark-surface) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+body.path-local-la .la-app-legend-row {
+    border-color: var(--la-dark-border) !important;
+}
+
+body.path-local-la .la-app-more {
+    color: var(--la-dark-accent) !important;
+}
+
+body.path-local-la .la-app-more:hover,
+body.path-local-la .la-app-more:focus {
+    color: #c2d7ff !important;
+}
+
+body.path-local-la .la-library-sql-section-content code:not(.la-sql-preview-code) {
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-app-card .btn-icon,
+body.path-local-la .la-app-card .btn-icon .icon,
+body.path-local-la .la-library .btn-icon,
+body.path-local-la .la-library .btn-icon .icon {
+    color: var(--la-dark-text-muted) !important;
+}
+
+body.path-local-la .la-app-card .btn-icon:hover,
+body.path-local-la .la-app-card .btn-icon:focus,
+body.path-local-la .la-app-card .btn-icon:hover .icon,
+body.path-local-la .la-app-card .btn-icon:focus .icon,
+body.path-local-la .la-library .btn-icon:hover,
+body.path-local-la .la-library .btn-icon:focus,
+body.path-local-la .la-library .btn-icon:hover .icon,
+body.path-local-la .la-library .btn-icon:focus .icon {
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-calendar-legend-swatch.la-calendar-level-0 {
+    background: #2b313a !important;
+}
+
+body.path-local-la .la-calendar-legend-swatch.la-calendar-level-1 {
+    background: #223049 !important;
+}
+
+body.path-local-la .la-calendar-legend-swatch.la-calendar-level-2 {
+    background: #2d4270 !important;
+}
+
+body.path-local-la .la-calendar-legend-swatch.la-calendar-level-3 {
+    background: #3a5ca4 !important;
+}
+
+body.path-local-la .la-calendar-legend-swatch.la-calendar-level-4 {
+    background: #5573e8 !important;
+}
+
+body.path-local-la .la-ai-report-context-item {
+    background: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+body.path-local-la .la-ai-report-context-icon {
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-ai-report-context-item div:last-child div {
+    color: var(--la-dark-text-muted) !important;
+}
+
+body.path-local-la .la-ai-report-review-card {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-ai-report-review-icon {
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: var(--la-dark-text-muted) !important;
+}
+
+body.path-local-la .la-ai-report-review-text div {
+    color: var(--la-dark-text-muted) !important;
+}
+
+body.path-local-la .la-home-context-chip {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-home-context-chip:hover,
+body.path-local-la .la-home-context-chip:focus {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-home-context-menu,
+body.path-local-la .la-home-context-submenu {
+    background: var(--la-dark-surface) !important;
+    box-shadow:
+        rgba(0, 0, 0, 0.35) 0 10px 15px -3px,
+        rgba(0, 0, 0, 0.3) 0 4px 6px -4px,
+        rgba(255, 255, 255, 0.14) 0 0 0 0.5px;
+    scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+}
+
+body.path-local-la .la-home-table-mode {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+body.path-local-la .la-home-table-mode input:checked + span {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+body.path-local-la .la-home-context-parent:hover,
+body.path-local-la .la-home-context-parent:focus,
+body.path-local-la .la-home-context-option:hover,
+body.path-local-la .la-home-context-option:focus,
+body.path-local-la .la-home-context-selected-item:hover,
+body.path-local-la .la-home-context-selected-item:focus {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-report-synthetic-dropdown {
+    padding: 6px !important;
+    border: 0 !important;
+    border-radius: 12px;
+    background: var(--la-dark-surface) !important;
+    box-shadow:
+        rgba(0, 0, 0, 0.35) 0 10px 15px -3px,
+        rgba(0, 0, 0, 0.3) 0 4px 6px -4px,
+        rgba(255, 255, 255, 0.14) 0 0 0 0.5px;
+    scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+}
+
+body.path-local-la .la-report-synthetic-body {
+    max-height: min(24rem, calc(100vh - 13rem));
+    overflow-y: auto;
+}
+
+body.path-local-la .la-report-synthetic-metric {
+    gap: 0.35rem;
+    padding: 0.35rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+body.path-local-la .la-report-synthetic-metric-option {
+    border-radius: 0.6rem;
+    color: var(--la-dark-text) !important;
+}
+
+body.path-local-la .la-report-synthetic-metric-option.active,
+body.path-local-la .la-report-synthetic-metric-option:has(input:checked) {
+    background: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: rgba(0, 0, 0, 0.12) 0 1px 4px;
+}
+
+body.path-local-la .la-report-synthetic-body .form-check {
+    color: var(--la-dark-text-muted);
+}
+
+body.path-local-la .la-report-synthetic-footer {
+    border-color: var(--la-dark-border) !important;
+    background: var(--la-dark-surface) !important;
+}

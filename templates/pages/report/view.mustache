@@ -1,0 +1,51 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/report/view
+
+    Renders the main report view.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * toolbar - string: Text for toolbar.
+    * table - string: Rendered HTML for table.
+
+    Example context (json):
+    {
+        "head": "<title>Users tracking</title>",
+        "header": "<header></header>",
+        "toolbar": "<div></div>",
+        "table": "<table></table>"
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main p-1 pt-4 pb-4">
+        <section class="container-fluid">
+            {{{head}}}
+            {{{toolbar}}}
+            {{{table}}}
+        </section>
+    </main>
+</div>

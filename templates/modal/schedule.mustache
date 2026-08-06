@@ -1,0 +1,297 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/schedule
+
+    Renders the report delivery schedule form.
+
+    Classes required for JS:
+    * .alert - JavaScript selector hook.
+    * .btn - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-check - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+    * .la-schedule-form - JavaScript selector hook.
+    * .row - JavaScript selector hook.
+    * .show - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-bs-toggle="collapse" - JavaScript data or selector hook.
+    * data-fieldtype="checkbox" - JavaScript data or selector hook.
+    * data-fieldtype="date_time" - JavaScript data or selector hook.
+    * data-fieldtype="date_time_selector" - JavaScript data or selector hook.
+    * data-fieldtype="editor" - JavaScript data or selector hook.
+    * data-fieldtype="group" - JavaScript data or selector hook.
+    * data-fieldtype="select" - JavaScript data or selector hook.
+    * data-fieldtype="text" - JavaScript data or selector hook.
+    * data-groupname="audiences" - JavaScript data or selector hook.
+    * data-groupname="timescheduled" - JavaScript data or selector hook.
+    * data-report-id - JavaScript data or selector hook.
+    * data-schedule-id - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * reportid - int: Numeric value for reportid.
+    * scheduleid - int: Numeric value for scheduleid.
+    * name - string: Text for name.
+    * formats - array: List of entries for formats.
+    * value - string: Text for value.
+    * selected - array|bool: Section data or visibility flag for selected.
+    * time.days - array: List of entries for time days.
+    * time.months - array: List of entries for time months.
+    * time.years - array: List of entries for time years.
+    * time.hours - array: List of entries for time hours.
+    * time.minutes - array|bool: Section data or visibility flag for time minutes.
+    * recurrences - array: List of entries for recurrences.
+    * hasaudiences - array|bool: Section data or visibility flag for hasaudiences.
+    * audiences - array: List of entries for audiences.
+    * type - string: Text for type.
+    * disabled - array|bool: Section data or visibility flag for disabled.
+    * limitmessage - array|bool: Section data or visibility flag for limitmessage.
+    * subject - string: Text for subject.
+    * body - string: Text for body.
+    * emptyoptions - array: List of entries for emptyoptions.
+
+    Example context (json):
+    {
+        "reportid": 1,
+        "scheduleid": 0,
+        "name": "Weekly report",
+        "subject": "Users tracking",
+        "formats": [
+            {
+                "value": "csv",
+                "name": "CSV",
+                "selected": true
+            }
+        ],
+        "recurrences": [
+            {
+                "value": "weekly",
+                "name": "Weekly",
+                "selected": true
+            }
+        ]
+    }
+}}
+<form class="mform la-schedule-form" autocomplete="off" data-report-id="{{reportid}}" data-schedule-id="{{scheduleid}}">
+    <fieldset class="clearfix fitem collapsible" id="la-schedule-general" name="general">
+        <legend class="visually-hidden">{{#str}}general, core{{/str}}</legend>
+        <div class="d-flex align-items-center mb-2">
+            <div class="position-relative d-flex ftoggler align-items-center me-1">
+                <a data-bs-toggle="collapse" href="#la-schedule-general-container" role="button" aria-expanded="true" aria-controls="la-schedule-general-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader">
+                    <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                    <span class="visually-hidden">{{#str}}general, core{{/str}}</span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}general, core{{/str}}</h3>
+            </div>
+        </div>
+        <div id="la-schedule-general-container" class="fcontainer collapseable collapse show">
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-schedule-name">{{#str}}name, core{{/str}}</label>
+                    <div class="form-label-addon d-flex align-items-center align-self-start">
+                        <div class="text-danger" title="{{#str}}required{{/str}}" aria-hidden="true"><i class="icon fa fa-circle-exclamation text-danger fa-fw" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="text">
+                    <input id="la-schedule-name" name="name" type="text" class="form-control" value="{{name}}" aria-required="true" required>
+                    <div class="form-control-feedback invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-schedule-format">{{#str}}format, local_la{{/str}}</label>
+                    <div class="form-label-addon d-flex align-items-center align-self-start"></div>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="select">
+                    <select id="la-schedule-format" name="format" class="form-select">
+                        {{#formats}}<option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>{{/formats}}
+                    </select>
+                    <div class="form-control-feedback invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="mb-3 row fitem" data-groupname="timescheduled">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <p class="mb-0 word-break">{{#str}}startingfrom, local_la{{/str}}</p>
+                    <div class="form-label-addon d-flex align-items-center align-self-start"></div>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="date_time_selector">
+                    <fieldset data-fieldtype="date_time" class="m-0 p-0 border-0">
+                        <legend class="visually-hidden">{{#str}}startingfrom, local_la{{/str}}</legend>
+                        <div class="fdate_time_selector d-flex flex-wrap align-items-center gap-2">
+                            <select class="form-select mb-3" name="timescheduled[day]" aria-label="{{#str}}day, local_la{{/str}}">
+                                {{#time.days}}<option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>{{/time.days}}
+                            </select>
+                            <select class="form-select mb-3" name="timescheduled[month]" aria-label="{{#str}}month, local_la{{/str}}">
+                                {{#time.months}}<option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>{{/time.months}}
+                            </select>
+                            <select class="form-select mb-3" name="timescheduled[year]" aria-label="{{#str}}year, local_la{{/str}}">
+                                {{#time.years}}<option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>{{/time.years}}
+                            </select>
+                            <select class="form-select mb-3" name="timescheduled[hour]" aria-label="{{#str}}hour, local_la{{/str}}">
+                                {{#time.hours}}<option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>{{/time.hours}}
+                            </select>
+                            <select class="form-select mb-3" name="timescheduled[minute]" aria-label="{{#str}}minute, local_la{{/str}}">
+                                {{#time.minutes}}<option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>{{/time.minutes}}
+                            </select>
+                            <button class="btn btn-link btn-sm icon-no-margin mb-3" type="button" title="{{#str}}datepicker, local_la{{/str}}" aria-label="{{#str}}datepicker, local_la{{/str}}">
+                                <i class="icon fa-regular fa-calendar fa-fw" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </fieldset>
+                    <div class="form-control-feedback invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-schedule-recurrence">{{#str}}recurrence, local_la{{/str}}</label>
+                    <div class="form-label-addon d-flex align-items-center align-self-start"></div>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="select">
+                    <select id="la-schedule-recurrence" name="recurrence" class="form-select">
+                        {{#recurrences}}<option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>{{/recurrences}}
+                    </select>
+                    <div class="form-control-feedback invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-schedule-viewas">{{#str}}viewreportdataas, local_la{{/str}}</label>
+                    <div class="form-label-addon d-flex align-items-center align-self-start"></div>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="select">
+                    <select id="la-schedule-viewas" class="form-select" disabled>
+                        <option>{{#str}}schedulecreator, local_la{{/str}}</option>
+                    </select>
+                    <div class="form-control-feedback invalid-feedback"></div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="clearfix fitem collapsible" id="la-schedule-audience" name="audience">
+        <legend class="visually-hidden">{{#str}}audience, local_la{{/str}}</legend>
+        <div class="d-flex align-items-center mb-2">
+            <div class="position-relative d-flex ftoggler align-items-center me-1">
+                <a data-bs-toggle="collapse" href="#la-schedule-audience-container" role="button" aria-expanded="true" aria-controls="la-schedule-audience-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader">
+                    <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                    <span class="visually-hidden">{{#str}}audience, local_la{{/str}}</span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}audience, local_la{{/str}}</h3>
+            </div>
+        </div>
+        <div id="la-schedule-audience-container" class="fcontainer collapseable collapse show">
+            <div class="mb-3 row fitem femptylabel" data-groupname="audiences">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0"></div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="group">
+                    {{#hasaudiences}}
+                        <div class="w-100 m-0 p-0 border-0">
+                            {{#audiences}}
+                                <label class="form-check fitem mb-2 w-100" data-fieldtype="checkbox">
+                                    <input class="form-check-input" type="checkbox" name="audiences[]" value="{{type}}" {{#selected}}checked{{/selected}} {{#disabled}}disabled{{/disabled}}>
+                                    {{name}}: {{value}}
+                                    {{#limitmessage}}<span class="d-block text-danger small">{{limitmessage}}</span>{{/limitmessage}}
+                                </label>
+                            {{/audiences}}
+                        </div>
+                    {{/hasaudiences}}
+                    {{^hasaudiences}}
+                        <div class="alert alert-info mb-0">{{#str}}noaudiences, local_la{{/str}}</div>
+                    {{/hasaudiences}}
+                    <div class="form-control-feedback invalid-feedback"></div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="clearfix fitem collapsible" id="la-schedule-message" name="message">
+        <legend class="visually-hidden">{{#str}}messagecontent, local_la{{/str}}</legend>
+        <div class="d-flex align-items-center mb-2">
+            <div class="position-relative d-flex ftoggler align-items-center me-1">
+                <a data-bs-toggle="collapse" href="#la-schedule-message-container" role="button" aria-expanded="true" aria-controls="la-schedule-message-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader">
+                    <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                    <span class="visually-hidden">{{#str}}messagecontent, local_la{{/str}}</span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}messagecontent, local_la{{/str}}</h3>
+            </div>
+        </div>
+        <div id="la-schedule-message-container" class="fcontainer collapseable collapse show">
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-schedule-subject">{{#str}}subject, core{{/str}}</label>
+                    <div class="form-label-addon d-flex align-items-center align-self-start">
+                        <div class="text-danger" title="{{#str}}required{{/str}}" aria-hidden="true"><i class="icon fa fa-circle-exclamation text-danger fa-fw" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="text">
+                    <input id="la-schedule-subject" name="subject" type="text" class="form-control" value="{{subject}}" aria-required="true" required>
+                    <div class="form-control-feedback invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-schedule-body">{{#str}}body, local_la{{/str}}</label>
+                    <div class="form-label-addon d-flex align-items-center align-self-start">
+                        <div class="text-danger" title="{{#str}}required{{/str}}" aria-hidden="true"><i class="icon fa fa-circle-exclamation text-danger fa-fw" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="editor">
+                    <textarea id="la-schedule-body" name="body" class="form-control" rows="12" aria-required="true" required>{{body}}</textarea>
+                    <div class="form-control-feedback invalid-feedback"></div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="clearfix fitem collapsible collapsed" id="la-schedule-advanced" name="advanced">
+        <legend class="visually-hidden">{{#str}}advanced, core{{/str}}</legend>
+        <div class="d-flex align-items-center mb-2">
+            <div class="position-relative d-flex ftoggler align-items-center me-1">
+                <a data-bs-toggle="collapse" href="#la-schedule-advanced-container" role="button" aria-expanded="false" aria-controls="la-schedule-advanced-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
+                    <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                    <span class="visually-hidden">{{#str}}advanced, core{{/str}}</span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}advanced, core{{/str}}</h3>
+            </div>
+        </div>
+        <div id="la-schedule-advanced-container" class="fcontainer collapseable collapse">
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-schedule-empty">{{#str}}ifreportempty, local_la{{/str}}</label>
+                    <div class="form-label-addon d-flex align-items-center align-self-start"></div>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="select">
+                    <select id="la-schedule-empty" name="emptyreport" class="form-select">
+                        {{#emptyoptions}}<option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>{{/emptyoptions}}
+                    </select>
+                    <div class="form-control-feedback invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="fdescription required" aria-hidden="true">
+                <i class="icon fa fa-circle-exclamation text-danger fa-fw" aria-hidden="true" title="{{#str}}required{{/str}}"></i> {{#str}}required{{/str}}
+            </div>
+        </div>
+    </fieldset>
+</form>

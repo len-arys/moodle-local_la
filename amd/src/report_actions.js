@@ -1,0 +1,316 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * JavaScript for the report actions interface.
+ *
+ * @module     local_la/report_actions
+ * @copyright  2026 Learning Analytics Contributors
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+define([
+    'jquery',
+    'core/ajax',
+    'core/modal',
+    'core/modal_save_cancel',
+    'core/modal_events',
+    'core/notification',
+    'core/config',
+    'core/str'
+], function($, Ajax, Modal, ModalSaveCancel, ModalEvents, Notification, Config, Str) {
+    var REPORT_SUMMARY_SELECTOR = '[data-action="toggle-report-summary"]';
+    var REPORT_MODAL_LINK_SELECTOR = '[data-action="open-report-modal-link"]';
+    var REPORT_PREVIEW_LIMIT_SELECTOR = '[data-action="change-report-preview-limit"]';
+    var FULL_REPORT_LINK_SELECTOR = '[data-action="open-full-report"]';
+    var BOOKMARK_REPORT_SELECTOR = '[data-action="bookmark-report"]';
+    var DUPLICATE_REPORT_SELECTOR = '[data-action="duplicate-report"]';
+    var RESET_REPORT_SELECTOR = '[data-action="reset-report"]';
+    var DELETE_REPORT_SELECTOR = '[data-action="delete-report"]';
+
+    var escapeHtml = function(value) {
+        return $('<div>').text(String(value || '')).html();
+    };
+
+    var getErrorMessage = function(error, fallback) {
+        return String(error && (error.message || error.error || error.exception) || fallback);
+    };
+
+    var getLoadingStrings = function() {
+        return Str.get_strings([
+            {key: 'loading', component: 'local_la'},
+            {key: 'unabletoloaddata', component: 'local_la'}
+        ]);
+    };
+
+    var moveModalFooters = function(root) {
+        var body = root.find('.modal-body').first();
+        var content = root.find('.modal-content').first();
+
+        if (!body.length || !content.length) {
+            return;
+        }
+
+        content.children('.la-modal-footer').remove();
+        body.find('.la-modal-footer').each(function() {
+            var footer = $(this);
+            footer.remove();
+            body.after(footer);
+        });
+    };
+
+    var bindReportSummaryToggle = function() {
+        $(document).on('click', REPORT_SUMMARY_SELECTOR, function(event) {
+            event.preventDefault();
+
+            var summary = $('[data-region="report-summary"]').first();
+
+            if (!summary.length) {
+                return;
+            }
+
+            summary.toggleClass('d-none');
+        });
+    };
+
+    var bindModalLinks = function() {
+        $(document).on('click', REPORT_MODAL_LINK_SELECTOR, function(event) {
+            event.preventDefault();
+
+            var link = $(this);
+            var title = String(link.data('title') || $.trim(link.text()) || 'Details');
+            var size = String(link.data('size') || 'xl');
+            var report = String(link.attr('data-report') || '');
+            var methodname = String(link.data('method') || '');
+            var id = Number(link.data('id') || link.data('userid') || 0);
+            var params = String(link.attr('data-params') || '{}');
+            var summary = String(link.attr('data-summary') || '{}');
+            var metrics = String(link.attr('data-metrics') || '[]');
+            var request = null;
+
+            if (report !== '') {
+                request = {
+                    methodname: 'local_la_get_report',
+                    args: {
+                        report: report,
+                        filters: String(link.attr('data-filters') || '{}'),
+                        columns: String(link.attr('data-columns') || '[]'),
+                        metrics: metrics,
+                        params: params,
+                        title: title,
+                        summary: summary
+                    }
+                };
+            } else if (methodname && params !== '{}' && params !== '') {
+                request = {
+                    methodname: methodname,
+                    args: JSON.parse(params)
+                };
+            } else if (methodname && id) {
+                request = {
+                    methodname: methodname,
+                    args: {
+                        id: id
+                    }
+                };
+            }
+
+            if (!request) {
+                return;
+            }
+
+            getLoadingStrings().then(function(strings) {
+                return Modal.create({
+                    title: title,
+                    body: '<div class="text-muted">' + escapeHtml(strings[0]) + '</div>'
+                }).then(function(modal) {
+                modal.show();
+
+                Ajax.call([request])[0].then(function(response) {
+                    var modalsize = String(response.size || size || 'xl');
+
+                    if (response.title) {
+                        modal.setTitle(response.title);
+                    }
+
+                    modal.setBody(response.html || '');
+                    modal.getRoot().find('.modal-dialog').removeClass('modal-sm modal-lg modal-xl');
+                    modal.getRoot().find('.modal-dialog').addClass('modal-' + modalsize);
+                    moveModalFooters(modal.getRoot());
+                    return modal;
+                }).catch(function(error) {
+                    modal.setBody(
+                        '<div class="alert alert-warning mb-0">' +
+                        escapeHtml(getErrorMessage(error, strings[1])) +
+                        '</div>'
+                    );
+                });
+
+                return modal;
+                });
+            });
+        });
+    };
+
+    var bindPreviewLimitChange = function() {
+        $(document).on('change', REPORT_PREVIEW_LIMIT_SELECTOR, function() {
+            var select = $(this);
+
+            if (String(select.val()) !== '-1') {
+                return;
+            }
+
+            var fullReportLink = select.closest('.la-report-modal').find(FULL_REPORT_LINK_SELECTOR).first();
+
+            if (!fullReportLink.length) {
+                return;
+            }
+
+            window.location.href = String(fullReportLink.attr('href') || '#');
+        });
+    };
+
+    var bindDeleteReport = function() {
+        $(document).on('click', DELETE_REPORT_SELECTOR, function(event) {
+            event.preventDefault();
+
+            var button = $(this);
+            var reportid = Number(button.data('reportid') || 0);
+            var title = String(button.data('title') || '');
+            var message = String(button.data('message') || '');
+            var buttonlabel = String(button.data('confirmButtonLabel') || 'Delete');
+            var returnurl = String(button.data('returnUrl') || '');
+
+            if (!reportid) {
+                return;
+            }
+
+            ModalSaveCancel.create({
+                title: title,
+                body: message
+            }).then(function(modal) {
+                modal.setSaveButtonText(buttonlabel);
+
+                modal.getRoot().on(ModalEvents.save, function() {
+                    Ajax.call([{
+                        methodname: 'local_la_library',
+                        args: {
+                            action: 'delete',
+                            reportid: reportid,
+                            reportkey: ''
+                        }
+                    }])[0].then(function() {
+                        window.location.href = returnurl || window.location.href;
+                    }).catch(Notification.exception);
+                });
+
+                modal.show();
+
+                return modal;
+            });
+        });
+    };
+
+    var bindDuplicateReport = function() {
+        $(document).on('click', DUPLICATE_REPORT_SELECTOR, function(event) {
+            event.preventDefault();
+
+            var button = $(this);
+            var reportid = Number(button.data('reportid') || 0);
+
+            if (!reportid) {
+                return;
+            }
+
+            Ajax.call([{
+                methodname: 'local_la_library',
+                args: {
+                    action: 'duplicate',
+                    reportid: reportid,
+                    reportkey: ''
+                }
+            }])[0].then(function(response) {
+                var newreportid = Number(response.reportid || 0);
+
+                if (!newreportid) {
+                    window.location.reload();
+                    return;
+                }
+
+                window.location.href = Config.wwwroot + '/local/la/report.php?id=' + newreportid;
+            }).catch(Notification.exception);
+        });
+    };
+
+    var bindBookmarkReport = function() {
+        $(document).on('click', BOOKMARK_REPORT_SELECTOR, function(event) {
+            event.preventDefault();
+
+            var button = $(this);
+            var reportid = Number(button.data('reportid') || 0);
+
+            if (!reportid) {
+                return;
+            }
+
+            Ajax.call([{
+                methodname: 'local_la_library',
+                args: {
+                    action: 'favorite',
+                    reportid: reportid,
+                    reportkey: ''
+                }
+            }])[0].then(function() {
+                window.location.reload();
+            }).catch(Notification.exception);
+        });
+    };
+
+    var bindResetReport = function() {
+        $(document).on('click', RESET_REPORT_SELECTOR, function(event) {
+            event.preventDefault();
+
+            var button = $(this);
+            var reportid = Number(button.data('reportid') || 0);
+
+            if (!reportid) {
+                return;
+            }
+
+            Ajax.call([{
+                methodname: 'local_la_library',
+                args: {
+                    action: 'reset',
+                    reportid: reportid,
+                    reportkey: ''
+                }
+            }])[0].then(function() {
+                window.location.reload();
+            }).catch(Notification.exception);
+        });
+    };
+
+    return {
+        init: function() {
+            bindReportSummaryToggle();
+            bindModalLinks();
+            bindPreviewLimitChange();
+            bindBookmarkReport();
+            bindDuplicateReport();
+            bindResetReport();
+            bindDeleteReport();
+        }
+    };
+});

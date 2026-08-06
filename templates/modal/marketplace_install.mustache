@@ -1,0 +1,327 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/marketplace_install
+
+    Renders the marketplace report installation review and validation.
+
+    Classes required for JS:
+    * .alert - JavaScript selector hook.
+    * .btn - JavaScript selector hook.
+    * .d-none - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-check - JavaScript selector hook.
+    * .show - JavaScript selector hook.
+    * .table - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="accept-marketplace-sql" - JavaScript data or selector hook.
+    * data-bs-placement="top" - JavaScript data or selector hook.
+    * data-bs-toggle="collapse" - JavaScript data or selector hook.
+    * data-bs-toggle="tooltip" - JavaScript data or selector hook.
+    * data-region="marketplace-validation-alert" - JavaScript data or selector hook.
+    * data-validation-failed - JavaScript data or selector hook.
+    * data-validation-rule - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * fields - array: List of entries for fields.
+    * key - string: Text for key.
+    * istags - array|bool: Section data or visibility flag for istags.
+    * tags - array: List of entries for tags.
+    * name - string: Text for name.
+    * value - string: Text for value.
+    * has_sql_snippets - array|bool: Section data or visibility flag for has sql snippets.
+    * sql_snippets - array|bool: Section data or visibility flag for sql snippets.
+    * version - string: Text for version.
+    * code - string: Text for code.
+    * validation - array: List of entries for validation.
+    * failed - array|bool: Section data or visibility flag for failed.
+    * icon - string: Text for icon.
+    * class - string: Text for class.
+    * has_validation_errors - array|bool: Section data or visibility flag for has validation errors.
+    * has_restricted_table_error - array|bool: Section data or visibility flag for has restricted table error.
+    * restricted_tables_help - string: Text for restricted tables help.
+    * restricted_tables_settings_url - string: URL for restricted tables settings url.
+    * has_columns - array|bool: Section data or visibility flag for has columns.
+    * columns - array: List of entries for columns.
+    * type - string: Text for type.
+    * drilldown_is_badge - array|bool: Section data or visibility flag for drilldown is badge.
+    * drilldown_class - string: Text for drilldown class.
+    * drilldown_has_tooltip - array|bool: Section data or visibility flag for drilldown has tooltip.
+    * drilldown_tooltip - string: Text for drilldown tooltip.
+    * drilldown - string: Text for drilldown.
+    * visible - bool: Whether visible is enabled.
+    * report_params_json - string: Text for report params json.
+    * has_sample - array|bool: Section data or visibility flag for has sample.
+    * sample_columns - array|bool: Section data or visibility flag for sample columns.
+    * sample_rows - array|bool: Section data or visibility flag for sample rows.
+    * cells - array: List of entries for cells.
+    * is_status - array|bool: Section data or visibility flag for is status.
+    * status_class - string: Text for status class.
+    * is_link - array|bool: Section data or visibility flag for is link.
+
+    Example context (json):
+    {
+        "name": "Users tracking",
+        "version": "1.0.0",
+        "fields": [
+            {
+                "name": "Status",
+                "value": "Ready"
+            }
+        ],
+        "has_sample": true,
+        "sample_columns": [
+            {
+                "name": "User"
+            }
+        ],
+        "sample_rows": [
+            {
+                "cells": [
+                    {
+                        "value": "Richard Burke"
+                    }
+                ]
+            }
+        ]
+    }
+}}
+<div class="mform">
+    <fieldset class="clearfix fitem collapsible" id="la-marketplace-install-details" name="reportdetails">
+        <legend class="visually-hidden">{{#str}}reportdetails, local_la{{/str}}</legend>
+        <div class="d-flex align-items-center mb-2">
+            <div class="position-relative d-flex ftoggler align-items-center me-1">
+                <a data-bs-toggle="collapse" href="#la-marketplace-install-details-container" role="button" aria-expanded="true" aria-controls="la-marketplace-install-details-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader">
+                    <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                    <span class="visually-hidden">{{#str}}reportdetails, local_la{{/str}}</span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}reportdetails, local_la{{/str}}</h3>
+            </div>
+        </div>
+        <div id="la-marketplace-install-details-container" class="fcontainer collapseable collapse show la-library-sql-section-content">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <tbody>
+                    {{#fields}}
+                        <tr>
+                            <th scope="row" class="text-nowrap"><code>{{key}}</code></th>
+                            <td>
+                                {{#istags}}
+                                    {{#tags}}
+                                        <span class="badge text-bg-secondary me-1">{{name}}</span>
+                                    {{/tags}}
+                                    {{^tags}}
+                                        {{value}}
+                                    {{/tags}}
+                                {{/istags}}
+                                {{^istags}}
+                                    {{value}}
+                                {{/istags}}
+                            </td>
+                        </tr>
+                    {{/fields}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+
+    {{#has_sql_snippets}}
+        <fieldset class="clearfix fitem collapsible collapsed" id="la-marketplace-install-sql" name="sql">
+            <legend class="visually-hidden">{{#str}}sql, local_la{{/str}}</legend>
+            <div class="d-flex align-items-center mb-2">
+                <div class="position-relative d-flex ftoggler align-items-center me-1">
+                    <a data-bs-toggle="collapse" href="#la-marketplace-install-sql-container" role="button" aria-expanded="false" aria-controls="la-marketplace-install-sql-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
+                        <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                        <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                        <span class="visually-hidden">{{#str}}sql, local_la{{/str}}</span>
+                    </a>
+                    <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}sql, local_la{{/str}}</h3>
+                </div>
+            </div>
+            <div id="la-marketplace-install-sql-container" class="fcontainer collapseable collapse la-library-sql-section-content">
+                {{#sql_snippets}}
+                    <div class="mb-4">
+                        <div><span class="badge text-bg-info mb-2"><i class="fa-solid fa-code"></i> {{name}}</span></div>
+                        <div class="table-responsive mb-2">
+                            <table class="table align-middle mb-0">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" class="text-nowrap"><code>name</code></th>
+                                        <td><code>{{name}}</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-nowrap"><code>version</code></th>
+                                        <td>{{version}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-nowrap"><code>code</code></th>
+                                        <td><pre class="la-sql-preview mb-0"><code class="la-sql-preview-code">{{code}}</code></pre></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-nowrap">{{#str}}validation, local_la{{/str}}</th>
+                                        <td>
+                                            <div class="d-flex flex-column gap-1">
+                                                {{#validation}}
+                                                    <span class="{{#failed}}alert alert-danger py-1 px-2 mb-0{{/failed}}" data-validation-rule="{{key}}" data-validation-failed="{{#failed}}1{{/failed}}{{^failed}}0{{/failed}}">
+                                                        <i class="fa-solid {{icon}} {{class}} me-1" aria-hidden="true"></i>{{name}}
+                                                    </span>
+                                                {{/validation}}
+                                            </div>
+                                            {{#has_validation_errors}}
+                                                <div class="alert alert-info d-none mt-3 mb-0" role="alert" tabindex="-1" data-region="marketplace-validation-alert">
+                                                    {{#has_restricted_table_error}}
+                                                        <div>{{restricted_tables_help}}</div>
+                                                        <div class="mt-2">{{#str}}sqlvalidationrestrictedtablesinstruction, local_la{{/str}}</div>
+                                                        <a href="{{restricted_tables_settings_url}}" target="_blank" rel="noopener noreferrer" class="alert-link d-inline-block mt-1">
+                                                            {{#str}}openrestrictedtablessettings, local_la{{/str}}
+                                                        </a>
+                                                    {{/has_restricted_table_error}}
+                                                    {{^has_restricted_table_error}}
+                                                        {{#str}}sqlvalidationinstallhelp, local_la{{/str}}
+                                                    {{/has_restricted_table_error}}
+                                                </div>
+                                            {{/has_validation_errors}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-nowrap">{{#str}}reviewsqlsnippet, local_la{{/str}}</th>
+                                        <td>
+                                            <label class="form-check mb-0">
+                                                <input type="checkbox" class="form-check-input" data-action="accept-marketplace-sql">
+                                                <span class="visually-hidden">{{#str}}reviewsqlsnippet, local_la{{/str}}</span>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {{/sql_snippets}}
+            </div>
+        </fieldset>
+    {{/has_sql_snippets}}
+
+    {{#has_columns}}
+        <fieldset class="clearfix fitem collapsible collapsed" id="la-marketplace-install-columns" name="columns">
+            <legend class="visually-hidden">{{#str}}columns, local_la{{/str}}</legend>
+            <div class="d-flex align-items-center mb-2">
+                <div class="position-relative d-flex ftoggler align-items-center me-1">
+                    <a data-bs-toggle="collapse" href="#la-marketplace-install-columns-container" role="button" aria-expanded="false" aria-controls="la-marketplace-install-columns-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
+                        <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                        <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                        <span class="visually-hidden">{{#str}}columns, local_la{{/str}}</span>
+                    </a>
+                    <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}columns, local_la{{/str}}</h3>
+                </div>
+            </div>
+            <div id="la-marketplace-install-columns-container" class="fcontainer collapseable collapse la-library-sql-section-content">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">{{#str}}key, local_la{{/str}}</th>
+                                <th scope="col">{{#str}}name, core{{/str}}</th>
+                                <th scope="col">{{#str}}type, local_la{{/str}}</th>
+                                <th scope="col">{{#str}}drilldown, local_la{{/str}}</th>
+                                <th scope="col">{{#str}}visible, local_la{{/str}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {{#columns}}
+                            <tr>
+                                <td><code>{{key}}</code></td>
+                                <td>{{name}}</td>
+                                <td>{{type}}</td>
+                                <td>
+                                    {{#drilldown_is_badge}}
+                                        <span class="badge {{drilldown_class}}"{{#drilldown_has_tooltip}} data-bs-toggle="tooltip" data-bs-placement="top" title="{{drilldown_tooltip}}"{{/drilldown_has_tooltip}}>{{drilldown}}</span>
+                                    {{/drilldown_is_badge}}
+                                    {{^drilldown_is_badge}}
+                                        <code>{{drilldown}}</code>
+                                    {{/drilldown_is_badge}}
+                                </td>
+                                <td>{{visible}}</td>
+                            </tr>
+                        {{/columns}}
+                        </tbody>
+                    </table>
+                </div>
+                <a href="#la-marketplace-install-report-params" class="d-inline-flex align-items-center gap-1 mt-3" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="la-marketplace-install-report-params">
+                    {{#str}}showallparams, local_la{{/str}}
+                    <i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i>
+                </a>
+                <div id="la-marketplace-install-report-params" class="collapse mt-3">
+                    <pre class="la-sql-preview mb-0"><code class="la-sql-preview-code">{{report_params_json}}</code></pre>
+                </div>
+            </div>
+        </fieldset>
+    {{/has_columns}}
+
+    {{#has_sample}}
+    <fieldset class="clearfix fitem collapsible collapsed" id="la-marketplace-install-preview" name="preview">
+        <legend class="visually-hidden">{{#str}}preview, local_la{{/str}}</legend>
+        <div class="d-flex align-items-center mb-2">
+            <div class="position-relative d-flex ftoggler align-items-center me-1">
+                <a data-bs-toggle="collapse" href="#la-marketplace-install-preview-container" role="button" aria-expanded="false" aria-controls="la-marketplace-install-preview-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
+                    <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                    <span class="visually-hidden">{{#str}}preview, local_la{{/str}}</span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}preview, local_la{{/str}}</h3>
+            </div>
+        </div>
+        <div id="la-marketplace-install-preview-container" class="fcontainer collapseable collapse la-library-sql-section-content">
+            <div class="alert alert-info">{{#str}}previewsampledata, local_la{{/str}}</div>
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            {{#sample_columns}}
+                                <th scope="col">{{name}}</th>
+                            {{/sample_columns}}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#sample_rows}}
+                            <tr>
+                                {{#cells}}
+                                    <td>
+                                        {{#is_status}}
+                                            <span class="{{status_class}}">{{value}}</span>
+                                        {{/is_status}}
+                                        {{^is_status}}
+                                            {{#is_link}}
+                                                <a href="#" class="aalink">{{value}}</a>
+                                            {{/is_link}}
+                                            {{^is_link}}
+                                                {{value}}
+                                            {{/is_link}}
+                                        {{/is_status}}
+                                    </td>
+                                {{/cells}}
+                            </tr>
+                        {{/sample_rows}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+    {{/has_sample}}
+</div>

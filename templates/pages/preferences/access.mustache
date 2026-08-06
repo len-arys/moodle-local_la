@@ -1,0 +1,125 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/preferences/access
+
+    Renders plugin access assignments and management actions.
+
+    Classes required for JS:
+    * .alert - JavaScript selector hook.
+    * .btn - JavaScript selector hook.
+    * .btn-primary - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+    * .table - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * accessdata.capability - string: Text for accessdata capability.
+    * accessdata.manageurl - string: URL for accessdata manageurl.
+    * accessdata.settingsurl - string: URL for accessdata settingsurl.
+    * accessdata.hasusers - array|bool: Section data or visibility flag for accessdata hasusers.
+    * accessdata.users - array: List of entries for accessdata users.
+    * id - int: Numeric value for id.
+    * firstname - string: Text for firstname.
+    * lastname - string: Text for lastname.
+    * email - string: Text for email.
+    * isbillingadmin - array|bool: Section data or visibility flag for isbillingadmin.
+    * role - string: Text for role.
+
+    Example context (json):
+    {
+        "head": "<title>Access</title>",
+        "header": "<header></header>",
+        "accessdata": {
+            "hasusers": true,
+            "manageurl": "#",
+            "settingsurl": "#",
+            "capability": "local/la:manage",
+            "users": [
+                {
+                    "id": 2,
+                    "firstname": "Richard",
+                    "lastname": "Burke",
+                    "email": "richard@example.com",
+                    "role": "Viewer"
+                }
+            ]
+        }
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main la-main-center pt-4 pb-4">
+        <div class="la-preferences container-fluid">
+            {{{head}}}
+
+            <section class="mt-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <input type="text" class="form-control me-3" value="{{accessdata.capability}}" readonly>
+                    <div class="d-flex gap-2">
+                        <a href="{{accessdata.manageurl}}" class="btn btn-primary">
+                            {{#str}}addadmins, local_la{{/str}}
+                        </a>
+                        <a href="{{accessdata.settingsurl}}" class="btn btn-secondary">
+                            {{#str}}changebillingadmin, local_la{{/str}}
+                        </a>
+                    </div>
+                </div>
+                {{#accessdata.hasusers}}
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{#str}}id, local_la{{/str}}</th>
+                                    <th scope="col">{{#str}}firstname{{/str}}</th>
+                                    <th scope="col">{{#str}}lastname{{/str}}</th>
+                                    <th scope="col">{{#str}}email{{/str}}</th>
+                                    <th scope="col">{{#str}}role{{/str}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#accessdata.users}}
+                                    <tr>
+                                        <td>{{id}}</td>
+                                        <td>{{firstname}}</td>
+                                        <td>{{lastname}}</td>
+                                        <td>{{email}}</td>
+                                        <td>
+                                            {{#isbillingadmin}}
+                                                <span class="badge text-bg-primary">{{role}}</span>
+                                            {{/isbillingadmin}}
+                                            {{^isbillingadmin}}
+                                                <span class="badge text-bg-secondary">{{role}}</span>
+                                            {{/isbillingadmin}}
+                                        </td>
+                                    </tr>
+                                {{/accessdata.users}}
+                            </tbody>
+                        </table>
+                    </div>
+                {{/accessdata.hasusers}}
+                {{^accessdata.hasusers}}
+                    <div class="alert alert-info mb-0" role="alert">{{#str}}nolearninganalyticsadmins, local_la{{/str}}</div>
+                {{/accessdata.hasusers}}
+            </section>
+        </div>
+    </main>
+</div>

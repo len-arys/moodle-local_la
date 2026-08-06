@@ -1,0 +1,281 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/report/audience
+
+    Renders report audience rules and forms.
+
+    Classes required for JS:
+    * .alert - JavaScript selector hook.
+    * .btn - JavaScript selector hook.
+    * .btn-primary - JavaScript selector hook.
+    * .d-none - JavaScript selector hook.
+    * .disabled - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .la-audience-autocomplete - JavaScript selector hook.
+    * .reportbuilder-audiences-container - JavaScript selector hook.
+    * .row - JavaScript selector hook.
+    * .show - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="cancel-audience-form" - JavaScript data or selector hook.
+    * data-action="delete-audience" - JavaScript data or selector hook.
+    * data-action="show-audience-form" - JavaScript data or selector hook.
+    * data-audience-title - JavaScript data or selector hook.
+    * data-audience-type - JavaScript data or selector hook.
+    * data-autocomplete-placeholder - JavaScript data or selector hook.
+    * data-autocomplete-source="core_user/form_user_selector" - JavaScript data or selector hook.
+    * data-bs-target - JavaScript data or selector hook.
+    * data-bs-toggle="collapse" - JavaScript data or selector hook.
+    * data-region="audience-card" - JavaScript data or selector hook.
+    * data-region="audience-description" - JavaScript data or selector hook.
+    * data-region="audience-empty-state" - JavaScript data or selector hook.
+    * data-region="audience-form" - JavaScript data or selector hook.
+    * data-region="audience-form-card" - JavaScript data or selector hook.
+    * data-region="audience-form-container" - JavaScript data or selector hook.
+    * data-region="audience-heading" - JavaScript data or selector hook.
+    * data-region="audience-not-saved" - JavaScript data or selector hook.
+    * data-region="sidebar-card" - JavaScript data or selector hook.
+    * data-region="sidebar-item" - JavaScript data or selector hook.
+    * data-report-id - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * audience - array|bool: Section data or visibility flag for audience.
+    * can_manage - array|bool: Section data or visibility flag for can manage.
+    * groups - array: List of entries for groups.
+    * name - string: Text for name.
+    * key - string: Text for key.
+    * items - array: List of entries for items.
+    * disabled - array|bool: Section data or visibility flag for disabled.
+    * type - string: Text for type.
+    * icon - string: Text for icon.
+    * has_cards - array|bool: Section data or visibility flag for has cards.
+    * forms - array|bool: Section data or visibility flag for forms.
+    * title - string: Text for title.
+    * reportid - int: Numeric value for reportid.
+    * action - string: URL for action.
+    * sesskey - string: Text for sesskey.
+    * is_simple - array|bool: Section data or visibility flag for is simple.
+    * description - string: Text for description.
+    * is_role - array|bool: Section data or visibility flag for is role.
+    * selectid - int: Numeric value for selectid.
+    * selected_roles - array|bool: Section data or visibility flag for selected roles.
+    * id - int: Numeric value for id.
+    * selected - array|bool: Section data or visibility flag for selected.
+    * is_user - array|bool: Section data or visibility flag for is user.
+    * selected_users - array|bool: Section data or visibility flag for selected users.
+    * value - string: Text for value.
+    * cards - array: List of entries for cards.
+    * showormessage - array|bool: Section data or visibility flag for showormessage.
+
+    Example context (json):
+    {
+        "head": "<title>Audience</title>",
+        "header": "<header></header>",
+        "reportid": 1,
+        "can_manage": true,
+        "has_cards": true,
+        "cards": [
+            {
+                "title": "Manually added users",
+                "items": [
+                    {
+                        "name": "Richard Burke"
+                    }
+                ]
+            }
+        ]
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main p-1 pt-4 pb-4">
+        <section class="container-fluid">
+            {{{head}}}
+            {{#audience}}
+                <div class="audiences-wrapper d-flex flex-column flex-lg-row mt-1">
+                    {{#can_manage}}
+                    <div class="reportbuilder-sidebar-menu d-flex flex-column me-lg-3 mb-3 mb-lg-0">
+                        <div class="reportbuilder-sidebar-menu-cards">
+                        {{#groups}}
+                            <div data-region="sidebar-card">
+                            <div class="card reportbuilder-toggle-card mb-2">
+                                <div class="card-header p-0">
+                                    <div class="d-flex align-items-center mb-0 p-1">
+                                        <div class="ms-3">
+                                            <span class="me-1">{{name}}</span>
+                                        </div>
+                                        <button class="btn toggle-card-button ms-auto" data-bs-toggle="collapse" data-bs-target="#la-audience-group-{{key}}" aria-expanded="true" aria-controls="la-audience-group-{{key}}" title="Show/hide '{{name}}'">
+                                            <span class="collapsed-icon-container"><i class="toggle-card-icon fa fa-lg fa-angle-down"></i></span>
+                                            <span class="expanded-icon-container"><i class="toggle-card-icon fa fa-lg fa-angle-up"></i></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="la-audience-group-{{key}}" class="collapse show">
+                                    <div class="card-body p-0">
+                                        <div class="list-group list-group-flush">
+                                            {{#items}}
+                                                <a href="#"
+                                                   title="Add audience '{{name}}'"
+                                                   role="button"
+                                                   class="list-group-item list-group-item-action pe-2 bg-transparent audience-menu-item{{#disabled}} disabled text-muted{{/disabled}}"
+                                                   data-region="sidebar-item"
+                                                   data-action="show-audience-form"
+                                                   data-audience-type="{{type}}"
+                                                   {{#disabled}}aria-disabled="true" tabindex="-1"{{/disabled}}>
+                                                    <span class="d-flex align-items-center justify-content-between">
+                                                        {{{name}}}
+                                                        <i class="icon fa {{icon}} fa-fw" aria-hidden="true"></i>
+                                                    </span>
+                                                </a>
+                                            {{/items}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        {{/groups}}
+                        </div>
+                    </div>
+                    {{/can_manage}}
+
+                    <div class="reportbuilder-audiences-container d-flex flex-column flex-fill">
+                        {{^has_cards}}
+                            <div class="alert alert-info" data-region="audience-empty-state">{{#str}}noaudiences, local_la{{/str}}</div>
+                        {{/has_cards}}
+                        {{#forms}}
+                            <div data-region="audience-form-card" data-audience-type="{{type}}" data-audience-title="{{title}}" data-report-id="{{reportid}}" class="instance-card d-none">
+                                <div class="mb-3 card">
+                                    <div class="card-header p-0">
+                                        <div class="mb-0 d-flex">
+                                            <h3 class="h6 text-start m-0 align-self-center ps-3" data-region="audience-heading">
+                                                {{title}}
+                                            </h3>
+                                            <span class="ms-auto">
+                                                <button type="button" class="btn btn-link px-0" aria-label="{{#str}}settings, core{{/str}}" title="{{#str}}settings, core{{/str}}" disabled>
+                                                    <i class="icon fa fa-gear fa-fw" aria-hidden="true"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-link px-0 me-2" data-action="delete-audience" data-audience-type="{{type}}" data-report-id="{{reportid}}" aria-label="{{#str}}delete, core{{/str}}" title="{{#str}}delete, core{{/str}}">
+                                                    <i class="icon fa fa-trash-can fa-fw" aria-hidden="true"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-3" data-region="audience-form">
+                                        <div data-region="audience-description" class="d-none"></div>
+                                        <div data-region="audience-form-container">
+                                            <div class="alert alert-warning p-2" data-region="audience-not-saved">{{#str}}audiencenotsaved, local_la{{/str}}</div>
+                                            <form method="post" action="{{action}}">
+                                                <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                                <input type="hidden" name="audience_type" value="{{type}}">
+
+                                                {{#is_simple}}
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                                                            <span class="d-inline-block">{{description}}</span>
+                                                        </div>
+                                                        <div class="col-md-9 d-flex flex-wrap align-items-start">
+                                                            <div class="form-control-static"></div>
+                                                        </div>
+                                                    </div>
+                                                {{/is_simple}}
+
+                                                {{#is_role}}
+                                                    <div class="row mb-3 align-items-start">
+                                                        <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                                                            <label class="d-inline-block" for="{{selectid}}">{{description}}</label>
+                                                        </div>
+                                                        <div class="col-md-9 d-flex flex-wrap align-items-start">
+                                                            <select id="{{selectid}}" name="audience_instanceid[]" class="form-select la-audience-autocomplete" multiple data-autocomplete-placeholder="{{#str}}search, core{{/str}}">
+                                                                {{#selected_roles}}
+                                                                    <option value="{{id}}"{{#selected}} selected{{/selected}}>{{name}}</option>
+                                                                {{/selected_roles}}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                {{/is_role}}
+
+                                                {{#is_user}}
+                                                    <div class="row mb-3 align-items-start">
+                                                        <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                                                            <label class="d-inline-block" for="{{selectid}}">{{description}}</label>
+                                                        </div>
+                                                        <div class="col-md-9 d-flex flex-wrap align-items-start">
+                                                            <select id="{{selectid}}" name="audience_instanceid[]" class="form-select la-audience-autocomplete" multiple data-autocomplete-placeholder="{{#str}}searchusers, local_la{{/str}}" data-autocomplete-source="core_user/form_user_selector">
+                                                                {{#selected_users}}
+                                                                    <option value="{{value}}" selected>{{name}}</option>
+                                                                {{/selected_users}}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                {{/is_user}}
+
+                                                <div class="row mb-0">
+                                                    <div class="col-md-3"></div>
+                                                    <div class="col-md-9 d-flex flex-wrap align-items-center gap-2">
+                                                        <button type="submit" class="btn btn-primary">{{#str}}save, core{{/str}}</button>
+                                                        <button type="button" class="btn btn-secondary" data-action="cancel-audience-form">{{#str}}cancel, core{{/str}}</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {{/forms}}
+                        {{#cards}}
+                            <div data-region="audience-card" class="instance-card" data-audience-type="{{type}}" data-audience-title="{{name}}" data-report-id="{{reportid}}">
+                                {{#showormessage}}
+                                    <span class="audience-separator d-flex mb-3 justify-content-center align-items-center small text-muted fw-bold">OR</span>
+                                {{/showormessage}}
+                            <div class="mb-3 card">
+                                <div class="card-header p-0">
+                                    <div class="mb-0 d-flex">
+                                        <h3 class="h6 text-start m-0 align-self-center ps-3" data-region="audience-heading">
+                                            <a href="#" class="quickeditlink aalink text-dark text-decoration-none" data-action="show-audience-form" data-audience-type="{{type}}" aria-label="{{#str}}edit, core{{/str}}">
+                                                {{name}}
+                                            </a>
+                                        </h3>
+                                    {{#can_manage}}
+                                    <span class="ms-auto">
+                                        <button type="button" class="btn btn-link px-0" data-action="show-audience-form" data-audience-type="{{type}}" aria-label="{{#str}}edit, core{{/str}}" title="{{#str}}edit, core{{/str}}">
+                                            <i class="icon fa fa-gear fa-fw" aria-hidden="true"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-link px-0 me-2" data-action="delete-audience" data-audience-type="{{type}}" data-report-id="{{reportid}}" aria-label="{{#str}}delete, core{{/str}}" title="{{#str}}delete, core{{/str}}">
+                                                <i class="icon fa fa-trash-can fa-fw" aria-hidden="true"></i>
+                                        </button>
+                                    </span>
+                                    {{/can_manage}}
+                                </div>
+                                </div>
+                                <div class="card-body p-3" data-region="audience-form">
+                                    <div data-region="audience-description">
+                                        {{value}}
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+
+                        {{/cards}}
+                    </div>
+                </div>
+            {{/audience}}
+        </section>
+    </main>
+</div>

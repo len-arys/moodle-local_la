@@ -1,0 +1,75 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/calendar/week
+
+    Renders the calendar week grid.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * weekdays - array: List of entries for weekdays.
+    * label - string: Text for label.
+    * day - int: Numeric value for day.
+    * hours - array: List of entries for hours.
+    * cells - array: List of entries for cells.
+    * hasactivity - array|bool: Section data or visibility flag for hasactivity.
+    * level - string: Text for level.
+    * title - string: Text for title.
+    * value - string: Text for value.
+
+    Example context (json):
+    {
+        "hours": [
+            {
+                "label": "09:00",
+                "cells": [
+                    {
+                        "title": "Monday 09:00",
+                        "value": "30m",
+                        "hasactivity": true
+                    }
+                ]
+            }
+        ]
+    }
+}}
+<div class="la-calendar-week-grid">
+    <div class="la-calendar-week-row la-calendar-week-head">
+        <div class="la-calendar-week-hour-label"></div>
+        {{#weekdays}}
+        <div class="la-calendar-week-column-head">
+            <div class="la-calendar-weekday">{{label}} {{day}}</div>
+        </div>
+        {{/weekdays}}
+    </div>
+
+    {{#hours}}
+    <div class="la-calendar-week-row">
+        <div class="la-calendar-week-hour-label">{{label}}</div>
+        {{#cells}}
+        <div class="la-calendar-week-cell la-calendar-cell{{#hasactivity}} la-calendar-level-{{level}}{{/hasactivity}}" title="{{title}}">
+            <div class="la-calendar-cell-value">{{value}}</div>
+        </div>
+        {{/cells}}
+    </div>
+    {{/hours}}
+</div>

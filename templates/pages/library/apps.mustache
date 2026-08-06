@@ -1,0 +1,199 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/library/apps
+
+    Renders the installed apps library.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .dropdown - JavaScript selector hook.
+    * .dropdown-menu - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .table - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="delete-library-item" - JavaScript data or selector hook.
+    * data-action="library-report-action" - JavaScript data or selector hook.
+    * data-action="show-app-params-modal" - JavaScript data or selector hook.
+    * data-appid - JavaScript data or selector hook.
+    * data-bs-toggle="dropdown" - JavaScript data or selector hook.
+    * data-confirm-button-label - JavaScript data or selector hook.
+    * data-enhance="moodle-core-actionmenu" - JavaScript data or selector hook.
+    * data-library-action="hideapp" - JavaScript data or selector hook.
+    * data-library-action="showapp" - JavaScript data or selector hook.
+    * data-library-action="uninstallapp" - JavaScript data or selector hook.
+    * data-message - JavaScript data or selector hook.
+    * data-rel="menu-content" - JavaScript data or selector hook.
+    * data-reportid - JavaScript data or selector hook.
+    * data-title - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * canmanage - array|bool: Section data or visibility flag for canmanage.
+    * items - array: List of entries for items.
+    * visible - array|bool: Section data or visibility flag for visible.
+    * isavailable - array|bool: Section data or visibility flag for isavailable.
+    * view_url - string: URL for view url.
+    * name - string: Text for name.
+    * lockmessage - string: Text for lockmessage.
+    * hidden - array|bool: Section data or visibility flag for hidden.
+    * info - array|bool: Section data or visibility flag for info.
+    * version - string: Text for version.
+    * id - int: Numeric value for id.
+
+    Example context (json):
+    {
+        "head": "<title>Apps</title>",
+        "header": "<header></header>",
+        "canmanage": true,
+        "items": [
+            {
+                "id": 1,
+                "name": "Learning overview",
+                "version": "1.0.0",
+                "isavailable": true,
+                "view_url": "#"
+            }
+        ]
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main la-main-center pt-4 pb-4">
+        <section class="la-library container-fluid">
+            {{{head}}}
+
+            <div class="table-responsive">
+                <table class="table border-top-0 align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="border-top-0 text-nowrap">{{#str}}name, core{{/str}}</th>
+                        <th scope="col" class="border-top-0 text-nowrap">{{#str}}version, core_plugin{{/str}}</th>
+                        {{#canmanage}}
+                            <th scope="col" class="border-top-0 text-nowrap">Params</th>
+                        {{/canmanage}}
+                        <th scope="col" class="text-end border-top-0"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{#items}}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge text-bg-primary la-reports-icon p-2">
+                                        <i class="fa-solid fa-chart-column"></i>
+                                    </span>
+                                    <div>
+                                        {{#visible}}
+                                            {{#isavailable}}
+                                                <a href="{{view_url}}">{{name}}</a>
+                                            {{/isavailable}}
+                                            {{^isavailable}}
+                                                <span title="{{lockmessage}}">{{name}}</span>
+                                                <span class="badge text-bg-light ms-1" title="{{lockmessage}}">{{#str}}upgrade, local_la{{/str}}</span>
+                                            {{/isavailable}}
+                                        {{/visible}}
+                                        {{^visible}}
+                                            <span>{{name}}</span>
+                                        {{/visible}}
+                                        {{#hidden}}
+                                            <span class="badge text-bg-secondary ms-1">{{#str}}hidden, local_la{{/str}}</span>
+                                        {{/hidden}}
+                                        {{#info}}
+                                            <div class="small text-muted">{{info}}</div>
+                                        {{/info}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-nowrap">{{version}}</td>
+                            {{#canmanage}}
+                                <td>
+                                    <a href="#" data-action="show-app-params-modal" data-appid="{{id}}" data-title="{{name}}" title="{{name}}" aria-label="{{name}}">
+                                        <i class="fa-solid fa-code"></i>
+                                    </a>
+                                </td>
+                            {{/canmanage}}
+                            <td class="text-end">
+                                <div class="action-menu moodle-actionmenu d-inline-block" id="app-action-menu-{{id}}" data-enhance="moodle-core-actionmenu">
+                                    <div class="menubar d-flex" id="app-action-menu-{{id}}-menubar">
+                                        <div class="action-menu-trigger">
+                                            <div class="dropdown">
+                                                <a href="#" tabindex="0" class="btn btn-icon d-flex no-caret dropdown-toggle icon-no-margin"
+                                                   id="app-action-menu-toggle-{{id}}" aria-label="{{#str}}actions, core{{/str}}"
+                                                   data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                                                   aria-controls="app-action-menu-{{id}}-menu" title="{{#str}}actions, core{{/str}}">
+                                                    <i class="icon fa fa-ellipsis-vertical fa-fw" aria-hidden="true"></i>
+                                                    <span class="visually-hidden">{{#str}}actions, core{{/str}}</span>
+                                                </a>
+                                                <div class="dropdown-menu menu dropdown-menu-end" id="app-action-menu-{{id}}-menu"
+                                                     data-rel="menu-content" aria-labelledby="app-action-menu-toggle-{{id}}" role="menu">
+                                                    {{#visible}}
+                                                        {{#isavailable}}
+                                                        <a href="{{view_url}}" class="dropdown-item menu-action" role="menuitem">
+                                                            <i class="icon fa fa-eye fa-fw" aria-hidden="true"></i>
+                                                            <span class="menu-action-text">{{#str}}view, core{{/str}}</span>
+                                                        </a>
+                                                        {{/isavailable}}
+                                                    {{/visible}}
+                                                    {{#canmanage}}
+                                                        {{#visible}}
+                                                            {{#isavailable}}
+                                                            <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="library-report-action" data-library-action="hideapp" data-reportid="{{id}}">
+                                                                <i class="icon fa fa-eye-slash fa-fw" aria-hidden="true"></i>
+                                                                <span class="menu-action-text">{{#str}}hide, core{{/str}}</span>
+                                                            </a>
+                                                            {{/isavailable}}
+                                                        {{/visible}}
+                                                        {{#hidden}}
+                                                            {{#isavailable}}
+                                                            <a href="#" class="dropdown-item menu-action" role="menuitem" data-action="library-report-action" data-library-action="showapp" data-reportid="{{id}}">
+                                                                <i class="icon fa fa-eye fa-fw" aria-hidden="true"></i>
+                                                                <span class="menu-action-text">{{#str}}show, core{{/str}}</span>
+                                                            </a>
+                                                            {{/isavailable}}
+                                                        {{/hidden}}
+                                                        <div class="dropdown-divider"></div>
+                                                        <a href="#" class="dropdown-item text-danger menu-action" role="menuitem"
+                                                           data-action="delete-library-item" data-library-action="uninstallapp" data-reportid="{{id}}"
+                                                           data-title="{{#str}}uninstall, local_la{{/str}}"
+                                                           data-message="{{#str}}uninstallappconfirm, local_la{{/str}}"
+                                                           data-confirm-button-label="{{#str}}uninstall, local_la{{/str}}">
+                                                            <i class="icon fa fa-trash-can fa-fw" aria-hidden="true"></i>
+                                                            <span class="menu-action-text">{{#str}}uninstall, local_la{{/str}}</span>
+                                                        </a>
+                                                    {{/canmanage}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {{/items}}
+                    {{^items}}
+                        <tr>
+                            <td colspan="{{#canmanage}}4{{/canmanage}}{{^canmanage}}3{{/canmanage}}" class="text-muted text-center py-4">{{#str}}notfound, local_la{{/str}}</td>
+                        </tr>
+                    {{/items}}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>

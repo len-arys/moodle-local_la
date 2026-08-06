@@ -1,0 +1,86 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/report/auditlogs
+
+    Renders report-specific audit logs.
+
+    Classes required for JS:
+    * .alert - JavaScript selector hook.
+    * .btn - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * auditlogs - array|bool: Section data or visibility flag for auditlogs.
+    * needsupgrade - array|bool: Section data or visibility flag for needsupgrade.
+    * upgradecopy - string: Text for upgradecopy.
+    * billingurl - string: URL for billingurl.
+    * reportid - int: Numeric value for reportid.
+    * search - string: Text for search.
+    * audienceurl - string: URL for audienceurl.
+    * table - string: Rendered HTML for table.
+
+    Example context (json):
+    {
+        "head": "<title>Audit logs</title>",
+        "header": "<header></header>",
+        "reportid": 1,
+        "audienceurl": "#",
+        "table": "<table></table>"
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main p-1 pt-4 pb-4">
+        <section class="container-fluid">
+            {{{head}}}
+            {{#auditlogs}}
+                {{#needsupgrade}}
+                    <div class="alert alert-info mt-4" role="alert">
+                        {{upgradecopy}}
+                        <a href="{{billingurl}}">{{#str}}upgrade, local_la{{/str}}</a>
+                    </div>
+                {{/needsupgrade}}
+                {{^needsupgrade}}
+                <div class="d-flex justify-content-between align-items-start gap-3 mt-4">
+                    <form method="get" action="" class="d-flex justify-content-start">
+                        <input type="hidden" name="id" value="{{reportid}}">
+                        <input type="hidden" name="tab" value="auditlogs">
+                        <div class="input-group mb-3 w-auto">
+                            <label for="la-audit-search">
+                                <span class="visually-hidden">{{#str}}search, core{{/str}}</span>
+                            </label>
+                            <input id="la-audit-search" name="audit_search" type="text" class="form-control rounded-start border-end-0" placeholder="{{#str}}search, core{{/str}}" aria-label="{{#str}}search, core{{/str}}" value="{{search}}" size="28">
+                            <button class="input-group-text ps-2 pe-2 bg-white border-start-0" type="submit" aria-label="{{#str}}search, core{{/str}}">
+                                <i class="icon fa fa-search fa-fw" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <a class="btn btn-secondary" href="{{audienceurl}}">{{#str}}manageaudience, local_la{{/str}}</a>
+                </div>
+                {{{table}}}
+                {{/needsupgrade}}
+            {{/auditlogs}}
+        </section>
+    </main>
+</div>

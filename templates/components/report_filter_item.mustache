@@ -1,0 +1,181 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/components/report_filter_item
+
+    Renders one configurable report filter.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .d-none - JavaScript selector hook.
+    * .filter - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+    * .la-report-multiselect - JavaScript selector hook.
+    * .la-report-users-autocomplete-wrap - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="set-search-default" - JavaScript data or selector hook.
+    * data-autocomplete-placeholder - JavaScript data or selector hook.
+    * data-empty-label - JavaScript data or selector hook.
+    * data-fieldtype="select" - JavaScript data or selector hook.
+    * data-fieldtype="text" - JavaScript data or selector hook.
+    * data-filter-for - JavaScript data or selector hook.
+    * data-key - JavaScript data or selector hook.
+    * data-loading-label - JavaScript data or selector hook.
+    * data-region="filter-operator" - JavaScript data or selector hook.
+    * data-region="filter-range" - JavaScript data or selector hook.
+    * data-region="filter-value" - JavaScript data or selector hook.
+    * data-region="multiselect" - JavaScript data or selector hook.
+    * data-region="multiselect-label" - JavaScript data or selector hook.
+    * data-region="multiselect-menu" - JavaScript data or selector hook.
+    * data-region="multiselect-options" - JavaScript data or selector hook.
+    * data-region="multiselect-search" - JavaScript data or selector hook.
+    * data-region="multiselect-select" - JavaScript data or selector hook.
+    * data-region="multiselect-trigger" - JavaScript data or selector hook.
+    * data-report-id - JavaScript data or selector hook.
+    * data-reportid - JavaScript data or selector hook.
+    * data-selected-suffix - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * name - string: Text for name.
+    * can_search_default - array|bool: Section data or visibility flag for can search default.
+    * reportid - int: Numeric value for reportid.
+    * key - string: Text for key.
+    * is_search_default - array|bool: Section data or visibility flag for is search default.
+    * operator_name - string: Text for operator name.
+    * operators - array: List of entries for operators.
+    * value - string: Text for value.
+    * selected - array|bool: Section data or visibility flag for selected.
+    * is_text - array|bool: Section data or visibility flag for is text.
+    * value_name - string: Text for value name.
+    * value_disabled - array|bool: Section data or visibility flag for value disabled.
+    * is_select - array|bool: Section data or visibility flag for is select.
+    * is_courses_multiselect - array|bool: Section data or visibility flag for is courses multiselect.
+    * search_courses_label - string: Text for search courses label.
+    * loading_label - string: Text for loading label.
+    * selected_suffix - bool: Whether selected suffix is enabled.
+    * options - array: List of entries for options.
+    * selected_count_label - bool: Whether selected count label is enabled.
+    * is_users_autocomplete - array|bool: Section data or visibility flag for is users autocomplete.
+    * is_date - array|bool: Section data or visibility flag for is date.
+    * show_range - array|bool: Section data or visibility flag for show range.
+    * from_name - string: Text for from name.
+    * from - string: Text for from.
+    * to_name - string: Text for to name.
+    * to - string: Text for to.
+
+    Example context (json):
+    {
+        "reportid": 1,
+        "key": "course",
+        "name": "Course",
+        "operators": [
+            {
+                "value": "is",
+                "name": "Is",
+                "selected": true
+            }
+        ],
+        "is_text": true
+    }
+}}
+<div class="filter pb-3 mb-3" data-filter-for="{{name}}">
+    <div class="filter-header d-flex align-items-start justify-content-between">
+        <div class="filter-name text-truncate">{{name}}</div>
+        {{#can_search_default}}
+            <button type="button" class="btn p-0 border-0 bg-transparent lh-1 ms-2" data-action="set-search-default" data-reportid="{{reportid}}" data-key="{{key}}" title="{{#str}}setdefaultsearch, local_la{{/str}}">
+                <i class="fa-solid fa-magnifying-glass la-filter-search-default{{#is_search_default}} active{{/is_search_default}}" aria-hidden="true"></i>
+                <span class="visually-hidden">{{#str}}setdefaultsearch, local_la{{/str}}</span>
+            </button>
+        {{/can_search_default}}
+    </div>
+    <fieldset class="m-0 p-0 border-0">
+        <legend class="visually-hidden">{{name}}</legend>
+        <div class="la-report-filter-fields">
+            <div class="la-report-filter-control la-report-filter-operator">
+                <span data-fieldtype="select">
+                    <select class="form-select" name="{{operator_name}}" data-region="filter-operator">
+                        {{#operators}}
+                            <option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>
+                        {{/operators}}
+                    </select>
+                </span>
+            </div>
+            <div class="la-report-filter-control la-report-filter-value" data-region="filter-value">
+                {{#is_text}}
+                    <span data-fieldtype="text">
+                        <input type="text" class="form-control" name="{{value_name}}" value="{{value}}"{{#value_disabled}} disabled{{/value_disabled}}>
+                    </span>
+                {{/is_text}}
+                {{#is_select}}
+                    {{#is_courses_multiselect}}
+                        <div
+                            class="la-report-multiselect"
+                            data-region="multiselect"
+                            data-report-id="{{reportid}}"
+                            data-empty-label="{{search_courses_label}}"
+                            data-loading-label="{{loading_label}}"
+                            data-selected-suffix="{{selected_suffix}}">
+                            <select class="d-none" name="{{value_name}}[]" multiple{{#value_disabled}} disabled{{/value_disabled}} data-region="multiselect-select">
+                                {{#options}}
+                                    <option value="{{value}}" selected>{{name}}</option>
+                                {{/options}}
+                            </select>
+                            <button type="button" class="form-select text-start la-report-multiselect-trigger" data-region="multiselect-trigger"{{#value_disabled}} disabled{{/value_disabled}}>
+                                <span data-region="multiselect-label">{{selected_count_label}}</span>
+                            </button>
+                            <div class="la-report-multiselect-menu d-none" data-region="multiselect-menu">
+                                <div class="la-report-multiselect-search">
+                                    <input type="search" class="form-control" placeholder="{{#str}}searchcourses, local_la{{/str}}" data-region="multiselect-search"{{#value_disabled}} disabled{{/value_disabled}}>
+                                </div>
+                                <div class="la-report-multiselect-options" data-region="multiselect-options"></div>
+                            </div>
+                        </div>
+                    {{/is_courses_multiselect}}
+                    {{^is_courses_multiselect}}
+                    <span data-fieldtype="select"{{#is_users_autocomplete}} class="la-report-users-autocomplete-wrap"{{/is_users_autocomplete}}>
+                        <select class="form-select{{#is_users_autocomplete}} la-report-user-autocomplete{{/is_users_autocomplete}}" name="{{value_name}}{{#is_users_autocomplete}}[]{{/is_users_autocomplete}}"{{#is_users_autocomplete}} multiple{{/is_users_autocomplete}}{{#value_disabled}} disabled{{/value_disabled}}{{#is_users_autocomplete}} data-autocomplete-placeholder="{{#str}}searchusers, local_la{{/str}}"{{/is_users_autocomplete}}>
+                            {{#options}}
+                                <option value="{{value}}"{{#selected}} selected{{/selected}}>{{name}}</option>
+                            {{/options}}
+                        </select>
+                    </span>
+                    {{/is_courses_multiselect}}
+                {{/is_select}}
+                {{#is_date}}
+                    <span data-fieldtype="text">
+                        <input type="date" class="form-control" name="{{value_name}}" value="{{value}}"{{#value_disabled}} disabled{{/value_disabled}}>
+                    </span>
+                {{/is_date}}
+            </div>
+            {{#is_date}}
+                <div class="la-report-filter-range{{^show_range}} d-none{{/show_range}}" data-region="filter-range">
+                    <div class="la-report-filter-control">
+                        <span data-fieldtype="text">
+                            <input type="date" class="form-control" name="{{from_name}}" value="{{from}}">
+                        </span>
+                    </div>
+                    <div class="la-report-filter-control">
+                        <span data-fieldtype="text">
+                            <input type="date" class="form-control" name="{{to_name}}" value="{{to}}">
+                        </span>
+                    </div>
+                </div>
+            {{/is_date}}
+        </div>
+    </fieldset>
+</div>

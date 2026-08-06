@@ -1,0 +1,55 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/column_settings
+
+    Renders the report column settings form container.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .btn-primary - JavaScript selector hook.
+    * .la-column-settings-footer - JavaScript selector hook.
+    * .la-column-settings-form - JavaScript selector hook.
+    * .modal-footer - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="cancel-column-settings" - JavaScript data or selector hook.
+    * data-action="save-column-settings" - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * reportid - int: Numeric value for reportid.
+    * key - string: Text for key.
+
+    Example context (json):
+    {
+        "reportid": 1,
+        "key": "user_name"
+    }
+}}
+<form class="la-column-settings-form">
+    <input type="hidden" name="id" value="{{reportid}}">
+    <input type="hidden" name="key" value="{{key}}">
+
+    <div class="px-3 pt-3">
+        {{> local_la/components/column_form}}
+    </div>
+
+    <div class="modal-footer la-column-settings-footer">
+        <button type="button" class="btn btn-link" data-action="cancel-column-settings">{{#str}}cancel, core{{/str}}</button>
+        <button type="button" class="btn btn-primary" data-action="save-column-settings">{{#str}}save, core{{/str}}</button>
+    </div>
+</form>

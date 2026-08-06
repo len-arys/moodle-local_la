@@ -1,0 +1,99 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/components/app_widget_body
+
+    Renders the content of an app dashboard widget.
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * data-action="open-report-modal-link" - JavaScript data or selector hook.
+    * data-method - JavaScript data or selector hook.
+    * data-params - JavaScript data or selector hook.
+    * data-title - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * has_donut - array|bool: Section data or visibility flag for has donut.
+    * donutstyle - string: Text for donutstyle.
+    * value - string: Text for value.
+    * show_metric_value - array|bool: Section data or visibility flag for show metric value.
+    * has_segments - array|bool: Section data or visibility flag for has segments.
+    * segments - array: List of entries for segments.
+    * dotstyle - string: Text for dotstyle.
+    * label - string: Text for label.
+    * detail - array|bool: Section data or visibility flag for detail.
+    * displayvalue - string: Text for displayvalue.
+    * link - array|bool: Section data or visibility flag for link.
+    * ismodal - array|bool: Section data or visibility flag for ismodal.
+    * method - string: Text for method.
+    * paramsjson - string: Text for paramsjson.
+    * title - string: Text for title.
+    * url - string: URL for url.
+
+    Example context (json):
+    {
+        "title": "Active users",
+        "displayvalue": "120",
+        "detail": "Users active this week"
+    }
+}}
+{{#has_donut}}
+    <div class="la-app-donut mx-auto" style="{{donutstyle}}">
+        <div class="la-app-donut-value">{{value}}</div>
+    </div>
+{{/has_donut}}
+
+{{#show_metric_value}}
+    <div class="la-app-metric-value">{{value}}</div>
+{{/show_metric_value}}
+
+{{#has_segments}}
+    <div class="la-app-legend">
+        {{#segments}}
+            <div class="la-app-legend-row">
+                <span class="la-app-legend-dot" style="{{dotstyle}}"></span>
+                <span>
+                    <span>{{label}}</span>
+                    {{#detail}}
+                        <span class="la-app-legend-detail">({{detail}})</span>
+                    {{/detail}}
+                </span>
+                <strong>{{displayvalue}}</strong>
+            </div>
+        {{/segments}}
+    </div>
+{{/has_segments}}
+
+{{#link}}
+    <div class="text-center mt-3">
+        {{#ismodal}}
+            <a
+                href="#"
+                class="la-app-more la-modal-link"
+                data-action="open-report-modal-link"
+                data-method="{{method}}"
+                data-params="{{paramsjson}}"
+                data-title="{{title}}"
+            >{{label}} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        {{/ismodal}}
+        {{^ismodal}}
+            <a href="{{url}}" class="la-app-more">{{label}} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        {{/ismodal}}
+    </div>
+{{/link}}

@@ -1,0 +1,92 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/preferences/billing
+
+    Renders billing guidance and external plan links.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .btn-primary - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * head - string: Text for head.
+    * hasmarketplaceurl - array|bool: Section data or visibility flag for hasmarketplaceurl.
+    * marketplaceurl - string: URL for marketplaceurl.
+    * haspricingurl - array|bool: Section data or visibility flag for haspricingurl.
+    * pricingurl - string: URL for pricingurl.
+    * settingsurl - string: URL for settingsurl.
+    * hasbillingactions - array|bool: Section data or visibility flag for hasbillingactions.
+    * hascontacturl - array|bool: Section data or visibility flag for hascontacturl.
+    * contacturl - string: URL for contacturl.
+
+    Example context (json):
+    {
+        "head": "<title>Billing</title>",
+        "header": "<header></header>",
+        "hasmarketplaceurl": true,
+        "marketplaceurl": "#",
+        "haspricingurl": true,
+        "pricingurl": "#",
+        "hascontacturl": true,
+        "contacturl": "mailto:contact@example.com"
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main la-main-center pt-4 pb-4">
+        <div class="la-preferences container-fluid">
+            {{{head}}}
+
+            <section class="mt-4 mb-4">
+                <h2 class="h5">{{#str}}subscription, local_la{{/str}}</h2>
+                <ul class="mb-0">
+                    <li>
+                        {{#str}}billingmanagedoutside, local_la{{/str}}
+                        {{#hasmarketplaceurl}}
+                            <a href="{{marketplaceurl}}">{{#str}}managesubscription, local_la{{/str}}</a>.
+                        {{/hasmarketplaceurl}}
+                    </li>
+                    {{#haspricingurl}}
+                        <li>
+                            {{#str}}billingpricingmessage, local_la{{/str}}
+                            <a href="{{pricingurl}}">{{#str}}billingpricinglink, local_la{{/str}}</a>.
+                        </li>
+                    {{/haspricingurl}}
+                    <li>
+                        {{#str}}billingadminmessage, local_la{{/str}}
+                        <a href="{{settingsurl}}">{{#str}}change, local_la{{/str}}</a>
+                    </li>
+                </ul>
+                {{#hasbillingactions}}
+                    <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
+                        {{#hasmarketplaceurl}}
+                            <a class="btn btn-primary" href="{{marketplaceurl}}">{{#str}}marketplace, local_la{{/str}}</a>
+                        {{/hasmarketplaceurl}}
+                        {{#hascontacturl}}
+                            <a href="{{contacturl}}">{{#str}}contactus, local_la{{/str}}</a>
+                        {{/hascontacturl}}
+                    </div>
+                {{/hasbillingactions}}
+            </section>
+        </div>
+    </main>
+</div>

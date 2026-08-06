@@ -1,0 +1,162 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/components/column_form
+
+    Renders fields used to configure a report column.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .d-none - JavaScript selector hook.
+    * .form-check - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+    * .row - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="toggle-column-advanced" - JavaScript data or selector hook.
+    * data-region - JavaScript data or selector hook.
+    * data-region="column-advanced" - JavaScript data or selector hook.
+    * data-region="column-form" - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * idprefix - string: Text for idprefix.
+    * enabledname - array|bool: Section data or visibility flag for enabledname.
+    * enabledregion - array|bool: Section data or visibility flag for enabledregion.
+    * enabledchecked - array|bool: Section data or visibility flag for enabledchecked.
+    * namevalue - string: Text for namevalue.
+    * namename - array|bool: Section data or visibility flag for namename.
+    * nameregion - array|bool: Section data or visibility flag for nameregion.
+    * typename - array|bool: Section data or visibility flag for typename.
+    * typeregion - array|bool: Section data or visibility flag for typeregion.
+    * types - array: List of entries for types.
+    * value - string: Text for value.
+    * selected - array|bool: Section data or visibility flag for selected.
+    * label - string: Text for label.
+    * visiblename - array|bool: Section data or visibility flag for visiblename.
+    * visibleregion - array|bool: Section data or visibility flag for visibleregion.
+    * visiblechecked - array|bool: Section data or visibility flag for visiblechecked.
+    * sortablename - array|bool: Section data or visibility flag for sortablename.
+    * sortableregion - array|bool: Section data or visibility flag for sortableregion.
+    * sortablechecked - array|bool: Section data or visibility flag for sortablechecked.
+    * formulavalue - string: Text for formulavalue.
+    * formulaname - array|bool: Section data or visibility flag for formulaname.
+    * formularegion - array|bool: Section data or visibility flag for formularegion.
+    * conditionvalue - string: Text for conditionvalue.
+    * conditionname - array|bool: Section data or visibility flag for conditionname.
+    * conditionregion - array|bool: Section data or visibility flag for conditionregion.
+
+    Example context (json):
+    {
+        "idprefix": "column-1",
+        "namevalue": "Course name",
+        "types": [
+            {
+                "value": "text",
+                "label": "Text",
+                "selected": true
+            }
+        ],
+        "visiblechecked": true
+    }
+}}
+<div class="row g-3 align-items-start" data-region="column-form">
+    <div class="col-lg-3">
+        <label class="col-form-label" for="{{idprefix}}-enabled">{{#str}}enabled, local_la{{/str}}</label>
+    </div>
+    <div class="col-lg-9">
+        <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" id="{{idprefix}}-enabled"{{#enabledname}} name="{{.}}"{{/enabledname}}{{#enabledregion}} data-region="{{.}}"{{/enabledregion}}{{#enabledchecked}} checked{{/enabledchecked}}>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <label class="col-form-label" for="{{idprefix}}-name">{{#str}}name, core{{/str}}</label>
+    </div>
+    <div class="col-lg-9">
+        <input type="text" class="form-control w-100" id="{{idprefix}}-name" value="{{namevalue}}"{{#namename}} name="{{.}}"{{/namename}}{{#nameregion}} data-region="{{.}}"{{/nameregion}}>
+    </div>
+
+    <div class="col-lg-3">
+        <label class="col-form-label" for="{{idprefix}}-type">{{#str}}columntype, local_la{{/str}}</label>
+    </div>
+    <div class="col-lg-9">
+        <select class="form-select w-100" id="{{idprefix}}-type"{{#typename}} name="{{.}}"{{/typename}}{{#typeregion}} data-region="{{.}}"{{/typeregion}}>
+            {{#types}}
+                <option value="{{value}}"{{#selected}} selected{{/selected}}>{{label}}</option>
+            {{/types}}
+        </select>
+    </div>
+
+    <div class="col-lg-3">
+        <label class="col-form-label" for="{{idprefix}}-visible">{{#str}}visible, core{{/str}}</label>
+    </div>
+    <div class="col-lg-9">
+        <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" id="{{idprefix}}-visible"{{#visiblename}} name="{{.}}"{{/visiblename}}{{#visibleregion}} data-region="{{.}}"{{/visibleregion}}{{#visiblechecked}} checked{{/visiblechecked}}>
+        </div>
+    </div>
+
+    <div class="col-lg-3">
+        <label class="col-form-label" for="{{idprefix}}-sortable">{{#str}}sortable, local_la{{/str}}</label>
+    </div>
+    <div class="col-lg-9">
+        <div class="form-check mt-2">
+            <input class="form-check-input" type="checkbox" id="{{idprefix}}-sortable"{{#sortablename}} name="{{.}}"{{/sortablename}}{{#sortableregion}} data-region="{{.}}"{{/sortableregion}}{{#sortablechecked}} checked{{/sortablechecked}}>
+        </div>
+    </div>
+
+    <div class="col-lg-3"></div>
+    <div class="col-lg-9">
+        <button type="button" class="btn btn-link p-0 text-decoration-none" data-action="toggle-column-advanced" aria-expanded="false">
+            {{#str}}advanced, core{{/str}}
+        </button>
+    </div>
+
+    <div class="col-12 d-none" data-region="column-advanced">
+        <div class="row g-3 align-items-start">
+            <div class="col-lg-3">
+                <label class="col-form-label" for="{{idprefix}}-formula">{{#str}}formula, local_la{{/str}}</label>
+            </div>
+            <div class="col-lg-9">
+                <input type="text" class="form-control w-100" id="{{idprefix}}-formula" value="{{formulavalue}}"{{#formulaname}} name="{{.}}"{{/formulaname}}{{#formularegion}} data-region="{{.}}"{{/formularegion}}>
+                <div class="form-text">
+                    <div>{{#str}}formulahelpintro, local_la{{/str}}</div>
+                    <ul class="mb-1 ps-3">
+                        <li><code>grade * 100</code></li>
+                        <li><code>grade / visits</code></li>
+                    </ul>
+                    <div>{{#str}}formulahelpnote, local_la{{/str}}</div>
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <label class="col-form-label" for="{{idprefix}}-condition">{{#str}}condition, local_la{{/str}}</label>
+            </div>
+            <div class="col-lg-9">
+                <input type="text" class="form-control w-100" id="{{idprefix}}-condition" value="{{conditionvalue}}"{{#conditionname}} name="{{.}}"{{/conditionname}}{{#conditionregion}} data-region="{{.}}"{{/conditionregion}}>
+                <div class="form-text">
+                    <div>{{#str}}conditionhelpintro, local_la{{/str}}</div>
+                    <ul class="mb-1 ps-3">
+                        <li><code>IT</code></li>
+                        <li><code>active</code></li>
+                    </ul>
+                    <div>{{#str}}conditionhelpnote, local_la{{/str}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

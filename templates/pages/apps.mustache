@@ -1,0 +1,135 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/pages/apps
+
+    Renders an app dashboard page.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .dropdown - JavaScript selector hook.
+    * .dropdown-menu - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="delete-widget" - JavaScript data or selector hook.
+    * data-action="toggle-app-widget" - JavaScript data or selector hook.
+    * data-action="toggle-widget-maximize" - JavaScript data or selector hook.
+    * data-action="toggle-widget-refresh" - JavaScript data or selector hook.
+    * data-app-id - JavaScript data or selector hook.
+    * data-bs-toggle="dropdown" - JavaScript data or selector hook.
+    * data-region="app-widget-body" - JavaScript data or selector hook.
+    * data-region="widget-maximize-label" - JavaScript data or selector hook.
+    * data-region="widget-refresh-label" - JavaScript data or selector hook.
+    * data-widget-key - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * header - string: Text for header.
+    * appcontext - array|bool: Section data or visibility flag for appcontext.
+    * head - string: Text for head.
+    * has_widgets - array|bool: Section data or visibility flag for has widgets.
+    * widgets - array: List of entries for widgets.
+    * value_class - string: Text for value class.
+    * has_donut - array|bool: Section data or visibility flag for has donut.
+    * is_value - array|bool: Section data or visibility flag for is value.
+    * is_totals - array|bool: Section data or visibility flag for is totals.
+    * is_active - array|bool: Section data or visibility flag for is active.
+    * is_maximized - array|bool: Section data or visibility flag for is maximized.
+    * is_auto_refreshing - array|bool: Section data or visibility flag for is auto refreshing.
+    * appid - int: Numeric value for appid.
+    * key - string: Text for key.
+    * title - string: Text for title.
+
+    Example context (json):
+    {
+        "head": "<title>Learning overview</title>",
+        "header": "<header></header>",
+        "appid": 1,
+        "title": "Learning overview",
+        "has_widgets": true,
+        "widgets": [
+            {
+                "key": "users",
+                "title": "Active users",
+                "is_value": true
+            }
+        ]
+    }
+}}
+<div class="la-page-wrapper">
+    {{{header}}}
+    <main class="la-main p-4">
+        <section class="container-fluid">
+            {{#appcontext}}
+                <div class="la-app">
+                    {{{head}}}
+                    {{#has_widgets}}
+                        <div class="la-app-grid">
+                            {{#widgets}}
+                                <section
+                                    class="la-app-card {{value_class}} {{#has_donut}}la-app-card-donut{{/has_donut}} {{#is_value}}la-app-card-metric{{/is_value}} {{#is_totals}}la-app-card-totals{{/is_totals}} {{#is_active}}is-active{{/is_active}} {{#is_maximized}}is-maximized{{/is_maximized}} {{#is_auto_refreshing}}is-auto-refreshing{{/is_auto_refreshing}}"
+                                    data-action="toggle-app-widget"
+                                    role="button"
+                                    tabindex="0"
+                                    aria-expanded="{{#is_active}}true{{/is_active}}{{^is_active}}false{{/is_active}}"
+                                    data-app-id="{{appid}}"
+                                    data-widget-key="{{key}}"
+                                >
+                                    <div class="d-flex align-items-start justify-content-between gap-2 mb-3">
+                                        <h2 class="la-app-card-title mb-0">{{title}}</h2>
+                                        <div class="dropdown">
+                                            <button class="btn btn-icon icon-no-margin no-caret p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{#str}}actions, core{{/str}}">
+                                                <i class="icon fa fa-ellipsis-vertical fa-fw" aria-hidden="true"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a href="#" class="dropdown-item" role="menuitem" data-action="toggle-widget-maximize" aria-pressed="{{#is_maximized}}true{{/is_maximized}}{{^is_maximized}}false{{/is_maximized}}">
+                                                    <i class="icon fa fa-expand fa-fw" aria-hidden="true"></i>
+                                                    <span data-region="widget-maximize-label">{{#is_maximized}}{{#str}}minimize, local_la{{/str}}{{/is_maximized}}{{^is_maximized}}{{#str}}maximize, local_la{{/str}}{{/is_maximized}}</span>
+                                                </a>
+                                                <a href="#" class="dropdown-item" role="menuitem" data-action="toggle-widget-refresh" aria-pressed="{{#is_auto_refreshing}}true{{/is_auto_refreshing}}{{^is_auto_refreshing}}false{{/is_auto_refreshing}}">
+                                                    <i class="icon fa fa-rotate fa-fw" aria-hidden="true"></i>
+                                                    <span data-region="widget-refresh-label">{{#is_auto_refreshing}}{{#str}}stopautorefresh, local_la{{/str}}{{/is_auto_refreshing}}{{^is_auto_refreshing}}{{#str}}startautorefresh, local_la{{/str}}{{/is_auto_refreshing}}</span>
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item text-danger" role="menuitem" data-action="delete-widget">
+                                                    <i class="icon fa fa-trash-can fa-fw" aria-hidden="true"></i>
+                                                    <span>{{#str}}delete, core{{/str}}</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div data-region="app-widget-body">
+                                        {{> local_la/components/app_widget_body }}
+                                    </div>
+                                </section>
+                            {{/widgets}}
+                        </div>
+                    {{/has_widgets}}
+
+                    {{^has_widgets}}
+                        <div class="text-muted text-center py-4">{{#str}}notfound, local_la{{/str}}</div>
+                    {{/has_widgets}}
+                </div>
+            {{/appcontext}}
+
+            {{^appcontext}}
+                <div class="text-muted text-center py-4">{{#str}}notfound, local_la{{/str}}</div>
+            {{/appcontext}}
+        </section>
+    </main>
+</div>

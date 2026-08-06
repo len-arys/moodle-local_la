@@ -1,0 +1,74 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/grade
+
+    Renders grade details and related actions.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .la-report-modal - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-action="open-full-report" - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * summary.primary - string: Text for summary primary.
+    * summary.secondary - string: Text for summary secondary.
+    * grade.table - string: Rendered HTML for grade table.
+    * grade.url - string: URL for grade url.
+    * grade.name - string: Text for grade name.
+    * buttons - array: List of entries for buttons.
+    * url - string: URL for url.
+    * label - string: Text for label.
+
+    Example context (json):
+    {
+        "summary": {
+            "primary": "Assignment grade",
+            "secondary": "85%"
+        },
+        "grade": {
+            "name": "Assignment",
+            "url": "#",
+            "table": "<table></table>"
+        }
+    }
+}}
+<div class="la-report-modal">
+    <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+        <div>
+            <div class="h5 mb-1">{{summary.primary}}</div>
+            <div class="text-muted small">{{summary.secondary}}</div>
+        </div>
+    </div>
+    <div class="path-grade-report-singleview">
+        {{{grade.table}}}
+    </div>
+    <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mt-3">
+        <a href="{{grade.url}}" class="btn btn-secondary" data-action="open-full-report">
+            {{grade.name}} (<b>m</b>)
+        </a>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            {{#buttons}}
+            <a href="{{url}}" class="btn btn-outline-secondary">
+                {{label}} <i class="fa-classic fa-solid fa-angles-right"></i>
+            </a>
+            {{/buttons}}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/report_details
+
+    Renders the editable report name, description, and tags.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .form-control - JavaScript selector hook.
+    * .la-report-details-form - JavaScript selector hook.
+    * .row - JavaScript selector hook.
+    * .show - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-bs-toggle="collapse" - JavaScript data or selector hook.
+    * data-fieldtype="editor" - JavaScript data or selector hook.
+    * data-fieldtype="text" - JavaScript data or selector hook.
+    * data-fieldtype="textarea" - JavaScript data or selector hook.
+    * data-report-id - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * reportid - int: Numeric value for reportid.
+    * name - string: Text for name.
+    * description - string: Text for description.
+    * tags - array: List of entries for tags.
+
+    Example context (json):
+    {
+        "reportid": 1,
+        "name": "Users tracking",
+        "description": "User activity and learning time.",
+        "tags": "users, activity"
+    }
+}}
+<form class="mform la-report-details-form" autocomplete="off" data-report-id="{{reportid}}">
+    <fieldset class="clearfix fitem collapsible" id="la-report-details-general" name="general">
+        <legend class="visually-hidden">{{#str}}general{{/str}}</legend>
+        <div class="d-flex align-items-center mb-2">
+            <div class="position-relative d-flex ftoggler align-items-center me-1">
+                <a data-bs-toggle="collapse" href="#la-report-details-general-container" role="button" aria-expanded="true" aria-controls="la-report-details-general-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader">
+                    <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                    <span class="visually-hidden">{{#str}}general{{/str}}</span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}general{{/str}}</h3>
+            </div>
+        </div>
+        <div id="la-report-details-general-container" class="fcontainer collapseable collapse show">
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-report-details-name">{{#str}}name, core{{/str}}</label>
+                    <div class="form-label-addon d-flex align-items-center align-self-start">
+                        <div class="text-danger" title="{{#str}}required{{/str}}" aria-hidden="true"><i class="icon fa fa-circle-exclamation text-danger fa-fw" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="text">
+                    <input id="la-report-details-name" name="name" type="text" class="form-control" value="{{name}}" required aria-required="true">
+                </div>
+            </div>
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-report-details-description">{{#str}}description{{/str}}</label>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="editor">
+                    <textarea id="la-report-details-description" name="description" class="form-control" rows="12">{{description}}</textarea>
+                </div>
+            </div>
+            <div class="mb-3 row fitem">
+                <div class="col-md-3 col-form-label d-flex pb-0 pe-md-0">
+                    <label class="d-inline word-break" for="la-report-details-tags">{{#str}}tags{{/str}}</label>
+                </div>
+                <div class="col-md-9 d-flex flex-wrap align-items-start felement" data-fieldtype="textarea">
+                    <textarea id="la-report-details-tags" name="tags" class="form-control" rows="2">{{tags}}</textarea>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>

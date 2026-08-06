@@ -1,0 +1,159 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/library_app_params
+
+    Renders an installed app definition and parameter details.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .fa - JavaScript selector hook.
+    * .show - JavaScript selector hook.
+    * .table - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-bs-toggle="collapse" - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * app_fields - array|bool: Section data or visibility flag for app fields.
+    * key - string: Text for key.
+    * value - string: Text for value.
+    * has_widgets - array|bool: Section data or visibility flag for has widgets.
+    * widgets - array: List of entries for widgets.
+    * title - string: Text for title.
+    * type - string: Text for type.
+    * snippets - array: List of entries for snippets.
+    * name - string: Text for name.
+    * code - string: Text for code.
+    * validation - array: List of entries for validation.
+    * icon - string: Text for icon.
+    * class - string: Text for class.
+    * definition_json - string: Text for definition json.
+
+    Example context (json):
+    {
+        "title": "App parameters",
+        "name": "Learning overview",
+        "definition_json": "{}",
+        "has_widgets": true,
+        "widgets": [
+            {
+                "name": "Active users",
+                "type": "metric"
+            }
+        ]
+    }
+}}
+<div class="mform">
+    <fieldset class="clearfix fitem collapsible" id="la-library-app-details" name="appdetails">
+        <legend class="visually-hidden">{{#str}}appdetails, local_la{{/str}}</legend>
+        <div class="d-flex align-items-center mb-2">
+            <div class="position-relative d-flex ftoggler align-items-center me-1">
+                <a data-bs-toggle="collapse" href="#la-library-app-details-container" role="button" aria-expanded="true" aria-controls="la-library-app-details-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader">
+                    <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                    <span class="visually-hidden">{{#str}}appdetails, local_la{{/str}}</span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}appdetails, local_la{{/str}}</h3>
+            </div>
+        </div>
+        <div id="la-library-app-details-container" class="fcontainer collapseable collapse show la-library-sql-section-content">
+            <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                    <tbody>
+                    {{#app_fields}}
+                        <tr>
+                            <th scope="row" class="text-nowrap"><code>{{key}}</code></th>
+                            <td>{{value}}</td>
+                        </tr>
+                    {{/app_fields}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </fieldset>
+
+    {{#has_widgets}}
+        <fieldset class="clearfix fitem collapsible collapsed" id="la-library-app-widgets" name="widgets">
+            <legend class="visually-hidden">{{#str}}widgets, local_la{{/str}}</legend>
+            <div class="d-flex align-items-center mb-2">
+                <div class="position-relative d-flex ftoggler align-items-center me-1">
+                    <a data-bs-toggle="collapse" href="#la-library-app-widgets-container" role="button" aria-expanded="false" aria-controls="la-library-app-widgets-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
+                        <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                        <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                        <span class="visually-hidden">{{#str}}widgets, local_la{{/str}}</span>
+                    </a>
+                    <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">{{#str}}widgets, local_la{{/str}}</h3>
+                </div>
+            </div>
+            <div id="la-library-app-widgets-container" class="fcontainer collapseable collapse la-library-sql-section-content">
+                {{#widgets}}
+                    <div class="mb-4">
+                        <div><span class="badge text-bg-info mb-2"><i class="fa-solid fa-chart-column"></i> {{title}}</span></div>
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" class="text-nowrap"><code>key</code></th>
+                                        <td><code>{{key}}</code></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="text-nowrap"><code>type</code></th>
+                                        <td>{{type}}</td>
+                                    </tr>
+                                    {{#snippets}}
+                                        <tr>
+                                            <th scope="row" class="text-nowrap"><code>{{name}}</code></th>
+                                            <td><pre class="la-sql-preview mb-0"><code class="la-sql-preview-code">{{code}}</code></pre></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row" class="text-nowrap">{{#str}}validation, local_la{{/str}}</th>
+                                            <td>
+                                                <div class="d-flex flex-column gap-1">
+                                                    {{#validation}}
+                                                        <span><i class="fa-solid {{icon}} {{class}} me-1" aria-hidden="true"></i>{{name}}</span>
+                                                    {{/validation}}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {{/snippets}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {{/widgets}}
+            </div>
+        </fieldset>
+    {{/has_widgets}}
+
+    <fieldset class="clearfix fitem collapsible collapsed" id="la-library-app-params" name="params">
+        <legend class="visually-hidden">Params</legend>
+        <div class="d-flex align-items-center mb-2">
+            <div class="position-relative d-flex ftoggler align-items-center me-1">
+                <a data-bs-toggle="collapse" href="#la-library-app-params-container" role="button" aria-expanded="false" aria-controls="la-library-app-params-container" class="btn btn-icon me-3 icons-collapse-expand stretched-link fheader collapsed">
+                    <span class="expanded-icon icon-no-margin p-2" title="{{#str}}collapse, core{{/str}}"><i class="icon fa fa-chevron-down fa-fw" aria-hidden="true"></i></span>
+                    <span class="collapsed-icon icon-no-margin p-2" title="{{#str}}expand, core{{/str}}"><i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i></span>
+                    <span class="visually-hidden">Params</span>
+                </a>
+                <h3 class="d-flex align-self-stretch align-items-center mb-0" aria-hidden="true">Params</h3>
+            </div>
+        </div>
+        <div id="la-library-app-params-container" class="fcontainer collapseable collapse la-library-sql-section-content">
+            <pre class="la-sql-preview mb-0"><code class="la-sql-preview-code">{{definition_json}}</code></pre>
+        </div>
+    </fieldset>
+</div>

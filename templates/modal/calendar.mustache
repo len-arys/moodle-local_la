@@ -1,0 +1,176 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_la/modal/calendar
+
+    Renders calendar tracking data and its view controls.
+
+    Classes required for JS:
+    * .btn - JavaScript selector hook.
+    * .la-report-modal - JavaScript selector hook.
+
+    Data attributes required for JS:
+    * data-activityid - JavaScript data or selector hook.
+    * data-courseid - JavaScript data or selector hook.
+    * data-day - JavaScript data or selector hook.
+    * data-instanceid - JavaScript data or selector hook.
+    * data-metric - JavaScript data or selector hook.
+    * data-month - JavaScript data or selector hook.
+    * data-name - JavaScript data or selector hook.
+    * data-region="la-calendar" - JavaScript data or selector hook.
+    * data-scope - JavaScript data or selector hook.
+    * data-userid - JavaScript data or selector hook.
+    * data-view - JavaScript data or selector hook.
+    * data-year - JavaScript data or selector hook.
+
+    Context variables required for this template:
+    * metricisvisits - array|bool: Section data or visibility flag for metricisvisits.
+    * summary.hasavatar - array|bool: Section data or visibility flag for summary hasavatar.
+    * summary.avatarurl - string: URL for summary avatarurl.
+    * summary.avataralt - string: Text for summary avataralt.
+    * summary.primary - string: Text for summary primary.
+    * summary.secondary - string: Text for summary secondary.
+    * metrics - array: List of entries for metrics.
+    * value - string: Text for value.
+    * label - string: Text for label.
+    * calendar_metric - string: Text for calendar metric.
+    * calendar_scope - string: Text for calendar scope.
+    * calendar_userid - int: Numeric value for calendar userid.
+    * calendar_courseid - int: Numeric value for calendar courseid.
+    * calendar_activityid - int: Numeric value for calendar activityid.
+    * calendar_view - string: Text for calendar view.
+    * calendar_year - int: Numeric value for calendar year.
+    * calendar_month - int: Numeric value for calendar month.
+    * calendar_day - int: Numeric value for calendar day.
+    * calendar_name - string: Text for calendar name.
+    * calendar_instanceid - int: Numeric value for calendar instanceid.
+    * hasweekdays - array|bool: Section data or visibility flag for hasweekdays.
+    * weekdays - array: List of entries for weekdays.
+    * ismonthview - array|bool: Section data or visibility flag for ismonthview.
+    * isweekview - array|bool: Section data or visibility flag for isweekview.
+    * isyearview - array|bool: Section data or visibility flag for isyearview.
+    * isyearsview - array|bool: Section data or visibility flag for isyearsview.
+    * legendlabel - string: Text for legendlabel.
+    * legend - array|bool: Section data or visibility flag for legend.
+    * level - string: Text for level.
+    * trackingreport.url - array|bool: Section data or visibility flag for trackingreport url.
+    * trackingreport.label - string: Text for trackingreport label.
+    * debugsql - array|bool: Section data or visibility flag for debugsql.
+
+    Example context (json):
+    {
+        "calendar_view": "month",
+        "calendar_year": 2026,
+        "calendar_month": 8,
+        "ismonthview": true,
+        "weekdays": [
+            {
+                "label": "Monday"
+            }
+        ]
+    }
+}}
+<div class="la-report-modal la-calendar-modal{{#metricisvisits}} la-visits-modal{{/metricisvisits}}">
+    <div class="d-flex justify-content-between align-items-start gap-3 mb-4 flex-wrap">
+        <div class="la-calendar-summary">
+            {{#summary.hasavatar}}
+            <img src="{{summary.avatarurl}}" alt="{{summary.avataralt}}" class="la-calendar-summary-avatar">
+            {{/summary.hasavatar}}
+            <div>
+                <div class="h4 mb-1">{{summary.primary}}</div>
+                <div class="text-muted mb-1">{{summary.secondary}}</div>
+            </div>
+        </div>
+        <div class="la-report-modal-metrics text-end">
+            {{#metrics}}
+            <div class="la-report-modal-metric">
+                <div class="la-report-modal-metric-value">{{value}}</div>
+                <div class="la-report-modal-metric-label">{{label}}</div>
+            </div>
+            {{/metrics}}
+        </div>
+    </div>
+
+    <div
+        class="la-calendar-panel"
+        data-region="la-calendar"
+        data-metric="{{calendar_metric}}"
+        data-scope="{{calendar_scope}}"
+        data-userid="{{calendar_userid}}"
+        data-courseid="{{calendar_courseid}}"
+        data-activityid="{{calendar_activityid}}"
+        data-view="{{calendar_view}}"
+        data-year="{{calendar_year}}"
+        data-month="{{calendar_month}}"
+        data-day="{{calendar_day}}"
+        data-name="{{calendar_name}}"
+        data-instanceid="{{calendar_instanceid}}"
+    >
+        {{> local_la/modal/calendar/header}}
+
+        {{#hasweekdays}}
+        <div class="la-calendar-weekdays">
+            {{#weekdays}}
+            <div class="la-calendar-weekday">{{label}}</div>
+            {{/weekdays}}
+        </div>
+        {{/hasweekdays}}
+
+        {{#ismonthview}}
+        {{> local_la/modal/calendar/month}}
+        {{/ismonthview}}
+
+        {{#isweekview}}
+        {{> local_la/modal/calendar/week}}
+        {{/isweekview}}
+
+        {{#isyearview}}
+        {{> local_la/modal/calendar/year}}
+        {{/isyearview}}
+
+        {{#isyearsview}}
+        {{> local_la/modal/calendar/years}}
+        {{/isyearsview}}
+
+        <div class="la-calendar-footer">
+            <div class="la-calendar-legend">
+                <span class="la-calendar-legend-label">{{legendlabel}}</span>
+                {{#legend}}
+                <span class="la-calendar-legend-item">
+                    <span class="la-calendar-legend-swatch la-calendar-level-{{level}}"></span>
+                    <span>{{label}}</span>
+                </span>
+                {{/legend}}
+            </div>
+            <div class="la-calendar-footer-actions">
+                {{#trackingreport.url}}
+                <a class="btn btn-outline-secondary" href="{{trackingreport.url}}">
+                    {{trackingreport.label}}
+                    <i class="fa-classic fa-solid fa-angles-right"></i>
+                </a>
+                {{/trackingreport.url}}
+            </div>
+        </div>
+
+        {{#debugsql}}
+        <details class="la-table-sql-debug-wrap mt-3">
+            <summary>{{#str}}sql, local_la{{/str}}</summary>
+            <pre class="la-table-sql-debug mb-0">{{debugsql}}</pre>
+        </details>
+        {{/debugsql}}
+    </div>
+</div>
