@@ -20,7 +20,7 @@ use core_privacy\local\request\writer;
  * Tests for the local_la privacy provider.
  *
  * @package    local_la
- * @copyright  2026 Learning Analytics Contributors
+ * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class provider_test extends advanced_testcase {
