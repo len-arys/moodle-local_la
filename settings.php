@@ -102,6 +102,15 @@ if ($hassiteconfig) {
     ));
     $settings->hide_if('local_la/apiurl', 'local_la/api', 'neq', 'api');
 
+    $settings->add(new admin_setting_configtext(
+        'local_la/apicurlsettings',
+        get_string('apicurlsettings', 'local_la'),
+        get_string('apicurlsettings_desc', 'local_la'),
+        '',
+        PARAM_RAW
+    ));
+    $settings->hide_if('local_la/apicurlsettings', 'local_la/api', 'neq', 'api');
+
     $settings->add(new admin_setting_configcheckbox(
         'local_la/debug',
         get_string('debug', 'local_la'),

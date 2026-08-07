@@ -461,7 +461,15 @@ class api {
         require_once($CFG->libdir . '/filelib.php');
 
         $defaults = require(__DIR__ . '/../../config.php');
-        $curl = new \curl($defaults['apicurlsettings'] ?? []);
+        $curlsettings = $defaults['apicurlsettings'] ?? [];
+        $configuredsettings = get_config('local_la', 'apicurlsettings');
+        if ($configuredsettings !== false && trim($configuredsettings) !== '') {
+            $parsedsettings = parse_ini_string($configuredsettings, false, INI_SCANNER_TYPED);
+            if (is_array($parsedsettings)) {
+                $curlsettings = $parsedsettings;
+            }
+        }
+        $curl = new \curl($curlsettings);
         $result = $curl->post($url, json_encode($payload), [
             'CURLOPT_HTTPHEADER' => ['Content-Type: application/json', 'Accept: application/json'],
             'CURLOPT_TIMEOUT' => 10,

@@ -33,6 +33,8 @@
     * marketplaceurl - string: URL for marketplaceurl.
     * haspricingurl - array|bool: Section data or visibility flag for haspricingurl.
     * pricingurl - string: URL for pricingurl.
+    * hasissuesurl - array|bool: Section data or visibility flag for hasissuesurl.
+    * issuesurl - string: URL for issuesurl.
     * settingsurl - string: URL for settingsurl.
     * hasbillingactions - array|bool: Section data or visibility flag for hasbillingactions.
     * hascontacturl - array|bool: Section data or visibility flag for hascontacturl.
@@ -46,6 +48,8 @@
         "marketplaceurl": "#",
         "haspricingurl": true,
         "pricingurl": "#",
+        "hasissuesurl": true,
+        "issuesurl": "https://github.com/len-arys/moodle-local_la/issues",
         "hascontacturl": true,
         "contacturl": "mailto:contact@example.com"
     }
@@ -71,6 +75,12 @@
                             <a href="{{pricingurl}}">{{#str}}billingpricinglink, local_la{{/str}}</a>.
                         </li>
                     {{/haspricingurl}}
+                    {{#hasissuesurl}}
+                        <li>
+                            {{#str}}billingissuesmessage, local_la{{/str}}
+                            <a href="{{issuesurl}}">{{#str}}billingissueslink, local_la{{/str}}</a>.
+                        </li>
+                    {{/hasissuesurl}}
                     <li>
                         {{#str}}billingadminmessage, local_la{{/str}}
                         <a href="{{settingsurl}}">{{#str}}change, local_la{{/str}}</a>

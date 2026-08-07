@@ -35,6 +35,7 @@ class billing {
         $defaults = require(__DIR__ . '/../../../config.php');
         $contactemail = clean_param((string) ($defaults['contactemail'] ?? ''), PARAM_EMAIL);
         $contacturl = $contactemail === '' ? '' : 'mailto:' . $contactemail;
+        $issuesurl = clean_param((string) ($defaults['issuesurl'] ?? ''), PARAM_URL);
         $marketplaceurl = clean_param((string) ($defaults['marketplaceurl'] ?? ''), PARAM_URL);
         $pricingurl = clean_param((string) ($defaults['pricingurl'] ?? ''), PARAM_URL);
 
@@ -42,6 +43,8 @@ class billing {
             'contacturl' => s($contacturl),
             'hascontacturl' => $contacturl !== '',
             'hasbillingactions' => $contacturl !== '' || $marketplaceurl !== '',
+            'issuesurl' => s($issuesurl),
+            'hasissuesurl' => $issuesurl !== '',
             'marketplaceurl' => s($marketplaceurl),
             'hasmarketplaceurl' => $marketplaceurl !== '',
             'pricingurl' => s($pricingurl),
