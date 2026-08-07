@@ -158,11 +158,9 @@ class general {
                 'hasupdate' => $hasupdate,
                 'hasupdateurl' => $hasupdate && !empty($defaults['downloadurl']),
                 'updateurl' => (string) ($defaults['downloadurl'] ?? ''),
-                'updatedetails' => $hasupdate ? s(get_string('updateversiondetails', 'local_la', (object) [
-                    'current' => (string) get_config('local_la', 'version'),
-                    'available' => (string) ($license['pluginversion'] ?? ''),
-                    'released' => $released,
-                ])) : '',
+                'updatecurrentversion' => $hasupdate ? s((string) get_config('local_la', 'version')) : '',
+                'updateavailableversion' => $hasupdate ? s((string) ($license['pluginversion'] ?? '')) : '',
+                'updatereleaseddate' => $hasupdate ? s($released) : '',
             ],
         ];
     }

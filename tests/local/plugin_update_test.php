@@ -85,11 +85,9 @@ final class plugin_update_test extends advanced_testcase {
         $this->assertTrue($license['hasupdateurl']);
         $defaults = require(__DIR__ . '/../../config.php');
         $this->assertSame($defaults['downloadurl'], $license['updateurl']);
-        $this->assertSame(get_string('updateversiondetails', 'local_la', (object) [
-            'current' => '2026080302',
-            'available' => '2026080303',
-            'released' => $expecteddate,
-        ]), $license['updatedetails']);
+        $this->assertSame('2026080302', $license['updatecurrentversion']);
+        $this->assertSame('2026080303', $license['updateavailableversion']);
+        $this->assertSame($expecteddate, $license['updatereleaseddate']);
     }
 
     /**

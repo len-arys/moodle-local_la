@@ -470,7 +470,7 @@ class tracker {
      * @return array
      */
     protected static function get_tracking_params(): array {
-        $agent = (string) ($_SERVER['HTTP_USER_AGENT'] ?? '');
+        $agent = (string) \core_useragent::get_user_agent_string();
 
         return [
             'ip' => self::truncate((string) getremoteaddr(), 255),
