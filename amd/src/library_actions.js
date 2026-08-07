@@ -17,7 +17,7 @@
  * JavaScript for the library actions interface.
  *
  * @module     local_la/library_actions
- * @copyright  2026 Learning Analytics Contributors
+ * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

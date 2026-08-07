@@ -17,7 +17,7 @@
  * JavaScript for the home interface.
  *
  * @module     local_la/home
- * @copyright  2026 Learning Analytics Contributors
+ * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
