@@ -496,7 +496,7 @@ $string['plandetailschedules'] = '{$a} schedules configured';
 $string['documentation'] = 'Documentation';
 $string['change'] = 'Change';
 $string['pluginsettingsmessage'] = 'General plugin settings, Learning time tracking. Security settings.';
-$string['supportmessage'] = 'Contact your Lenarys provider for priority support.';
+$string['supportmessage'] = 'Priority support is included with your plan. Contact Lenarys Support for assistance.';
 
 $string['billing'] = 'Billing';
 $string['contactus'] = 'Contact Us';
