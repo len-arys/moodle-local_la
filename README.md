@@ -16,7 +16,7 @@ The plugin provides a report and app library, controlled report audiences, sched
 
 ## Requirements
 
-- This `MOODLE_402_STABLE` branch is for Moodle 4.2.11 or later in the Moodle 4.2 release line.
+- This `MOODLE_400_STABLE` branch is for Moodle 4.0.12 or later in the Moodle 4.0 release line.
 - A PHP version supported by the installed Moodle release.
 - Moodle cron configured and running for scheduled report delivery.
 - No additional Moodle plugins are required.
