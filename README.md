@@ -6,7 +6,7 @@ The plugin provides a report and app library, controlled report audiences, sched
 
 ## Features
 
-- Install and manage reports and dashboard-style apps from the licensed catalog.
+- Install and manage reports and dashboard-style apps from the Lenarys Marketplace.
 - Review report definitions, SQL validation results, columns, widgets, and preview data before installation.
 - Control report visibility with user, role, and all-user audience rules.
 - Deliver report exports in the Moodle data formats enabled on the site, using one-time or recurring schedules.
@@ -21,7 +21,7 @@ The plugin provides a report and app library, controlled report audiences, sched
 - Moodle cron configured and running for scheduled report delivery.
 - No additional Moodle plugins are required.
 
-AI-assisted report generation requires a configured Moodle AI provider with the **Generate text** action enabled.
+AI-assisted report generation is available on Moodle 4.5 or later and requires a configured Moodle AI provider with the **Generate text** action enabled.
 
 ## Moodle version compatibility
 
@@ -37,7 +37,7 @@ Moodle releases are supported in separate plugin branches because the required M
 
 The `main` branch targets Moodle 5.0 and later. Moodle 4.5 sites must use `MOODLE_405_STABLE`. Do not install `main` or a package from another Moodle release branch on an older site. Moodle versions not listed in the table are not currently supported.
 
-Marketplace installations should use the plugin release explicitly marked as compatible with the site's Moodle version. When installing from source control, check out the matching `MOODLE_*_STABLE` branch before creating or installing the ZIP package.
+Moodle Marketplace installations should use the plugin release explicitly marked as compatible with the site's Moodle version. When installing from source control, check out the matching `MOODLE_*_STABLE` branch before creating or installing the ZIP package.
 
 ## Installation
 
@@ -64,9 +64,9 @@ Marketplace installations should use the plugin release explicitly marked as com
 
 Go to **Site administration > Plugins > Local plugins > Lenarys Analytics** and:
 
-1. Select the administrator responsible for billing and licensed marketplace access.
+1. Select the administrator responsible for billing and Lenarys Marketplace access.
 2. Choose a license mode:
-   - **API** connects to the configured license and marketplace service.
+   - **API** connects to the configured Lenarys API service.
    - **Manual** reads a license JSON file supplied by the service provider.
 3. Enable learning-time tracking only if it is appropriate for the site's privacy policy.
 4. Review report audiences and the users who hold management access.
@@ -76,13 +76,13 @@ Go to **Site administration > Plugins > Local plugins > Lenarys Analytics** and:
 
 - `local/la:manage` allows report management. It is granted by default to managers.
 
-Report audiences control access to individual reports. Marketplace, billing, audience administration, access review, and audit functions are restricted to users with management access or to the configured billing administrator.
+Report audiences control access to individual reports. Lenarys Marketplace, billing, audience administration, access review, and audit functions are restricted to users with management access or to the configured billing administrator.
 
 Scheduled reports are sent only to eligible, email-enabled audience members. An **All users** scheduled audience is limited to 100 eligible recipients by default.
 
 ## Licensing and external services
 
-Access to the report/app catalog and licensed features requires a valid license. Marketplace purchases are completed outside the plugin. Contact [Lenarys support](https://lenarys.com/support) for manual licensing assistance.
+Access to the Lenarys Marketplace and licensed features requires an active subscription purchased and managed through Moodle Marketplace. The plugin does not provide a checkout flow. Contact [Lenarys support](https://lenarys.com/support) for manual licensing assistance.
 
 In API mode, the plugin communicates with the API endpoint configured by the site administrator. These requests can include:
 
@@ -110,10 +110,11 @@ Learning-time tracking is disabled by default. The plugin implements Moodle's Pr
 ## Support
 
 - [Documentation and support](https://lenarys.com/support)
-- Contact email: configure `contactemail` in `config.php`.
+- [Report a bug or request a feature](https://github.com/len-arys/moodle-local_la/issues)
+- Email: support@lenarys.com
 
 When reporting an issue, include the Moodle version, plugin version, database type, relevant debugging output, and steps to reproduce. Do not include license keys or personal data.
 
 ## License
 
-This plugin is licensed under the [GNU GPL v3 or later](https://www.gnu.org/licenses/gpl-3.0.html).
+This plugin is licensed under the [GNU GPL v3 or later](LICENSE).
