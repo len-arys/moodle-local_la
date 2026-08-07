@@ -54,7 +54,9 @@
     * license.hasupdate - array|bool: Section data or visibility flag for license hasupdate.
     * license.hasupdateurl - array|bool: Section data or visibility flag for license hasupdateurl.
     * license.updateurl - string: URL for license updateurl.
-    * license.updatedetails - string: Text for license updatedetails.
+    * license.updatecurrentversion - string: Installed plugin version.
+    * license.updateavailableversion - string: Available plugin version.
+    * license.updatereleaseddate - string: Available plugin release date.
     * license.hasplandetails - array|bool: Section data or visibility flag for license hasplandetails.
     * license.plandetails - array|bool: Section data or visibility flag for license plandetails.
     * licensekey - array|bool: Section data or visibility flag for licensekey.
@@ -139,7 +141,24 @@
                                 <a class="alert-link" href="{{license.updateurl}}">{{#str}}updatenow, local_la{{/str}}</a>
                             {{/license.hasupdateurl}}
                         </div>
-                        <p class="small text-muted mb-0">{{license.updatedetails}}</p>
+                        <div class="table-responsive">
+                            <table class="table table-sm small text-muted border-top-0 mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">{{#str}}updateinstalled, local_la{{/str}}</th>
+                                        <th scope="col">{{#str}}updateavailable, local_la{{/str}}</th>
+                                        <th scope="col">{{#str}}updatereleaseddate, local_la{{/str}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{license.updatecurrentversion}}</td>
+                                        <td>{{license.updateavailableversion}}</td>
+                                        <td>{{license.updatereleaseddate}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     {{/license.hasupdate}}
                 </section>
             {{/license.showupdates}}

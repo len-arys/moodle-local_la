@@ -37,6 +37,7 @@ final class billing_test extends advanced_testcase {
 
         $defaults = require(__DIR__ . '/../../config.php');
         $contacturl = 'mailto:' . $defaults['contactemail'];
+        $issuesurl = $defaults['issuesurl'];
         $marketplaceurl = $defaults['marketplaceurl'];
         $pricingurl = $defaults['pricingurl'];
         $context = [
@@ -45,6 +46,8 @@ final class billing_test extends advanced_testcase {
             'contacturl' => $contacturl,
             'hascontacturl' => true,
             'hasbillingactions' => true,
+            'issuesurl' => $issuesurl,
+            'hasissuesurl' => true,
             'marketplaceurl' => $marketplaceurl,
             'hasmarketplaceurl' => true,
             'pricingurl' => $pricingurl,
@@ -60,6 +63,7 @@ final class billing_test extends advanced_testcase {
         $this->assertSame(2, substr_count($html, 'href="' . $marketplaceurl . '"'));
         $this->assertStringContainsString('class="btn btn-primary"', $html);
         $this->assertStringContainsString('href="' . $pricingurl . '"', $html);
+        $this->assertStringContainsString('href="' . $issuesurl . '"', $html);
         $this->assertStringNotContainsString('data-action="billing-checkout"', $html);
         $this->assertStringNotContainsString('data-action="billing-portal"', $html);
     }
