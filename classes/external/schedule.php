@@ -33,7 +33,7 @@ use local_la\local\schedule as schedule_helper;
  * Report schedule external API.
  *
  * @package    local_la
- * @copyright  2026 Learning Analytics Contributors
+ * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class schedule extends external_api {

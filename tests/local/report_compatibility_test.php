@@ -16,7 +16,7 @@ use advanced_testcase;
  * Tests for report SQL compatibility helpers.
  *
  * @package    local_la
- * @copyright  2026 Lenarys
+ * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class report_compatibility_test extends advanced_testcase {
