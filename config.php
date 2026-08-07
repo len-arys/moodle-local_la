@@ -32,7 +32,7 @@ return [
     'contactemail' => 'support@lenarys.com',
     'docsurl' => 'https://lenarys.com/docs',
     'downloadurl' => 'https://lenarys.com/en/get-started',
-    'issuesurl' => 'https://github.com/len-arys/local_la/issues',
+    'issuesurl' => 'https://github.com/len-arys/moodle-local_la/issues',
     'marketplaceurl' => 'https://marketplace.moodle.com/',
     'pricingurl' => 'https://lenarys.com/en/pricing',
     'debug' => 0,
