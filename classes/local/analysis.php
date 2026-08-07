@@ -22,7 +22,7 @@ defined('MOODLE_INTERNAL') || die();
  * Builds lightweight analyst summaries for selected report rows.
  *
  * @package    local_la
- * @copyright  2026 Learning Analytics Contributors
+ * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class analysis {

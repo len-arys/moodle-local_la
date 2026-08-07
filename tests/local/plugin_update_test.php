@@ -17,7 +17,7 @@ use local_la\output\preferences\general as preferences_general;
  * Tests for plugin update metadata.
  *
  * @package    local_la
- * @copyright  2026 Learning Analytics Contributors
+ * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class plugin_update_test extends advanced_testcase {
