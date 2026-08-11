@@ -716,3 +716,5 @@ $string['billingadmins'] = 'Billing Admin';
 $string['billingadmins_desc'] = 'Select the site administrator who can access Marketplace and install or uninstall reports.';
 $string['billingadminsrequired'] = 'Please set a billing admin to use Lenarys.';
 $string['cannotpersistlearningtime'] = 'Unable to save learning time data.';
+$string['cachedef_tracking'] = 'Learning time tracking session data';
+$string['cachedef_install_definitions'] = 'Pending generated report installations';

@@ -61,7 +61,7 @@ class library extends external_api {
      * @return array
      */
     public static function execute(string $action, int $reportid = 0, string $reportkey = ''): array {
-        global $DB, $SESSION, $USER;
+        global $DB, $USER;
 
         $params = self::validate_parameters(self::execute_parameters(), [
             'action' => $action,
@@ -168,16 +168,17 @@ class library extends external_api {
                     throw new \moodle_exception('nopermissions', 'error', '', get_string('marketplace', 'local_la'));
                 }
                 $token = $params['reportkey'];
-                $pending = $SESSION->local_la_install_definitions[$token] ?? null;
-                if (empty($pending['definition']) || (time() - (int) ($pending['timecreated'] ?? 0)) > HOURSECS) {
+                $cache = \cache::make('local_la', 'install_definitions');
+                $definition = $cache->get($token);
+                if (!is_array($definition)) {
                     throw new \moodle_exception('errorinvalidreportconfig', 'local_la');
                 }
 
-                $installedreportid = installer::install_definition($pending['definition']);
-                unset($SESSION->local_la_install_definitions[$token]);
+                $installedreportid = installer::install_definition($definition);
+                $cache->delete($token);
                 repository::add_report($installedreportid, (int) $USER->id);
                 logger::add('install_generated_report', 'report', $installedreportid, [
-                    'shortname' => (string) ($pending['definition']['shortname'] ?? ''),
+                    'shortname' => (string) ($definition['shortname'] ?? ''),
                 ]);
                 $duplicatereportid = $installedreportid;
                 break;

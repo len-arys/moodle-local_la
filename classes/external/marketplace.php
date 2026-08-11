@@ -205,8 +205,6 @@ class marketplace extends external_api {
      * @return array
      */
     public static function generated_install_modal(string $definition): array {
-        global $SESSION;
-
         $params = self::validate_parameters(self::generated_install_modal_parameters(), [
             'definition' => $definition,
         ]);
@@ -225,10 +223,8 @@ class marketplace extends external_api {
         installer::validate_definition($definition);
 
         $token = random_string(32);
-        $SESSION->local_la_install_definitions[$token] = [
-            'definition' => $definition,
-            'timecreated' => time(),
-        ];
+        $cache = \cache::make('local_la', 'install_definitions');
+        $cache->set($token, $definition);
 
         return self::build_install_modal($definition) + ['token' => $token];
     }
