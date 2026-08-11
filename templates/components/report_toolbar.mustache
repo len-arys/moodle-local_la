@@ -182,7 +182,7 @@
                             <input type="hidden" name="{{name}}" value="{{value}}">
                         {{/synthetic_hidden_params}}
                         <div class="la-report-synthetic-body px-3 py-3">
-                            <div class="la-report-synthetic-metric mb-3" role="radiogroup" aria-label="Synthetic column value">
+                            <div class="la-report-synthetic-metric mb-3" role="radiogroup" aria-label="{{#str}}syntheticcolumnvalue, local_la{{/str}}">
                                 <label class="la-report-synthetic-metric-option{{#synthetic.timesec_selected}} active{{/synthetic.timesec_selected}}">
                                     <input
                                         class="visually-hidden"
@@ -190,7 +190,7 @@
                                         name="{{synthetic.metric_name}}"
                                         value="timesec"
                                         {{#synthetic.timesec_selected}}checked{{/synthetic.timesec_selected}}>
-                                    <span>Learning time</span>
+                                    <span>{{#str}}learningtime, local_la{{/str}}</span>
                                 </label>
                                 <label class="la-report-synthetic-metric-option{{#synthetic.visits_selected}} active{{/synthetic.visits_selected}}">
                                     <input
@@ -199,7 +199,7 @@
                                         name="{{synthetic.metric_name}}"
                                         value="visits"
                                         {{#synthetic.visits_selected}}checked{{/synthetic.visits_selected}}>
-                                    <span>Visits</span>
+                                    <span>{{#str}}visits, local_la{{/str}}</span>
                                 </label>
                             </div>
 
@@ -218,11 +218,11 @@
 
                             <div class="la-report-synthetic-custom{{^synthetic.custom_selected}} d-none{{/synthetic.custom_selected}}" data-region="synthetic-custom-fields">
                                 <div>
-                                    <label class="form-label small text-muted mb-1">From</label>
+                                    <label class="form-label small text-muted mb-1">{{#str}}fromdate, core{{/str}}</label>
                                     <input type="date" class="form-control" name="{{synthetic.from_name}}" value="{{synthetic.from}}">
                                 </div>
                                 <div>
-                                    <label class="form-label small text-muted mb-1">To</label>
+                                    <label class="form-label small text-muted mb-1">{{#str}}todate, core{{/str}}</label>
                                     <input type="date" class="form-control" name="{{synthetic.to_name}}" value="{{synthetic.to}}">
                                 </div>
                             </div>
