@@ -73,7 +73,6 @@ $PAGE->set_pagelayout('popup');
 $PAGE->set_heading(get_string('pluginname', 'local_la'));
 $PAGE->set_url(url::report_tab_url((int) $report->id, ['tab' => $tab]));
 $PAGE->set_title(format_string($report->name));
-$PAGE->requires->css('/local/la/styles.css');
 $PAGE->requires->js_call_amd('local_la/report_actions', 'init');
 if (helper::is_admin()) {
     $PAGE->requires->js_call_amd('local_la/report_details', 'init');

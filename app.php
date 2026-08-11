@@ -50,7 +50,6 @@ $PAGE->set_url(new moodle_url('/local/la/app.php', ['id' => $id]));
 $PAGE->set_pagelayout('popup');
 $PAGE->set_title(get_string('apps', 'local_la'));
 $PAGE->set_heading(get_string('pluginname', 'local_la'));
-$PAGE->requires->css('/local/la/styles.css');
 
 $renderer = $PAGE->get_renderer('local_la');
 

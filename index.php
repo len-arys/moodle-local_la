@@ -38,7 +38,6 @@ $PAGE->set_pagelayout('popup');
 $PAGE->set_title(get_string('home'));
 $PAGE->set_heading(get_string('pluginname', 'local_la'));
 $PAGE->set_url(url::home_url());
-$PAGE->requires->css('/local/la/styles.css');
 $PAGE->requires->js_call_amd('local_la/home', 'init');
 
 $renderer = $PAGE->get_renderer("local_la");
