@@ -188,7 +188,8 @@ define([
             var swatchstyle = 'background:' + String(option.swatch || '#fff') + ';';
             var label = strings.colors[option.value] || option.value;
 
-            return '<button type="button" class="btn btn-outline-secondary text-start d-flex align-items-center gap-2 la-report-highlight-option" ' +
+            return '<button type="button" ' +
+                'class="btn btn-outline-secondary text-start d-flex align-items-center gap-2 la-report-highlight-option" ' +
                 'data-action="apply-highlight-color" data-color="' + option.value + '">' +
                 '<span class="d-inline-block rounded-circle border" style="' + swatchstyle +
                 ' border-color: rgba(0, 0, 0, 0.12); width: 1rem; height: 1rem;"></span>' +

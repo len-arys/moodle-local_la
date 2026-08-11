@@ -69,7 +69,8 @@ define([
 
                     var description = document.getElementById(EDITOR_ID);
                     if (description) {
-                        TinyEditor.setupForTarget(description, JSON.parse(response.editoroptions || '{}')).catch(Notification.exception);
+                        TinyEditor.setupForTarget(description, JSON.parse(response.editoroptions || '{}'))
+                            .catch(Notification.exception);
                     }
                 }).catch(Notification.exception);
 

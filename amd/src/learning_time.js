@@ -154,7 +154,7 @@ define(['core/ajax'], function(Ajax) {
             };
         };
 
-        tracker.buildRequestBody = function(seconds, isNewVisit) {
+        tracker.buildRequestBody = function(seconds) {
             return JSON.stringify([{
                 index: 0,
                 methodname: 'local_la_track_learning_time',
@@ -180,7 +180,7 @@ define(['core/ajax'], function(Ajax) {
                 return false;
             }
 
-            body = tracker.buildRequestBody(seconds, isNewVisit);
+            body = tracker.buildRequestBody(seconds);
             tracker.log('send exit heartbeat', {
                 seconds: seconds,
                 isNewVisit: isNewVisit

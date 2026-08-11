@@ -208,7 +208,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
 
     var runAgentSetup = function(root) {
         root.find('.la-welcome-card').addClass('is-setup');
-        root.find('.la-welcome-slides, [data-region="agent-dots"], [data-action="agent-prev"], [data-action="agent-next"], [data-action="agent-complete"]')
+        root.find(
+            '.la-welcome-slides, [data-region="agent-dots"], [data-action="agent-prev"], ' +
+            '[data-action="agent-next"], [data-action="agent-complete"]'
+        )
             .addClass('d-none');
         root.find('[data-region="agent-setup"]').removeClass('d-none');
         setSetupText(root, strings.checking, strings.checkingdesc);

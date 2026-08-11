@@ -284,7 +284,9 @@ define([
         Promise.all(requests.map(function(request) {
             return request.promise.then(function(response) {
                 request.checkbox.attr('data-initial-status', request.status ? '1' : '0');
-                request.checkbox.closest('tr').next('tr').find('[data-region="sql-timeactivated"]').text(response.timeactivated || '');
+                request.checkbox.closest('tr').next('tr')
+                    .find('[data-region="sql-timeactivated"]')
+                    .text(response.timeactivated || '');
                 return response;
             });
         })).then(function() {

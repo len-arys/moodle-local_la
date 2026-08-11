@@ -26,6 +26,8 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], f
     var COLUMN_ITEM_SELECTOR = '[data-column-key]';
     var BUILDER_ITEM_SELECTOR = '[data-region="builder-item"]';
     var BUILDER_SECTION_SELECTOR = '[data-region="builder-section"]';
+    var SAVE_COLUMN_SETTINGS_SELECTOR = '[data-action="save-column-settings"]';
+    var CANCEL_COLUMN_SETTINGS_SELECTOR = '[data-action="cancel-column-settings"]';
 
     var filterBuilderItems = function(input) {
         var field = $(input);
@@ -34,7 +36,9 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], f
 
         modal.find(BUILDER_SECTION_SELECTOR).each(function() {
             var section = $(this);
-            var sectionname = $.trim(String(section.find('[data-region="builder-section-name"]').first().text() || '')).toLowerCase();
+            var sectionname = $.trim(String(
+                section.find('[data-region="builder-section-name"]').first().text() || ''
+            )).toLowerCase();
             var visiblecount = 0;
 
             section.find(BUILDER_ITEM_SELECTOR).each(function() {
@@ -197,7 +201,8 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], f
                     modal.getRoot().find('.modal-dialog').addClass('modal-lg');
                     moveModalFooter(modal.getRoot(), '.la-column-settings-footer');
 
-                    modal.getRoot().off('click.laColumnSettingsSave').on('click.laColumnSettingsSave', '[data-action="save-column-settings"]', function(event) {
+                    modal.getRoot().off('click.laColumnSettingsSave').on(
+                        'click.laColumnSettingsSave', SAVE_COLUMN_SETTINGS_SELECTOR, function(event) {
                         var form = modal.getRoot().find('.la-column-settings-form').first();
 
                         event.preventDefault();
@@ -208,19 +213,30 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], f
                                 id: Number(form.find('[name="id"]').val() || 0),
                                 key: String(form.find('[name="key"]').val() || ''),
                                 column: {
-                                    enabled: form.find('[data-region="column-enabled"], [name$="[enabled]"]').prop('checked') ? 1 : 0,
+                                    enabled: form.find(
+                                        '[data-region="column-enabled"], [name$="[enabled]"]'
+                                    ).prop('checked') ? 1 : 0,
                                     name: String(form.find('[data-region="column-name"], [name$="[name]"]').val() || ''),
                                     type: String(form.find('[data-region="column-type"], [name$="[type]"]').val() || 'text'),
-                                    formula: String(form.find('[data-region="column-formula"], [name$="[formula]"]').val() || ''),
-                                    condition: String(form.find('[data-region="column-condition"], [name$="[condition]"]').val() || ''),
-                                    visible: form.find('[data-region="column-visible"], [name$="[visible]"]').prop('checked') ? 1 : 0,
-                                    sortable: form.find('[data-region="column-sortable"], [name$="[sortable]"]').prop('checked') ? 1 : 0
+                                    formula: String(form.find(
+                                        '[data-region="column-formula"], [name$="[formula]"]'
+                                    ).val() || ''),
+                                    condition: String(form.find(
+                                        '[data-region="column-condition"], [name$="[condition]"]'
+                                    ).val() || ''),
+                                    visible: form.find(
+                                        '[data-region="column-visible"], [name$="[visible]"]'
+                                    ).prop('checked') ? 1 : 0,
+                                    sortable: form.find(
+                                        '[data-region="column-sortable"], [name$="[sortable]"]'
+                                    ).prop('checked') ? 1 : 0
                                 }
                             }
                         }])[0]);
                     });
 
-                    modal.getRoot().off('click.laColumnSettingsCancel').on('click.laColumnSettingsCancel', '[data-action="cancel-column-settings"]', function(event) {
+                    modal.getRoot().off('click.laColumnSettingsCancel').on(
+                        'click.laColumnSettingsCancel', CANCEL_COLUMN_SETTINGS_SELECTOR, function(event) {
                         event.preventDefault();
                         modal.hide();
                     });
