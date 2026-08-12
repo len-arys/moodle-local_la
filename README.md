@@ -47,6 +47,9 @@ Moodle Marketplace installations should use the plugin release explicitly marked
 
 ## Installation
 
+- [Download from Moodle Marketplace](https://marketplace.moodle.com/plugins/4002)
+- [View the source code on GitHub](https://github.com/len-arys/moodle-local_la)
+
 ### From a ZIP package
 
 1. Confirm that the package supports the site's Moodle version using the compatibility table above.
@@ -88,7 +91,7 @@ Scheduled reports are sent only to eligible, email-enabled audience members. An 
 
 ## Licensing and external services
 
-Access to the Lenarys Marketplace and licensed features requires an active subscription purchased and managed through Moodle Marketplace. The plugin does not provide a checkout flow. Contact [Lenarys support](https://lenarys.com/support) for manual licensing assistance.
+Access to the Lenarys Marketplace and licensed features requires an active subscription purchased and managed through [Moodle Marketplace](https://marketplace.moodle.com/plugins/4002). The plugin does not provide a checkout flow. Contact [Lenarys support](https://lenarys.com/support) for manual licensing assistance.
 
 In API mode, the plugin communicates with the API endpoint configured by the site administrator. These requests can include:
 
