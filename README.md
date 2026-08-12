@@ -1,6 +1,8 @@
 # Lenarys Analytics
 
 [![Moodle Plugin CI](https://github.com/len-arys/moodle-local_la/actions/workflows/ci.yml/badge.svg)](https://github.com/len-arys/moodle-local_la/actions/workflows/ci.yml)
+[![License: GPL v3 or later](https://img.shields.io/github/license/len-arys/moodle-local_la)](LICENSE)
+![Moodle compatibility](https://img.shields.io/badge/Moodle-5.0%E2%80%935.2-orange)
 
 Lenarys Analytics is a Moodle local plugin for building, managing, and delivering report-based analytics. Its Moodle component name is `local_la`; the `la` suffix represents **Lenarys**.
 
