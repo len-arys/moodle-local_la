@@ -81,6 +81,13 @@ define([
         }])[0];
     };
 
+    var reloadAfterLibraryAction = function(action, reportid, reportkey) {
+        return runLibraryAction(action, reportid, reportkey).then(function() {
+            window.location.reload();
+            return true;
+        }).catch(Notification.exception);
+    };
+
     var bindLibraryActions = function() {
         $(document).on('click', LIBRARY_ACTION_SELECTOR, function(event) {
             event.preventDefault();
@@ -99,10 +106,11 @@ define([
 
                 if (action === 'duplicate' && newreportid) {
                     window.location.href = Config.wwwroot + '/local/la/report.php?id=' + newreportid;
-                    return;
+                    return response;
                 }
 
                 window.location.reload();
+                return response;
             }).catch(Notification.exception);
         });
     };
@@ -126,15 +134,25 @@ define([
                 modal.setSaveButtonText(buttonlabel);
 
                 modal.getRoot().on(ModalEvents.save, function() {
-                    runLibraryAction(action, reportid, '').then(function() {
-                        window.location.reload();
-                    }).catch(Notification.exception);
+                    reloadAfterLibraryAction(action, reportid, '');
                 });
 
                 modal.show();
 
                 return modal;
-            });
+            }).catch(Notification.exception);
+        });
+    };
+
+    var disableReport = function(toggle, action, reportid, onFailure) {
+        return runLibraryAction(action, reportid, '').then(function() {
+            window.location.reload();
+            return true;
+        }).catch(function(error) {
+            onFailure();
+            toggle.prop('checked', true);
+            Notification.exception(error);
+            return false;
         });
     };
 
@@ -155,9 +173,11 @@ define([
             if (toggle.is(':checked')) {
                 runLibraryAction(enableaction, reportid, '').then(function() {
                     window.location.reload();
+                    return true;
                 }).catch(function(error) {
                     toggle.prop('checked', false);
                     Notification.exception(error);
+                    return false;
                 });
                 return;
             }
@@ -174,12 +194,8 @@ define([
 
                 modal.getRoot().on(ModalEvents.save, function() {
                     confirmed = true;
-                    runLibraryAction(disableaction, reportid, '').then(function() {
-                        window.location.reload();
-                    }).catch(function(error) {
+                    disableReport(toggle, disableaction, reportid, function() {
                         confirmed = false;
-                        toggle.prop('checked', true);
-                        Notification.exception(error);
                     });
                 });
 
@@ -192,7 +208,28 @@ define([
                 modal.show();
 
                 return modal;
-            });
+            }).catch(Notification.exception);
+        });
+    };
+
+    var setModalSaveLabel = function(modal) {
+        return Str.get_string('save', 'core').then(function(save) {
+            modal.setSaveButtonText(save);
+            return save;
+        }).catch(Notification.exception);
+    };
+
+    var loadSqlModal = function(modal, reportid, title) {
+        return Ajax.call([{
+            methodname: 'local_la_library_sql',
+            args: {
+                reportid: reportid
+            }
+        }])[0].then(function(response) {
+            modal.setTitle(response.title || title);
+            modal.setBody(response.html || '');
+            modal.getRoot().find('.modal-dialog').addClass('modal-xl');
+            return response;
         });
     };
 
@@ -219,31 +256,16 @@ define([
                 title: title,
                 body: getLoadingBody()
             }).then(function(modal) {
-                Str.get_string('save', 'core').then(function(save) {
-                    modal.setSaveButtonText(save);
-                    return save;
-                }).catch(Notification.exception);
+                setModalSaveLabel(modal);
                 modal.show();
-
-                Ajax.call([{
-                    methodname: 'local_la_library_sql',
-                    args: {
-                        reportid: reportid
-                    }
-                }])[0].then(function(response) {
-                    modal.setTitle(response.title || title);
-                    modal.setBody(response.html || '');
-                    modal.getRoot().find('.modal-dialog').addClass('modal-xl');
-                    return response;
-                }).catch(Notification.exception);
 
                 modal.getRoot().on(ModalEvents.save, function(event) {
                     event.preventDefault();
                     saveSqlStatuses(modal);
                 });
 
-                return modal;
-            });
+                return loadSqlModal(modal, reportid, title);
+            }).catch(Notification.exception);
         });
     };
 
@@ -295,6 +317,21 @@ define([
         }).catch(function(error) {
             root.find(SQL_STATUS_SELECTOR).prop('disabled', false);
             Notification.exception(error);
+            return false;
+        });
+    };
+
+    var loadAppParams = function(modal, appid, title) {
+        return Ajax.call([{
+            methodname: 'local_la_library_app_params',
+            args: {
+                appid: appid
+            }
+        }])[0].then(function(response) {
+            modal.setTitle(response.title || title);
+            modal.setBody(response.html || '');
+            modal.getRoot().find('.modal-dialog').addClass('modal-xl');
+            return response;
         });
     };
 
@@ -315,21 +352,35 @@ define([
                 body: getLoadingBody()
             }).then(function(modal) {
                 modal.show();
+                return loadAppParams(modal, appid, title);
+            }).catch(Notification.exception);
+        });
+    };
 
-                Ajax.call([{
-                    methodname: 'local_la_library_app_params',
-                    args: {
-                        appid: appid
-                    }
-                }])[0].then(function(response) {
-                    modal.setTitle(response.title || title);
-                    modal.setBody(response.html || '');
-                    modal.getRoot().find('.modal-dialog').addClass('modal-xl');
-                    return response;
-                }).catch(Notification.exception);
+    var loadReportPreview = function(modal, report, title) {
+        return Ajax.call([{
+            methodname: 'local_la_get_report',
+            args: {
+                report: report,
+                filters: '{}',
+                columns: '[]',
+                metrics: '[]',
+                title: title,
+                summary: '{}',
+                showsubheader: 0,
+                showfullreporturl: 0
+            }
+        }])[0].then(function(response) {
+            if (response.title) {
+                modal.setTitle(response.title);
+            }
 
-                return modal;
-            });
+            modal.setBody(response.html || '');
+            modal.getRoot().find('.modal-dialog').addClass('modal-xl');
+            return modal;
+        }).catch(function() {
+            modal.setBody(getUnableToLoadBody());
+            return false;
         });
     };
 
@@ -350,33 +401,8 @@ define([
                 body: getLoadingBody()
             }).then(function(modal) {
                 modal.show();
-
-                Ajax.call([{
-                    methodname: 'local_la_get_report',
-                    args: {
-                        report: report,
-                        filters: '{}',
-                        columns: '[]',
-                        metrics: '[]',
-                        title: title,
-                        summary: '{}',
-                        showsubheader: 0,
-                        showfullreporturl: 0
-                    }
-                }])[0].then(function(response) {
-                    if (response.title) {
-                        modal.setTitle(response.title);
-                    }
-
-                    modal.setBody(response.html || '');
-                    modal.getRoot().find('.modal-dialog').addClass('modal-xl');
-                    return modal;
-                }).catch(function() {
-                    modal.setBody(getUnableToLoadBody());
-                });
-
-                return modal;
-            });
+                return loadReportPreview(modal, report, title);
+            }).catch(Notification.exception);
         });
     };
 
@@ -457,26 +483,44 @@ define([
         return true;
     };
 
+    var loadInstallReview = function(modal, request, title, state) {
+        return Ajax.call([request])[0].then(function(response) {
+            state.installkey = String(response.token || state.installkey || '');
+            modal.setTitle(response.title || title);
+            modal.setBody(response.html || '');
+            modal.getRoot().find('.modal-dialog').addClass('modal-xl');
+            modal.getRoot().find('[data-action="accept-marketplace-install"]').trigger('change');
+            return response;
+        });
+    };
+
+    var installMarketplaceItem = function(installaction, installkey) {
+        return runLibraryAction(installaction, 0, installkey).then(function(response) {
+            var reportid = Number(response.reportid || 0);
+
+            if (reportid) {
+                window.location.href = Config.wwwroot + '/local/la/report.php?id=' + reportid;
+                return response;
+            }
+
+            window.location.reload();
+            return response;
+        }).catch(Notification.exception);
+    };
+
     var openInstallReview = function(title, request, installaction, installkey, termskey, savekey) {
-        ModalSaveCancel.create({
+        var state = {installkey: installkey};
+
+        return ModalSaveCancel.create({
             title: title,
             body: getLoadingBody()
         }).then(function(modal) {
             setupMarketplaceInstallFooter(modal, termskey, savekey);
             modal.show();
 
-            Ajax.call([request])[0].then(function(response) {
-                installkey = String(response.token || installkey || '');
-                modal.setTitle(response.title || title);
-                modal.setBody(response.html || '');
-                modal.getRoot().find('.modal-dialog').addClass('modal-xl');
-                modal.getRoot().find('[data-action="accept-marketplace-install"]').trigger('change');
-                return response;
-            }).catch(Notification.exception);
-
             modal.getRoot().on(ModalEvents.save, function(event) {
                 event.preventDefault();
-                if (getModalSaveButton(modal).prop('disabled') || !installkey) {
+                if (getModalSaveButton(modal).prop('disabled') || !state.installkey) {
                     return;
                 }
 
@@ -484,20 +528,11 @@ define([
                     return;
                 }
 
-                runLibraryAction(installaction, 0, installkey).then(function(response) {
-                    var reportid = Number(response.reportid || 0);
-
-                    if (reportid) {
-                        window.location.href = Config.wwwroot + '/local/la/report.php?id=' + reportid;
-                        return;
-                    }
-
-                    window.location.reload();
-                }).catch(Notification.exception);
+                installMarketplaceItem(installaction, state.installkey);
             });
 
-            return modal;
-        });
+            return loadInstallReview(modal, request, title, state);
+        }).catch(Notification.exception);
     };
 
     var openGeneratedInstallReview = function(definition, title) {
@@ -559,10 +594,10 @@ define([
         var container = $(MARKETPLACE_SELECTOR).first();
 
         if (!container.length) {
-            return;
+            return false;
         }
 
-        Ajax.call([{
+        return Ajax.call([{
             methodname: 'local_la_get_marketplace',
             args: {
                 plan: String(container.data('plan') || 'all'),
@@ -574,7 +609,8 @@ define([
             container.html(response.html || '');
             return response;
         }).catch(function() {
-            container.html('<div class="alert alert-danger mb-0">Unable to load marketplace items.</div>');
+            container.html(getUnableToLoadBody());
+            return false;
         });
     };
 

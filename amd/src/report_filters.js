@@ -320,7 +320,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/form-autocomplete'], f
                 loadMultiselectOptions(picker).then(function() {
                     syncMultiselectChecks(picker);
                     menu.removeClass('d-none');
-                });
+                    return true;
+                }).catch(Notification.exception);
             } else {
                 menu.addClass('d-none');
             }

@@ -43,6 +43,8 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], f
 
     var bindLogDetails = function() {
         $(document).on('click', LOG_DETAILS_ACTION, function(event) {
+            var modal;
+
             event.preventDefault();
 
             var logId = parseInt($(this).data('log-id'), 10) || 0;
@@ -54,23 +56,23 @@ define(['jquery', 'core/ajax', 'core/modal', 'core/notification', 'core/str'], f
                 return Modal.create({
                     title: '',
                     body: '<div class="text-muted">' + loading + '</div>'
-                }).then(function(modal) {
-                    modal.getRoot().find('.modal-dialog').addClass('modal-xl');
-                    modal.show();
-
-                    Ajax.call([{
-                        methodname: 'local_la_log_details',
-                        args: {
-                            logid: logId
-                        }
-                    }])[0].then(function(response) {
-                        modal.setTitle(response.title || '');
-                        modal.setBody(response.html || '');
-                        modal.getRoot().find('.modal-footer').remove();
-                    }).catch(Notification.exception);
-
-                    return modal;
                 });
+            }).then(function(createdModal) {
+                modal = createdModal;
+                modal.getRoot().find('.modal-dialog').addClass('modal-xl');
+                modal.show();
+
+                return Ajax.call([{
+                    methodname: 'local_la_log_details',
+                    args: {
+                        logid: logId
+                    }
+                }])[0];
+            }).then(function(response) {
+                modal.setTitle(response.title || '');
+                modal.setBody(response.html || '');
+                modal.getRoot().find('.modal-footer').remove();
+                return response;
             }).catch(Notification.exception);
         });
     };

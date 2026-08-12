@@ -71,6 +71,43 @@ define([
         });
     };
 
+    var loadReportModal = function(modal, request, strings, size) {
+        return Ajax.call([request])[0].then(function(response) {
+            var modalsize = String(response.size || size || 'xl');
+
+            if (response.title) {
+                modal.setTitle(response.title);
+            }
+
+            modal.setBody(response.html || '');
+            modal.getRoot().find('.modal-dialog').removeClass('modal-sm modal-lg modal-xl');
+            modal.getRoot().find('.modal-dialog').addClass('modal-' + modalsize);
+            moveModalFooters(modal.getRoot());
+            return modal;
+        }).catch(function(error) {
+            modal.setBody(
+                '<div class="alert alert-warning mb-0">' +
+                escapeHtml(getErrorMessage(error, strings[1])) +
+                '</div>'
+            );
+            return modal;
+        });
+    };
+
+    var deleteReport = function(reportid, returnurl) {
+        return Ajax.call([{
+            methodname: 'local_la_library',
+            args: {
+                action: 'delete',
+                reportid: reportid,
+                reportkey: ''
+            }
+        }])[0].then(function() {
+            window.location.href = returnurl || window.location.href;
+            return true;
+        }).catch(Notification.exception);
+    };
+
     var bindReportSummaryToggle = function() {
         $(document).on('click', REPORT_SUMMARY_SELECTOR, function(event) {
             event.preventDefault();
@@ -131,36 +168,18 @@ define([
                 return;
             }
 
+            var state = {};
+
             getLoadingStrings().then(function(strings) {
+                state.strings = strings;
                 return Modal.create({
                     title: title,
                     body: '<div class="text-muted">' + escapeHtml(strings[0]) + '</div>'
-                }).then(function(modal) {
+                });
+            }).then(function(modal) {
                 modal.show();
-
-                Ajax.call([request])[0].then(function(response) {
-                    var modalsize = String(response.size || size || 'xl');
-
-                    if (response.title) {
-                        modal.setTitle(response.title);
-                    }
-
-                    modal.setBody(response.html || '');
-                    modal.getRoot().find('.modal-dialog').removeClass('modal-sm modal-lg modal-xl');
-                    modal.getRoot().find('.modal-dialog').addClass('modal-' + modalsize);
-                    moveModalFooters(modal.getRoot());
-                    return modal;
-                }).catch(function(error) {
-                    modal.setBody(
-                        '<div class="alert alert-warning mb-0">' +
-                        escapeHtml(getErrorMessage(error, strings[1])) +
-                        '</div>'
-                    );
-                });
-
-                return modal;
-                });
-            });
+                return loadReportModal(modal, request, state.strings, size);
+            }).catch(Notification.exception);
         });
     };
 
@@ -204,22 +223,13 @@ define([
                 modal.setSaveButtonText(buttonlabel);
 
                 modal.getRoot().on(ModalEvents.save, function() {
-                    Ajax.call([{
-                        methodname: 'local_la_library',
-                        args: {
-                            action: 'delete',
-                            reportid: reportid,
-                            reportkey: ''
-                        }
-                    }])[0].then(function() {
-                        window.location.href = returnurl || window.location.href;
-                    }).catch(Notification.exception);
+                    deleteReport(reportid, returnurl);
                 });
 
                 modal.show();
 
                 return modal;
-            });
+            }).catch(Notification.exception);
         });
     };
 
@@ -246,10 +256,11 @@ define([
 
                 if (!newreportid) {
                     window.location.reload();
-                    return;
+                    return true;
                 }
 
                 window.location.href = Config.wwwroot + '/local/la/report.php?id=' + newreportid;
+                return true;
             }).catch(Notification.exception);
         });
     };
@@ -274,6 +285,7 @@ define([
                 }
             }])[0].then(function() {
                 window.location.reload();
+                return true;
             }).catch(Notification.exception);
         });
     };
@@ -298,6 +310,7 @@ define([
                 }
             }])[0].then(function() {
                 window.location.reload();
+                return true;
             }).catch(Notification.exception);
         });
     };
