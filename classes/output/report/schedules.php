@@ -16,8 +16,6 @@
 
 namespace local_la\output\report;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\table\schedule_table;
 
 /**

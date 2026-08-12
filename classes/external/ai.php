@@ -16,8 +16,6 @@
 
 namespace local_la\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use core_external\external_api;
 use core_external\external_function_parameters;
@@ -61,9 +59,17 @@ class ai extends external_api {
      * Generate one report definition using Moodle AI providers.
      *
      * @param string $prompt
+     * @param int $reportid
+     * @param array $tables
+     * @param string $tablemode
      * @return array
      */
-    public static function generate_report(string $prompt, int $reportid = 0, array $tables = [], string $tablemode = 'context'): array {
+    public static function generate_report(
+        string $prompt,
+        int $reportid = 0,
+        array $tables = [],
+        string $tablemode = 'context'
+    ): array {
         global $USER;
 
         $params = self::validate_parameters(self::generate_report_parameters(), [
@@ -272,6 +278,7 @@ class ai extends external_api {
      * Build the AI prompt.
      *
      * @param string $request
+     * @param array $context
      * @return string
      */
     protected static function build_prompt(string $request, array $context = []): string {
@@ -286,7 +293,8 @@ class ai extends external_api {
             $prompt .= "Editing mode:\n" .
                 "- The selected report below is the source of truth.\n" .
                 "- Apply the user request as a modification to this report.\n" .
-                "- Do not return the original report unchanged. If the requested edit cannot be made safely, return a short plain-text explanation.\n" .
+                "- Do not return the original report unchanged. If the requested edit cannot be made safely, " .
+                "return a short plain-text explanation.\n" .
                 "- Return the complete updated report JSON, not a patch or explanation.\n" .
                 "- This must be installed as a new AI-generated copy. Do not modify the original installed report.\n" .
                 "- Use this exact new report name: " . (string) ($copy['name'] ?? '') . "\n" .
@@ -304,7 +312,8 @@ class ai extends external_api {
         if (!empty($context['tables'])) {
             $prompt .= ($context['tablemode'] ?? 'context') === 'only' ?
                 "Selected Moodle table schemas. Use only these tables in SQL. Do not use any other Moodle tables:\n" :
-                "Selected Moodle table schemas. Prefer these tables when they fit the request, but use other Moodle tables when needed:\n";
+                "Selected Moodle table schemas. Prefer these tables when they fit the request, " .
+                "but use other Moodle tables when needed:\n";
             $prompt .=
                 json_encode($context['tables'], JSON_UNESCAPED_SLASHES) . "\n\n";
         }
@@ -374,7 +383,10 @@ class ai extends external_api {
             $newname = self::normalise_identifier($mainname . '_' . $basename, $mainname . '_dependency');
             $index = 2;
             while (!empty($usednames[$newname])) {
-                $newname = self::normalise_identifier($mainname . '_' . $basename . '_' . $index, $mainname . '_dependency_' . $index);
+                $newname = self::normalise_identifier(
+                    $mainname . '_' . $basename . '_' . $index,
+                    $mainname . '_dependency_' . $index
+                );
                 $index++;
             }
 
@@ -540,6 +552,7 @@ class ai extends external_api {
      *
      * @param int $reportid
      * @param array $tables
+     * @param string $tablemode
      * @return array
      */
     protected static function build_context(int $reportid, array $tables, string $tablemode = 'context'): array {
@@ -735,6 +748,7 @@ class ai extends external_api {
     protected static function clean_json(string $json): string {
         $json = trim($json);
 
+        // phpcs:ignore moodle.Strings.ForbiddenStrings.Found -- Matches Markdown code fences from AI output.
         if (preg_match('/^```(?:json)?\s*(.*?)\s*```$/s', $json, $matches)) {
             $json = trim($matches[1]);
         }
@@ -806,9 +820,17 @@ class ai extends external_api {
      * @param string $prompt
      * @param string $identifier
      * @param string $a
+     * @param array $context
+     * @param string $requestid
      * @return never
      */
-    protected static function fail(string $prompt, string $identifier, string $a, array $context = [], string $requestid = ''): never {
+    protected static function fail(
+        string $prompt,
+        string $identifier,
+        string $a,
+        array $context = [],
+        string $requestid = ''
+    ): never {
         $message = get_string($identifier, 'local_la', $a);
         logger::add_ai($requestid, 'failed', [
             'identifier' => $identifier,

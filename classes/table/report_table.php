@@ -16,8 +16,6 @@
 
 namespace local_la\table;
 
-defined('MOODLE_INTERNAL') || die();
-
 use core_table\sql_table;
 use html_writer;
 use local_la\local\formula;
@@ -126,8 +124,10 @@ class report_table extends sql_table {
                 $this->column_class($column, $columnclass);
             }
 
-            if (!in_array($column, $context->columns, true) ||
-                (array_key_exists('sortable', $columnconfig) && empty($columnconfig['sortable']))) {
+            if (
+                !in_array($column, $context->columns, true) ||
+                (array_key_exists('sortable', $columnconfig) && empty($columnconfig['sortable']))
+            ) {
                 $this->no_sorting($column);
             }
         }
@@ -462,7 +462,8 @@ class report_table extends sql_table {
 
         $toggleid = 'la-report-actions-toggle-' . (int) ($row->id ?? random_int(1, 999999));
 
-        $button = html_writer::tag('button',
+        $button = html_writer::tag(
+            'button',
             '<i class="fa fa-ellipsis-vertical"></i>',
             [
                 'type' => 'button',
@@ -919,7 +920,8 @@ class report_table extends sql_table {
             return '';
         }
 
-        return html_writer::tag('details',
+        return html_writer::tag(
+            'details',
             html_writer::tag('summary', 'SQL') .
             html_writer::tag('pre', s($this->reportsql), ['class' => 'la-table-sql-debug mb-0']),
             ['class' => 'la-table-sql-debug-wrap mt-3']

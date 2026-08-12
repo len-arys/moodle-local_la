@@ -16,8 +16,6 @@
 
 namespace local_la\output\preferences;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Preferences billing tab context.
  *
@@ -32,6 +30,7 @@ class billing {
      * @return array
      */
     public static function get_context(): array {
+        // phpcs:ignore moodle.Files.RequireLogin.Missing -- This loads plugin defaults, not Moodle bootstrap.
         $defaults = require(__DIR__ . '/../../../config.php');
         $contactemail = clean_param((string) ($defaults['contactemail'] ?? ''), PARAM_EMAIL);
         $contacturl = $contactemail === '' ? '' : 'mailto:' . $contactemail;
@@ -51,5 +50,4 @@ class billing {
             'haspricingurl' => $pricingurl !== '',
         ];
     }
-
 }

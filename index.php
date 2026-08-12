@@ -21,11 +21,11 @@
  * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once('../../config.php');
-
 use local_la\local\url;
 use local_la\local\helper;
 use local_la\output\home as home_page;
+
+require_once('../../config.php');
 
 require_login();
 if (!helper::is_admin()) {

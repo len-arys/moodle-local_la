@@ -21,12 +21,12 @@
  * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once('../../config.php');
-
 use local_la\local\helper;
 use local_la\local\repository;
 use local_la\local\url;
 use local_la\output\app as app_page;
+
+require_once('../../config.php');
 
 $id = optional_param('id', 0, PARAM_INT);
 

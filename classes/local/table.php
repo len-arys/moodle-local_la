@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Table helper.
  *
@@ -262,7 +260,7 @@ class table {
     /**
      * Build native Moodle course menu group.
      *
-     * @param int $courseid
+     * @param \stdClass $row
      * @return array
      */
     public static function get_course_menu(\stdClass $row): array {
@@ -325,8 +323,7 @@ class table {
     /**
      * Build native Moodle user-course menu.
      *
-     * @param int $courseid
-     * @param int $userid
+     * @param \stdClass $row
      * @return array
      */
     public static function get_user_course_menu(\stdClass $row): array {
@@ -409,8 +406,7 @@ class table {
     /**
      * Build native Moodle course-activity menu.
      *
-     * @param int $courseid
-     * @param int $activityid
+     * @param \stdClass $row
      * @return array
      */
     public static function get_course_activity_menu(\stdClass $row): array {
@@ -459,7 +455,7 @@ class table {
     /**
      * Build native Moodle user menu group.
      *
-     * @param int $userid
+     * @param \stdClass $row
      * @return array
      */
     public static function get_user_menu(\stdClass $row): array {

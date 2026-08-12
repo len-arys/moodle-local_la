@@ -5,10 +5,16 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_la\privacy;
-
-defined('MOODLE_INTERNAL') || die();
 
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
@@ -28,10 +34,9 @@ use core_privacy\local\request\writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-        \core_privacy\local\metadata\provider,
-        \core_privacy\local\request\plugin\provider,
-        \core_privacy\local\request\core_userlist_provider {
-
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
     /** @var string Plugin-owned user preference. */
     protected const AGENT_PREFERENCE = 'local_la_agent_done';
 
@@ -161,10 +166,12 @@ class provider implements
         global $DB;
 
         $contextlist = new contextlist();
-        if (self::user_has_data($userid) || $DB->record_exists('user_preferences', [
+        if (
+            self::user_has_data($userid) || $DB->record_exists('user_preferences', [
             'userid' => $userid,
             'name' => self::AGENT_PREFERENCE,
-        ])) {
+            ])
+        ) {
             $contextlist->add_system_context();
         }
 
@@ -221,10 +228,14 @@ class provider implements
         $path = [get_string('pluginname', 'local_la')];
 
         self::export_records($writer, $path, 'report_preferences', $DB->get_records(
-            'local_la_report_users', ['userid' => $userid], 'timecreated ASC, id ASC'
+            'local_la_report_users',
+            ['userid' => $userid],
+            'timecreated ASC, id ASC'
         ));
         self::export_records($writer, $path, 'audience_assignments', $DB->get_records(
-            'local_la_report_audience', ['type' => 'user', 'instanceid' => $userid], 'timecreated ASC, id ASC'
+            'local_la_report_audience',
+            ['type' => 'user', 'instanceid' => $userid],
+            'timecreated ASC, id ASC'
         ));
         self::export_records($writer, $path, 'schedules', $DB->get_records_select(
             'local_la_report_schedule',
@@ -233,10 +244,14 @@ class provider implements
             'timecreated ASC, id ASC'
         ));
         self::export_records($writer, $path, 'audit_logs', $DB->get_records(
-            'local_la_logs', ['userid' => $userid], 'timecreated ASC, id ASC'
+            'local_la_logs',
+            ['userid' => $userid],
+            'timecreated ASC, id ASC'
         ));
         self::export_records($writer, $path, 'ai_history', $DB->get_records(
-            'local_la_ai', ['userid' => $userid], 'timecreated ASC, id ASC'
+            'local_la_ai',
+            ['userid' => $userid],
+            'timecreated ASC, id ASC'
         ));
 
         $tracking = $DB->get_records_sql(
@@ -249,7 +264,9 @@ class provider implements
         );
         self::export_records($writer, $path, 'time_tracking', $tracking);
         self::export_records($writer, $path, 'tracked_profile_pages', $DB->get_records(
-            'local_la_time_page', ['name' => 'profile', 'instanceid' => $userid], 'id ASC'
+            'local_la_time_page',
+            ['name' => 'profile', 'instanceid' => $userid],
+            'id ASC'
         ));
 
         $days = $DB->get_records_sql(

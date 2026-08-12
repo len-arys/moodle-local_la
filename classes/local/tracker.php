@@ -5,10 +5,16 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_la\local;
-
-defined('MOODLE_INTERNAL') || die();
 
 use moodle_url;
 
@@ -181,9 +187,11 @@ class tracker {
         $tokens = is_array($tokens) ? $tokens : [];
         $state = $tokens[$token] ?? null;
 
-        if (!is_array($state) || (int) ($state['userid'] ?? 0) !== $userid ||
+        if (
+            !is_array($state) || (int) ($state['userid'] ?? 0) !== $userid ||
                 empty($state['page']['name']) ||
-                (int) ($state['created'] ?? 0) < $now - self::TOKEN_TTL) {
+                (int) ($state['created'] ?? 0) < $now - self::TOKEN_TTL
+        ) {
             unset($tokens[$token]);
             $cache->set('tokens', $tokens);
             throw new \invalid_parameter_exception('Invalid or expired page tracking token');

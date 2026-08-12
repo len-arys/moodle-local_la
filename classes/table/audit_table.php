@@ -16,8 +16,6 @@
 
 namespace local_la\table;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\audit;
 use local_la\local\calendar;
 use local_la\local\url;

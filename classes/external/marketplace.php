@@ -16,8 +16,6 @@
 
 namespace local_la\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use core_external\external_api;
 use core_external\external_function_parameters;
@@ -60,7 +58,12 @@ class marketplace extends external_api {
      * @param string $sort
      * @return array
      */
-    public static function execute(string $plan = 'all', string $type = 'reports', string $search = '', string $sort = 'name'): array {
+    public static function execute(
+        string $plan = 'all',
+        string $type = 'reports',
+        string $search = '',
+        string $sort = 'name'
+    ): array {
         global $PAGE;
 
         $params = self::validate_parameters(self::execute_parameters(), [
@@ -255,8 +258,10 @@ class marketplace extends external_api {
         $sqlsnippets = self::get_sql_snippets($definition);
         $columns = self::get_preview_columns($definition['report_params']['columns'] ?? []);
         $sample = self::get_sample_preview($definition['report_params']['columns'] ?? []);
-        $reportparamsjson = json_encode(['report_params' => $definition['report_params'] ?? []],
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $reportparamsjson = json_encode(
+            ['report_params' => $definition['report_params'] ?? []],
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+        );
         $html = $renderer->render_from_template('local_la/modal/marketplace_install', [
             'fields' => self::get_definition_fields($definition),
             'sql_snippets' => $sqlsnippets,
@@ -312,6 +317,7 @@ class marketplace extends external_api {
      * Build marketplace template items.
      *
      * @param array $records
+     * @param string $type
      * @return array
      */
     protected static function build_items(array $records, string $type): array {
@@ -455,7 +461,7 @@ class marketplace extends external_api {
             );
         }
 
-        return array_values(array_filter($snippets, static function(array $snippet): bool {
+        return array_values(array_filter($snippets, static function (array $snippet): bool {
             return $snippet['name'] !== '' && $snippet['code'] !== '';
         }));
     }
@@ -477,7 +483,7 @@ class marketplace extends external_api {
             'code' => $code,
             'version' => $version,
             'validation' => $validation,
-            'has_validation_errors' => !empty(array_filter($validation, static function(array $rule): bool {
+            'has_validation_errors' => !empty(array_filter($validation, static function (array $rule): bool {
                 return !empty($rule['failed']);
             })),
             'has_restricted_table_error' => !empty($restrictedtables),
@@ -738,7 +744,10 @@ class marketplace extends external_api {
             return (string) (1 + ($row % 5)) . 'h ' . (string) (($row * 7) % 60) . 'm';
         }
 
-        if ($type === 'time' || strpos($field, 'date') !== false || strpos($field, 'created') !== false || strpos($field, 'modified') !== false) {
+        if (
+            $type === 'time' || strpos($field, 'date') !== false ||
+                strpos($field, 'created') !== false || strpos($field, 'modified') !== false
+        ) {
             return userdate(time() - ($row * DAYSECS), get_string('strftimedate', 'langconfig'));
         }
 
@@ -785,7 +794,7 @@ class marketplace extends external_api {
 
         $search = \core_text::strtolower(trim($search));
 
-        $records = array_values(array_filter($records, function($record) use ($plan, $search) {
+        $records = array_values(array_filter($records, function ($record) use ($plan, $search) {
             if ($plan !== 'all' && $record->plan !== $plan) {
                 return false;
             }
@@ -801,7 +810,7 @@ class marketplace extends external_api {
 
         $planorder = array_flip(array_keys(helper::get_plans()));
 
-        usort($records, function($left, $right) use ($sort, $planorder) {
+        usort($records, function ($left, $right) use ($sort, $planorder) {
             if ($sort === 'plan') {
                 $plandiff = ($planorder[(string) $left->plan] ?? PHP_INT_MAX) <=>
                     ($planorder[(string) $right->plan] ?? PHP_INT_MAX);
@@ -821,6 +830,7 @@ class marketplace extends external_api {
     /**
      * Get marketplace source items from the active sources.
      *
+     * @param string $type
      * @return array
      */
     protected static function get_source_items(string $type): array {
@@ -945,5 +955,4 @@ class marketplace extends external_api {
             'class' => $item['class'],
         ];
     }
-
 }

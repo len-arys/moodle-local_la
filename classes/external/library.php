@@ -16,8 +16,6 @@
 
 namespace local_la\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use core_external\external_api;
 use core_external\external_function_parameters;
@@ -73,8 +71,10 @@ class library extends external_api {
 
         $duplicatereportid = 0;
         $audienceactions = ['addreport', 'favorite', 'hide', 'show', 'reset', 'delete'];
-        if (in_array($params['action'], $audienceactions, true) &&
-                !audience::has_access((int) $params['reportid'], (int) $USER->id)) {
+        if (
+            in_array($params['action'], $audienceactions, true) &&
+                !audience::has_access((int) $params['reportid'], (int) $USER->id)
+        ) {
             throw new \moodle_exception('nopermissions', 'error');
         }
 
@@ -462,9 +462,13 @@ class library extends external_api {
      */
     protected static function get_report_fields(\stdClass $report): array {
         $fields = [];
+        $excluded = [
+            'sql_name', 'sqlcode', 'sqlid', 'sqlrecordname', 'sqltimeactivated', 'report_params', 'user_params',
+            'userid', 'favorite', 'timeaccess', 'params', 'dependencies',
+        ];
 
         foreach ((array) $report as $key => $value) {
-            if (in_array($key, ['sql_name', 'sqlcode', 'sqlid', 'sqlrecordname', 'sqltimeactivated', 'report_params', 'user_params', 'userid', 'favorite', 'timeaccess', 'params', 'dependencies'], true)) {
+            if (in_array($key, $excluded, true)) {
                 continue;
             }
 
@@ -569,7 +573,7 @@ class library extends external_api {
     protected static function get_tag_badges(string $tags): array {
         $items = array_filter(array_map('trim', explode(',', $tags)));
 
-        return array_map(static function(string $tag): array {
+        return array_map(static function (string $tag): array {
             return ['name' => $tag];
         }, $items);
     }

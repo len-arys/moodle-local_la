@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Report and app installer.
  *
@@ -301,8 +299,10 @@ class installer {
      * @return void
      */
     public static function validate_definition(array $definition): void {
-        if (empty($definition['name']) || empty($definition['shortname']) || empty($definition['plan']) ||
-                empty($definition['sql']['name']) || empty($definition['sql']['code'])) {
+        if (
+            empty($definition['name']) || empty($definition['shortname']) || empty($definition['plan']) ||
+                empty($definition['sql']['name']) || empty($definition['sql']['code'])
+        ) {
             throw new \moodle_exception('errorinvalidreportconfig', 'local_la');
         }
 
@@ -318,15 +318,19 @@ class installer {
      * @return void
      */
     public static function validate_app_definition(array $definition): void {
-        if (empty($definition['name']) || empty($definition['shortname']) || empty($definition['plan']) ||
+        if (
+            empty($definition['name']) || empty($definition['shortname']) || empty($definition['plan']) ||
                 empty($definition['widgets']) ||
-                !is_array($definition['widgets'])) {
+                !is_array($definition['widgets'])
+        ) {
             throw new \moodle_exception('errorinvalidappconfig', 'local_la');
         }
 
         foreach ($definition['widgets'] as $widget) {
-            if (!is_array($widget) || empty($widget['key']) || empty($widget['type']) || empty($widget['title']) ||
-                    empty($widget['sql'])) {
+            if (
+                !is_array($widget) || empty($widget['key']) || empty($widget['type']) || empty($widget['title']) ||
+                    empty($widget['sql'])
+            ) {
                 throw new \moodle_exception('errorinvalidappconfig', 'local_la');
             }
 
@@ -575,8 +579,10 @@ class installer {
      */
     protected static function merge_app_widget_state(array $definition, string $existingjson): array {
         $existingdefinition = json_decode($existingjson, true);
-        if (!is_array($existingdefinition) || empty($existingdefinition['widgets']) ||
-                !is_array($existingdefinition['widgets'])) {
+        if (
+            !is_array($existingdefinition) || empty($existingdefinition['widgets']) ||
+                !is_array($existingdefinition['widgets'])
+        ) {
             return $definition;
         }
 
