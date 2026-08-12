@@ -32,6 +32,7 @@ define(['jquery', 'core/ajax', 'core/str'], function($, Ajax, Str) {
         {key: 'unabletoloadcalendardata', component: 'local_la'}
     ]).then(function(results) {
         strings.unabletoloadcalendardata = String(results[0] || strings.unabletoloadcalendardata);
+        return strings;
     }).catch(function() {
         return;
     });
@@ -60,21 +61,29 @@ define(['jquery', 'core/ajax', 'core/str'], function($, Ajax, Str) {
         };
     };
 
+    var getStringState = function(trigger, key, fallback) {
+        return String(trigger.attr('data-' + key) || fallback || '');
+    };
+
+    var getNumberState = function(trigger, key, fallback) {
+        return Number(trigger.attr('data-' + key) || fallback || 0);
+    };
+
     var buildRequest = function(trigger) {
         var root = trigger.closest(CALENDAR_SELECTOR);
         var state = getRootData(root);
 
-        state.metric = String(trigger.attr('data-metric') || state.metric || 'timesec');
-        state.scope = String(trigger.attr('data-scope') || state.scope || '');
-        state.userid = Number(trigger.attr('data-userid') || state.userid || 0);
-        state.courseid = Number(trigger.attr('data-courseid') || state.courseid || 0);
-        state.activityid = Number(trigger.attr('data-activityid') || state.activityid || 0);
-        state.view = String(trigger.attr('data-view') || state.view || 'month');
-        state.year = Number(trigger.attr('data-year') || state.year || 0);
-        state.month = Number(trigger.attr('data-month') || state.month || 0);
-        state.day = Number(trigger.attr('data-day') || state.day || 0);
-        state.name = String(trigger.attr('data-name') || state.name || '');
-        state.instanceid = Number(trigger.attr('data-instanceid') || state.instanceid || 0);
+        state.metric = getStringState(trigger, 'metric', state.metric || 'timesec');
+        state.scope = getStringState(trigger, 'scope', state.scope);
+        state.userid = getNumberState(trigger, 'userid', state.userid);
+        state.courseid = getNumberState(trigger, 'courseid', state.courseid);
+        state.activityid = getNumberState(trigger, 'activityid', state.activityid);
+        state.view = getStringState(trigger, 'view', state.view || 'month');
+        state.year = getNumberState(trigger, 'year', state.year);
+        state.month = getNumberState(trigger, 'month', state.month);
+        state.day = getNumberState(trigger, 'day', state.day);
+        state.name = getStringState(trigger, 'name', state.name);
+        state.instanceid = getNumberState(trigger, 'instanceid', state.instanceid);
 
         return {
             root: root,
@@ -116,8 +125,10 @@ define(['jquery', 'core/ajax', 'core/str'], function($, Ajax, Str) {
                 }
 
                 modalBody.html(response.html || '');
+                return response;
             }).catch(function(error) {
                 renderError(payload.root, error);
+                return false;
             });
         });
     };

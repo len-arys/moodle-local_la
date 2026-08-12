@@ -16,8 +16,6 @@
 
 namespace local_la\output\preferences;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\api;
 use local_la\local\helper;
 use moodle_url;
@@ -38,6 +36,7 @@ class general {
     public static function get_context(): array {
         global $DB;
 
+        // phpcs:ignore moodle.Files.RequireLogin.Missing -- This loads plugin defaults, not Moodle bootstrap.
         $defaults = require(__DIR__ . '/../../../config.php');
         $hasaiproviders = helper::supports_ai_providers();
         $license = helper::is_api_mode() ? api::check_license() : api::get_local_license();
@@ -75,14 +74,20 @@ class general {
         ];
 
         if (!empty($license['trialends'])) {
-            $plandetails[] = ['text' => get_string($trialdays === 1 ? 'plandetailtrialendsone' : 'plandetailtrialends',
-                'local_la', (object) [
+            $plandetails[] = ['text' => get_string(
+                $trialdays === 1 ? 'plandetailtrialendsone' : 'plandetailtrialends',
+                'local_la',
+                (object) [
                     'days' => $trialdays,
                     'date' => userdate((int) $license['trialends'], get_string('strftimedate', 'langconfig')),
-                ])];
+                ]
+            )];
         } else if (!empty($license['nextbilldate'])) {
-            $plandetails[] = ['text' => get_string('plandetailnextbill', 'local_la',
-                userdate((int) $license['nextbilldate']))];
+            $plandetails[] = ['text' => get_string(
+                'plandetailnextbill',
+                'local_la',
+                userdate((int) $license['nextbilldate'])
+            )];
         }
 
         foreach (helper::get_admins() as $admin) {
@@ -96,14 +101,26 @@ class general {
             }
         }
 
-        $plandetails[] = ['text' => get_string('plandetailappsinstalled', 'local_la',
-            $DB->count_records('local_la_app'))];
-        $plandetails[] = ['text' => get_string('plandetailreportsinstalled', 'local_la',
-            $DB->count_records('local_la_report'))];
-        $plandetails[] = ['text' => get_string('plandetailreportsinuse', 'local_la',
-            $DB->count_records_sql('SELECT COUNT(DISTINCT reportid) FROM {local_la_report_users} WHERE status = 1'))];
-        $plandetails[] = ['text' => get_string('plandetailschedules', 'local_la',
-            $DB->count_records('local_la_report_schedule', ['status' => 1]))];
+        $plandetails[] = ['text' => get_string(
+            'plandetailappsinstalled',
+            'local_la',
+            $DB->count_records('local_la_app')
+        )];
+        $plandetails[] = ['text' => get_string(
+            'plandetailreportsinstalled',
+            'local_la',
+            $DB->count_records('local_la_report')
+        )];
+        $plandetails[] = ['text' => get_string(
+            'plandetailreportsinuse',
+            'local_la',
+            $DB->count_records_sql('SELECT COUNT(DISTINCT reportid) FROM {local_la_report_users} WHERE status = 1')
+        )];
+        $plandetails[] = ['text' => get_string(
+            'plandetailschedules',
+            'local_la',
+            $DB->count_records('local_la_report_schedule', ['status' => 1])
+        )];
 
         return [
             'settings' => [
@@ -150,7 +167,7 @@ class general {
                 'hastrialends' => !empty($license['trialends']),
                 'lastcheck' => $license['lastcheck'],
                 'haslastcheck' => !empty($license['lastcheck']),
-                'updates' => array_map(function(string $update): array {
+                'updates' => array_map(function (string $update): array {
                     return ['text' => s($update)];
                 }, $updates),
                 'hasupdates' => !empty($updates),
@@ -164,5 +181,4 @@ class general {
             ],
         ];
     }
-
 }

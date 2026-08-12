@@ -21,12 +21,12 @@
  * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once('../../config.php');
-
 use local_la\local\helper;
 use local_la\local\repository;
 use local_la\local\url;
 use local_la\output\app as app_page;
+
+require_once('../../config.php');
 
 $id = optional_param('id', 0, PARAM_INT);
 
@@ -50,7 +50,6 @@ $PAGE->set_url(new moodle_url('/local/la/app.php', ['id' => $id]));
 $PAGE->set_pagelayout('popup');
 $PAGE->set_title(get_string('apps', 'local_la'));
 $PAGE->set_heading(get_string('pluginname', 'local_la'));
-$PAGE->requires->css('/local/la/styles.css');
 
 $renderer = $PAGE->get_renderer('local_la');
 

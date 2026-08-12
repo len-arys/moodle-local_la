@@ -16,8 +16,6 @@
 
 namespace local_la\table;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\audience;
 use local_la\local\helper;
 use local_la\local\url;

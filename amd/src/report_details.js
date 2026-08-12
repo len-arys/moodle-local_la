@@ -47,63 +47,83 @@ define([
         modal.getRoot().find('.modal-footer').removeClass('d-none');
     };
 
+    var renderDetails = function(modal, response) {
+        var description;
+
+        modal.setTitle(response.title || '');
+        modal.setBody(response.html || '');
+        modal.getRoot().find('.modal-dialog').addClass('modal-lg');
+        showFooter(modal);
+
+        description = document.getElementById(EDITOR_ID);
+        if (description) {
+            return TinyEditor.setupForTarget(description, JSON.parse(response.editoroptions || '{}'));
+        }
+
+        return true;
+    };
+
+    var loadDetails = function(modal, reportid) {
+        return Ajax.call([{
+            methodname: 'local_la_report_details_modal',
+            args: {reportid: reportid}
+        }])[0].then(function(response) {
+            return renderDetails(modal, response);
+        });
+    };
+
+    var saveDetails = function(modal) {
+        var form = modal.getRoot().find('.la-report-details-form').first();
+        var editor = TinyEditor.getInstanceForElementId(EDITOR_ID);
+
+        if (editor) {
+            editor.save();
+        }
+
+        return Ajax.call([{
+            methodname: 'local_la_save_report_details',
+            args: {
+                reportid: Number(form.data('reportId') || 0),
+                name: String(form.find('[name="name"]').val() || ''),
+                description: String(form.find('[name="description"]').val() || ''),
+                tags: String(form.find('[name="tags"]').val() || '')
+            }
+        }])[0].then(function() {
+            window.location.reload();
+            return true;
+        }).catch(Notification.exception);
+    };
+
+    var bindModal = function(modal) {
+        modal.getRoot().on(ModalEvents.save, function(event) {
+            event.preventDefault();
+            saveDetails(modal);
+        });
+
+        modal.getRoot().on(ModalEvents.hidden, function() {
+            var editor = TinyEditor.getInstanceForElementId(EDITOR_ID);
+            if (editor) {
+                editor.remove();
+            }
+        });
+    };
+
     var openModal = function(reportid) {
-        Str.get_strings([
+        var strings;
+
+        return Str.get_strings([
             {key: 'editreportdetails', component: 'local_la'},
             {key: 'loading', component: 'local_la'},
             {key: 'save', component: 'core'}
-        ]).then(function(strings) {
-            return ModalSaveCancel.create().then(function(modal) {
-                modal.setSaveButtonText(strings[2]);
-                setLoading(modal, strings[0], strings[1]);
-                modal.show();
-
-                Ajax.call([{
-                    methodname: 'local_la_report_details_modal',
-                    args: {reportid: reportid}
-                }])[0].then(function(response) {
-                    modal.setTitle(response.title || '');
-                    modal.setBody(response.html || '');
-                    modal.getRoot().find('.modal-dialog').addClass('modal-lg');
-                    showFooter(modal);
-
-                    var description = document.getElementById(EDITOR_ID);
-                    if (description) {
-                        TinyEditor.setupForTarget(description, JSON.parse(response.editoroptions || '{}')).catch(Notification.exception);
-                    }
-                }).catch(Notification.exception);
-
-                modal.getRoot().on(ModalEvents.save, function(event) {
-                    var form = modal.getRoot().find('.la-report-details-form').first();
-                    var editor = TinyEditor.getInstanceForElementId(EDITOR_ID);
-
-                    event.preventDefault();
-                    if (editor) {
-                        editor.save();
-                    }
-
-                    Ajax.call([{
-                        methodname: 'local_la_save_report_details',
-                        args: {
-                            reportid: Number(form.data('reportId') || 0),
-                            name: String(form.find('[name="name"]').val() || ''),
-                            description: String(form.find('[name="description"]').val() || ''),
-                            tags: String(form.find('[name="tags"]').val() || '')
-                        }
-                    }])[0].then(function() {
-                        window.location.reload();
-                    }).catch(Notification.exception);
-                });
-
-                modal.getRoot().on(ModalEvents.hidden, function() {
-                    var editor = TinyEditor.getInstanceForElementId(EDITOR_ID);
-                    if (editor) {
-                        editor.remove();
-                    }
-                });
-
-                return modal;
-            });
+        ]).then(function(values) {
+            strings = values;
+            return ModalSaveCancel.create();
+        }).then(function(modal) {
+            modal.setSaveButtonText(strings[2]);
+            setLoading(modal, strings[0], strings[1]);
+            bindModal(modal);
+            modal.show();
+            return loadDetails(modal, reportid);
         }).catch(Notification.exception);
     };
 

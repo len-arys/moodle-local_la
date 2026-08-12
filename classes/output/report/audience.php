@@ -16,8 +16,6 @@
 
 namespace local_la\output\report;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\audience as audience_helper;
 use local_la\local\helper;
 use local_la\local\url;
@@ -39,7 +37,7 @@ class audience {
     public static function get_context(\stdClass $report): array {
         $options = audience_helper::get_options();
         $cards = audience_helper::get_report_audiences((int) $report->id);
-        $activetypes = array_map(function(array $card): string {
+        $activetypes = array_map(function (array $card): string {
             return (string) ($card['type'] ?? '');
         }, $cards);
 

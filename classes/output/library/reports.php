@@ -16,8 +16,6 @@
 
 namespace local_la\output\library;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\audience;
 use local_la\local\helper;
 use local_la\local\repository;
@@ -50,8 +48,10 @@ class reports {
         $records = repository::get_reports(self::PERPAGE, $page * self::PERPAGE, $sort, $dir, $search);
 
         return [
-            'controls' => $output->render_from_template('local_la/components/library_controls',
-                self::get_controls($sort, $dir, $search)),
+            'controls' => $output->render_from_template(
+                'local_la/components/library_controls',
+                self::get_controls($sort, $dir, $search)
+            ),
             'items' => self::get_items($records),
             'pagingbar' => self::get_paging_bar($output, $totalcount, $page, $sort, $dir, $search),
         ];

@@ -79,8 +79,8 @@
             data-year="{{prevyear}}"
             data-month="{{prevmonth}}"
             data-day="{{prevday}}"
-            aria-label="Previous"
-            title="Previous"
+            aria-label="{{#str}}previous, core{{/str}}"
+            title="{{#str}}previous, core{{/str}}"
         >
             <i class="icon fa fa-chevron-left fa-fw" aria-hidden="true"></i>
         </button>
@@ -110,8 +110,8 @@
             data-year="{{nextyear}}"
             data-month="{{nextmonth}}"
             data-day="{{nextday}}"
-            aria-label="Next"
-            title="Next"
+            aria-label="{{#str}}next, core{{/str}}"
+            title="{{#str}}next, core{{/str}}"
         >
             <i class="icon fa fa-chevron-right fa-fw" aria-hidden="true"></i>
         </button>
@@ -131,8 +131,8 @@
                 data-userid="{{targetuserid}}"
                 data-courseid="{{targetcourseid}}"
                 data-activityid="{{targetactivityid}}"
-                aria-label="Remove {{label}} filter"
-                title="Remove {{label}} filter"
+                aria-label="{{#str}}removefilter, local_la, {{label}}{{/str}}"
+                title="{{#str}}removefilter, local_la, {{label}}{{/str}}"
             >
                 <i class="fa fa-xmark fa-fw" aria-hidden="true"></i>
             </button>

@@ -5,6 +5,14 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 declare(strict_types=1);
 
@@ -26,6 +34,8 @@ use local_la\table\report_table;
  * @package    local_la
  * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \local_la\local\audience
+ * @covers     \local_la\local\repository
  */
 final class report_access_test extends advanced_testcase {
     /**
@@ -303,7 +313,7 @@ final class report_access_test extends advanced_testcase {
      * Audience drilldown links become plain values when disabled.
      */
     public function test_audience_drilldown_links_are_hidden_when_disabled(): void {
-        $table = new class(1) extends report_table {
+        $table = new class (1) extends report_table {
             /**
              * Set the table state needed to render one column.
              *
@@ -382,6 +392,7 @@ final class report_access_test extends advanced_testcase {
      * Create a minimal report.
      *
      * @param string $name
+     * @param array $params
      * @return int
      */
     private function create_report(string $name, array $params = []): int {

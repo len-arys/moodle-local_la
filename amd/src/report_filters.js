@@ -107,20 +107,26 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/form-autocomplete'], f
         var html = '';
 
         $.each(groups || [], function(index, group) {
+            var grouplabel = $('<div>').text(group.label || '').html();
+
             html += '<div class="la-report-multiselect-group">';
             html += '<label class="la-report-multiselect-group-label">';
             html += '<input type="checkbox" data-region="multiselect-group-checkbox">';
-            html += '<span title="' + $('<div>').text(group.label || '').html() + '">' + $('<div>').text(group.label || '').html() + '</span>';
+            html += '<span title="' + grouplabel + '">' + grouplabel + '</span>';
             html += '</label>';
-            html += '<button type="button" class="la-report-multiselect-group-toggle" data-region="multiselect-group-toggle" aria-expanded="true" aria-label="Toggle category">';
+            html += '<button type="button" class="la-report-multiselect-group-toggle" ';
+            html += 'data-region="multiselect-group-toggle" aria-expanded="true" aria-label="Toggle category">';
             html += '<span class="la-report-multiselect-group-toggle-icon" aria-hidden="true"></span>';
             html += '</button>';
             html += '<div class="la-report-multiselect-group-items" data-region="multiselect-group-items">';
 
             $.each(group.options || [], function(optionindex, option) {
+                var optionvalue = $('<div>').text(option.value || '').html();
+                var optionname = $('<div>').text(option.name || '').html();
+
                 html += '<label class="la-report-multiselect-option">';
-                html += '<input type="checkbox" value="' + $('<div>').text(option.value || '').html() + '" data-region="multiselect-checkbox">';
-                html += '<span title="' + $('<div>').text(option.name || '').html() + '">' + $('<div>').text(option.name || '').html() + '</span>';
+                html += '<input type="checkbox" value="' + optionvalue + '" data-region="multiselect-checkbox">';
+                html += '<span title="' + optionname + '">' + optionname + '</span>';
                 html += '</label>';
             });
 
@@ -314,7 +320,8 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/form-autocomplete'], f
                 loadMultiselectOptions(picker).then(function() {
                     syncMultiselectChecks(picker);
                     menu.removeClass('d-none');
-                });
+                    return true;
+                }).catch(Notification.exception);
             } else {
                 menu.addClass('d-none');
             }

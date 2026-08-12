@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Shared plugin helper methods.
  *
@@ -123,7 +121,7 @@ class helper {
             array_unshift($users, $billingadmin);
         }
 
-        return array_map(function(\stdClass $user) use ($billingadminid): array {
+        return array_map(function (\stdClass $user) use ($billingadminid): array {
             $isbillingadmin = (int) $user->id === $billingadminid;
 
             return [
@@ -345,7 +343,7 @@ class helper {
         $plans = is_array($configured) ? $configured : [];
         $default = self::DP;
 
-        $plans = array_values(array_filter(array_unique(array_map(function($plan): string {
+        $plans = array_values(array_filter(array_unique(array_map(function ($plan): string {
             return strtolower(trim((string) $plan));
         }, $plans))));
 
@@ -390,5 +388,4 @@ class helper {
     protected static function get_billing_admin_id(): int {
         return (int) get_config('local_la', 'billingadmins');
     }
-
 }

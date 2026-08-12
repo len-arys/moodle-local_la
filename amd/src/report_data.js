@@ -53,6 +53,13 @@ define([
     ];
     var cachedStrings = null;
 
+    var showWarning = function(message) {
+        Notification.addNotification({
+            type: 'warning',
+            message: message
+        });
+    };
+
     var getStrings = function() {
         if (cachedStrings !== null) {
             return $.Deferred().resolve(cachedStrings).promise();
@@ -188,7 +195,8 @@ define([
             var swatchstyle = 'background:' + String(option.swatch || '#fff') + ';';
             var label = strings.colors[option.value] || option.value;
 
-            return '<button type="button" class="btn btn-outline-secondary text-start d-flex align-items-center gap-2 la-report-highlight-option" ' +
+            return '<button type="button" ' +
+                'class="btn btn-outline-secondary text-start d-flex align-items-center gap-2 la-report-highlight-option" ' +
                 'data-action="apply-highlight-color" data-color="' + option.value + '">' +
                 '<span class="d-inline-block rounded-circle border" style="' + swatchstyle +
                 ' border-color: rgba(0, 0, 0, 0.12); width: 1rem; height: 1rem;"></span>' +
@@ -201,7 +209,7 @@ define([
         var selectedids = getSelectedRowIds();
 
         if (!selectedids.length) {
-            window.alert(strings.selectrowtohighlight);
+            showWarning(strings.selectrowtohighlight);
             return;
         }
 
@@ -231,7 +239,7 @@ define([
             });
 
             return modal;
-        });
+        }).catch(Notification.exception);
     };
 
     var escapeHtml = function(value) {
@@ -250,7 +258,7 @@ define([
         var rows = getSelectedRows();
 
         if (!rows.length) {
-            window.alert(strings.selectrowtosummarize);
+            showWarning(strings.selectrowtosummarize);
             return;
         }
 
@@ -261,7 +269,7 @@ define([
         var rows = getSelectedRows();
 
         if (!rows.length) {
-            window.alert(strings.selectrowtofindpatterns);
+            showWarning(strings.selectrowtofindpatterns);
             return;
         }
 
@@ -280,7 +288,7 @@ define([
         var documenthtml;
 
         if (!selected.length || !table.length) {
-            window.alert(strings.selectrowtoprint);
+            showWarning(strings.selectrowtoprint);
             return;
         }
 
@@ -309,7 +317,7 @@ define([
         printwindow = window.open('', '_blank', 'width=1024,height=720');
 
         if (!printwindow) {
-            window.alert(strings.unabletoopenprintpreview);
+            showWarning(strings.unabletoopenprintpreview);
             return;
         }
 
@@ -395,19 +403,8 @@ define([
             '</form>';
     };
 
-    var openShareModal = function(reportid) {
-        var data = getSelectedTableData();
-        var reporttitle = getReportTitle();
-
-        if (!data.rows.length) {
-            getStrings().then(function(strings) {
-                window.alert(strings.selectrowtoshare);
-                return strings;
-            });
-            return;
-        }
-
-        Str.get_strings([
+    var getShareStrings = function(reporttitle) {
+        return Str.get_strings([
             {key: 'sharereport', component: 'local_la', param: reporttitle},
             {key: 'send', component: 'local_la'},
             {key: 'recipientemails', component: 'local_la'},
@@ -416,7 +413,7 @@ define([
             {key: 'sharemessageplaceholder', component: 'local_la'},
             {key: 'reportsent', component: 'local_la'}
         ]).then(function(values) {
-            var strings = {
+            return {
                 title: values[0],
                 send: values[1],
                 to: values[2],
@@ -425,39 +422,73 @@ define([
                 messageplaceholder: values[5],
                 sent: values[6]
             };
+        });
+    };
 
-            return ModalSaveCancel.create({
-                title: strings.title,
-                body: getShareModalBody(data, strings)
-            }).then(function(modal) {
-                modal.setSaveButtonText(strings.send);
-                modal.getRoot().find('.modal-dialog').addClass('modal-lg');
+    var sendSharedReport = function(modal, reportid, data, strings) {
+        var form = modal.getRoot().find('.la-share-report-form').first();
 
-                modal.getRoot().on(ModalEvents.save, function(event) {
-                    var form = modal.getRoot().find('.la-share-report-form').first();
-
-                    event.preventDefault();
-
-                    Ajax.call([{
-                        methodname: 'local_la_share_report',
-                        args: {
-                            reportid: Number(reportid || 0),
-                            to: String(form.find('[name="to"]').val() || ''),
-                            subject: String(form.find('[name="subject"]').val() || ''),
-                            body: String(form.find('[name="body"]').val() || ''),
-                            headers: data.headers,
-                            rows: data.rows
-                        }
-                    }])[0].then(function() {
-                        modal.hide();
-                        Toast.add(strings.sent);
-                    }).catch(Notification.exception);
-                });
-
-                modal.show();
-                return modal;
-            });
+        return Ajax.call([{
+            methodname: 'local_la_share_report',
+            args: {
+                reportid: Number(reportid || 0),
+                to: String(form.find('[name="to"]').val() || ''),
+                subject: String(form.find('[name="subject"]').val() || ''),
+                body: String(form.find('[name="body"]').val() || ''),
+                headers: data.headers,
+                rows: data.rows
+            }
+        }])[0].then(function() {
+            modal.hide();
+            Toast.add(strings.sent);
+            return true;
         }).catch(Notification.exception);
+    };
+
+    var createShareModal = function(reportid, data, strings) {
+        return ModalSaveCancel.create({
+            title: strings.title,
+            body: getShareModalBody(data, strings)
+        }).then(function(modal) {
+            modal.setSaveButtonText(strings.send);
+            modal.getRoot().find('.modal-dialog').addClass('modal-lg');
+
+            modal.getRoot().on(ModalEvents.save, function(event) {
+                event.preventDefault();
+                sendSharedReport(modal, reportid, data, strings);
+            });
+
+            modal.show();
+            return modal;
+        });
+    };
+
+    var openShareModal = function(reportid) {
+        var data = getSelectedTableData();
+        var reporttitle = getReportTitle();
+
+        if (!data.rows.length) {
+            getStrings().then(function(strings) {
+                showWarning(strings.selectrowtoshare);
+                return strings;
+            }).catch(Notification.exception);
+            return;
+        }
+
+        getShareStrings(reporttitle).then(function(strings) {
+            return createShareModal(reportid, data, strings);
+        }).catch(Notification.exception);
+    };
+
+    var createRowsAnalysisModal = function(response) {
+        return Modal.create({
+            title: response.title,
+            body: response.html
+        }).then(function(modal) {
+            modal.show();
+            modal.getRoot().find('.modal-dialog').addClass('modal-lg');
+            return modal;
+        });
     };
 
     var openRowsAnalysisModal = function(reportid, action, rows) {
@@ -469,14 +500,7 @@ define([
                 rowsjson: JSON.stringify(rows)
             }
         }])[0].then(function(response) {
-            return Modal.create({
-                title: response.title,
-                body: response.html
-            }).then(function(modal) {
-                modal.show();
-                modal.getRoot().find('.modal-dialog').addClass('modal-lg');
-                return modal;
-            });
+            return createRowsAnalysisModal(response);
         }).catch(Notification.exception);
     };
 
@@ -509,20 +533,20 @@ define([
                 getStrings().then(function(strings) {
                     printSelectedRows(strings);
                     return strings;
-                });
+                }).catch(Notification.exception);
             } else if (action === 'share' && reportid !== '') {
                 openShareModal(reportid);
             } else if (action === 'highlight' && reportid !== '') {
                 getStrings().then(function(strings) {
                     openHighlightPicker(reportid, strings);
                     return strings;
-                });
+                }).catch(Notification.exception);
             } else if (action === 'analyze') {
                 if (String(select.attr('data-patterns-available') || '0') === '1') {
                     getStrings().then(function(strings) {
                         openPatternModal(reportid, strings);
                         return strings;
-                    });
+                    }).catch(Notification.exception);
                 } else {
                     Notification.addNotification({
                         type: 'warning',
@@ -534,7 +558,7 @@ define([
                     getStrings().then(function(strings) {
                         openUserStoryModal(reportid, strings);
                         return strings;
-                    });
+                    }).catch(Notification.exception);
                 } else {
                     Notification.addNotification({
                         type: 'warning',

@@ -132,8 +132,10 @@ class report_table extends \table_sql {
                 $this->column_class($column, $columnclass);
             }
 
-            if (!in_array($column, $context->columns, true) ||
-                (array_key_exists('sortable', $columnconfig) && empty($columnconfig['sortable']))) {
+            if (
+                !in_array($column, $context->columns, true) ||
+                (array_key_exists('sortable', $columnconfig) && empty($columnconfig['sortable']))
+            ) {
                 $this->no_sorting($column);
             }
         }
@@ -468,7 +470,8 @@ class report_table extends \table_sql {
 
         $toggleid = 'la-report-actions-toggle-' . (int) ($row->id ?? random_int(1, 999999));
 
-        $button = html_writer::tag('button',
+        $button = html_writer::tag(
+            'button',
             '<i class="fa fa-ellipsis-vertical"></i>',
             [
                 'type' => 'button',
@@ -926,7 +929,8 @@ class report_table extends \table_sql {
             return '';
         }
 
-        return html_writer::tag('details',
+        return html_writer::tag(
+            'details',
             html_writer::tag('summary', 'SQL') .
             html_writer::tag('pre', s($this->reportsql), ['class' => 'la-table-sql-debug mb-0']),
             ['class' => 'la-table-sql-debug-wrap mt-3']

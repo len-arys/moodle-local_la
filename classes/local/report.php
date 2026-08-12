@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Report helper.
  *
@@ -198,6 +196,7 @@ class report {
      * Used as a fallback when a valid report returns zero rows.
      *
      * @param array $params
+     * @param array $filters
      * @return array
      */
     public static function get_columns(array $params, array $filters = []): array {
@@ -227,6 +226,7 @@ class report {
      * Get SQL output columns needed to hydrate table rows.
      *
      * @param array $params
+     * @param array $filters
      * @return array
      */
     public static function get_select_columns(array $params, array $filters = []): array {
@@ -251,6 +251,8 @@ class report {
      * @param string $template
      * @param array $params
      * @param array $dependencies
+     * @param array $filters
+     * @param string $filtersql
      * @return string
      */
     public static function build_sql(
@@ -266,7 +268,7 @@ class report {
             return $template;
         }
 
-        uasort($columns, function(array $left, array $right): int {
+        uasort($columns, function (array $left, array $right): int {
             return ((int) ($left['order'] ?? 9999)) <=> ((int) ($right['order'] ?? 9999));
         });
 
@@ -384,9 +386,9 @@ class report {
             $names = explode(',', (string) $require);
         }
 
-        return array_values(array_filter(array_map(static function($name): string {
+        return array_values(array_filter(array_map(static function ($name): string {
             return trim((string) $name);
-        }, $names), static function(string $name): bool {
+        }, $names), static function (string $name): bool {
             return $name !== '';
         }));
     }
@@ -406,9 +408,9 @@ class report {
             $groups = explode(',', (string) $group);
         }
 
-        return array_values(array_filter(array_map(static function($item): string {
+        return array_values(array_filter(array_map(static function ($item): string {
             return trim((string) $item);
-        }, $groups), static function(string $item): bool {
+        }, $groups), static function (string $item): bool {
             return $item !== '';
         }));
     }
@@ -546,7 +548,7 @@ class report {
             $value = $filter['value'] ?? '';
 
             if (is_array($value)) {
-                $value = array_values(array_filter(array_map('trim', array_map('strval', $value)), function(string $item): bool {
+                $value = array_values(array_filter(array_map('trim', array_map('strval', $value)), function (string $item): bool {
                     return $item !== '';
                 }));
             } else {

@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Report audience helper.
  *
@@ -54,19 +52,23 @@ class audience {
             return true;
         }
 
-        if (is_siteadmin($userid) && $DB->record_exists('local_la_report_audience', [
+        if (
+            is_siteadmin($userid) && $DB->record_exists('local_la_report_audience', [
             'reportid' => $reportid,
             'type' => 'admin',
             'instanceid' => 0,
-        ])) {
+            ])
+        ) {
             return true;
         }
 
-        if ($DB->record_exists('local_la_report_audience', [
+        if (
+            $DB->record_exists('local_la_report_audience', [
             'reportid' => $reportid,
             'type' => 'user',
             'instanceid' => $userid,
-        ])) {
+            ])
+        ) {
             return true;
         }
 
@@ -203,7 +205,7 @@ class audience {
                     )
                 )
                 {$searchsql}",
-            $params
+            $params,
         ];
     }
 
@@ -267,7 +269,7 @@ class audience {
         if (in_array($type, ['all', 'admin'], true)) {
             $instanceids = [0];
         } else {
-            $instanceids = array_values(array_filter($instanceids, function(int $instanceid): bool {
+            $instanceids = array_values(array_filter($instanceids, function (int $instanceid): bool {
                 return $instanceid > 0;
             }));
         }
@@ -347,7 +349,12 @@ class audience {
 
         $grouped = [];
 
-        foreach ($DB->get_records('local_la_report_audience', ['reportid' => $reportid], 'type ASC, timecreated ASC, id ASC') as $record) {
+        $records = $DB->get_records(
+            'local_la_report_audience',
+            ['reportid' => $reportid],
+            'type ASC, timecreated ASC, id ASC'
+        );
+        foreach ($records as $record) {
             $type = (string) $record->type;
 
             if (!array_key_exists($type, $grouped)) {
@@ -371,7 +378,7 @@ class audience {
 
         $roles = $DB->get_records('role', null, 'sortorder ASC', 'id,name,shortname');
 
-        return array_values(array_map(function(\stdClass $role) use ($selectedids): array {
+        return array_values(array_map(function (\stdClass $role) use ($selectedids): array {
             return [
                 'id' => (int) $role->id,
                 'name' => trim((string) $role->name) !== '' ? format_string($role->name) : (string) $role->shortname,
@@ -395,7 +402,7 @@ class audience {
         }
 
         if ($type === 'admin') {
-            $admins = array_map(function(\stdClass $user): string {
+            $admins = array_map(function (\stdClass $user): string {
                 return fullname($user);
             }, get_admins());
 
@@ -415,7 +422,7 @@ class audience {
         }
 
         $users = repository::get_filter_selected_users($instanceids);
-        return implode(', ', array_map(function(array $user): string {
+        return implode(', ', array_map(function (array $user): string {
             return (string) $user['name'];
         }, $users));
     }

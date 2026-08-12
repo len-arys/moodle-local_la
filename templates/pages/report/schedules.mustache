@@ -48,7 +48,7 @@
 
     Example context (json):
     {
-        "head": "<title>Schedules</title>",
+        "head": "<h2>Schedules</h2>",
         "header": "<header></header>",
         "reportid": 1,
         "can_manage": true,
@@ -62,7 +62,7 @@
             {{{head}}}
             {{#schedules}}
                 <div class="d-flex justify-content-between align-items-start gap-3 mt-4">
-                    <form method="get" action="" class="d-flex justify-content-start">
+                    <form method="get" class="d-flex justify-content-start">
                         <input type="hidden" name="id" value="{{reportid}}">
                         <input type="hidden" name="tab" value="schedules">
                         <div class="input-group mb-3 w-auto la-search-input-group">

@@ -16,8 +16,6 @@
 
 namespace local_la\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use renderer_base;
 use renderable;
 use templatable;
@@ -53,8 +51,11 @@ class preferences implements renderable, templatable {
     public function export_for_template(renderer_base $output): array {
         $tabs = $this->get_tabs();
         $context = [
-            'header' => $output->render_from_template('local_la/header', renderer::get_header_context('preferences')),
-            'head' => $output->render_from_template('local_la/components/general_head', renderer::get_general_head_context('preferences', $tabs)),
+            'header' => $output->render_from_template('local_la/header', $output->get_header_context('preferences')),
+            'head' => $output->render_from_template(
+                'local_la/components/general_head',
+                renderer::get_general_head_context('preferences', $tabs)
+            ),
             'tab' => $this->tab,
             'settingsurl' => (new \moodle_url('/admin/settings.php', ['section' => 'local_la']))->out(false),
         ];

@@ -80,7 +80,7 @@
 
     Example context (json):
     {
-        "head": "<title>Reports</title>",
+        "head": "<h2>Reports</h2>",
         "header": "<header></header>",
         "controls": "<form></form>",
         "can_manage": true,
@@ -111,7 +111,7 @@
                         <th scope="col" class="text-center border-top-0 text-nowrap">{{#str}}favorite, local_la{{/str}}</th>
                         <th scope="col" class="border-top-0 text-nowrap">{{#str}}version, core_plugin{{/str}}</th>
                         {{#can_manage}}
-                            <th scope="col" class="border-top-0 text-nowrap">Params</th>
+                            <th scope="col" class="border-top-0 text-nowrap">{{#str}}params, local_la{{/str}}</th>
                         {{/can_manage}}
                         <th scope="col" class="border-top-0 text-nowrap">{{#str}}timesync, local_la{{/str}}</th>
 
@@ -141,7 +141,6 @@
                                         class="form-check-input la-library-enabled-toggle"
                                         type="checkbox"
                                         role="switch"
-                                        autocomplete="off"
                                         data-action="toggle-library-report"
                                         data-reportid="{{reportid}}"
                                         data-enable-action="addreport"
