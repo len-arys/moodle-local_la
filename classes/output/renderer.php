@@ -57,6 +57,8 @@ class renderer extends plugin_renderer_base {
             'darkstylesurl' => (new \moodle_url('/local/la/assets/css/darkstyles.css'))->out(false),
             'homeurl' => $canmanage ? url::home() : url::library(['tab' => 'reports']),
             'libraryurl' => url::library(),
+            'searchurl' => $this->page->url->out(false),
+            'query' => '',
             'preferencesurl' => url::preferences(),
             'closeurl' => url::close(),
             'canmanage' => $canmanage,

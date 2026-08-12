@@ -316,7 +316,7 @@ class app {
                 'value' => $value,
                 'displayvalue' => self::format_value($value, (string) ($segment['format'] ?? 'number')),
                 'color' => $color,
-                'dotstyle' => 'background-color: ' . $color . ';',
+                'dotstyle' => '--la-app-segment-color: ' . $color . ';',
             ];
             $index++;
         }
@@ -359,7 +359,7 @@ class app {
                 'value' => $value,
                 'displayvalue' => self::format_value($value, (string) ($widget['segments_format'] ?? 'number')),
                 'color' => $color,
-                'dotstyle' => 'background-color: ' . $color . ';',
+                'dotstyle' => '--la-app-segment-color: ' . $color . ';',
             ];
             $index++;
         }
@@ -461,7 +461,7 @@ class app {
     protected static function get_donut_style(array $segments): string {
         $total = array_sum(array_map(static fn($segment) => (float) $segment['value'], $segments));
         if ($total <= 0) {
-            return 'background: conic-gradient(' . self::COLORS['muted'] . ' 0deg 360deg);';
+            return '--la-app-donut-background: conic-gradient(' . self::COLORS['muted'] . ' 0deg 360deg);';
         }
 
         $start = 0.0;
@@ -472,7 +472,7 @@ class app {
             $start = $end;
         }
 
-        return 'background: conic-gradient(' . implode(', ', $parts) . ');';
+        return '--la-app-donut-background: conic-gradient(' . implode(', ', $parts) . ');';
     }
 
     /**

@@ -124,9 +124,12 @@
     Example context (json):
     {
         "reportid": 1,
+        "action": "#",
         "has_search": true,
         "search_name": "search",
         "search_term": "",
+        "search_operator_name": "filter_search_operator",
+        "search_value_name": "filter_search_value",
         "has_columns": true,
         "columns": [
             {
@@ -344,7 +347,7 @@
                         <span class="la-report-filter-badge">{{filter_count_label}}</span>
                     {{/show_filter_count}}
                 </button>
-                <div class="filters-dropdown la-report-filters-dropdown dropdown-menu dropdown-menu-end moodle-has-zindex p-0" aria-labelledby="la-report-filters-button">
+                <div class="filters-dropdown la-report-filters-dropdown dropdown-menu dropdown-menu-end moodle-has-zindex" aria-labelledby="la-report-filters-button">
                     <div class="reportbuilder-filters-sidebar scroll-shadow" data-region="report-filters">
                         <div class="px-3 pt-3">
                             <div class="reportbuilder-filters-wrapper" data-region="report-filters-form">
@@ -365,7 +368,7 @@
                                             {{> local_la/components/report_filter_item }}
                                         {{/hidden_filters}}
                                     {{/has_hidden_filters}}
-                                    <div class="mb-3 row fitem la-report-filters-actions" data-groupname="buttonar">
+                                    <div class="row fitem la-report-filters-actions" data-groupname="buttonar">
                                         <div class="col-md-12 d-flex flex-wrap align-items-center felement" data-fieldtype="group">
                                             <fieldset class="w-100 m-0 p-0 border-0">
                                                 <legend class="visually-hidden">{{#str}}filters, core{{/str}}</legend>

@@ -81,6 +81,8 @@
         "companyname": "lenArys",
         "homeurl": "#",
         "libraryurl": "#",
+        "searchurl": "#",
+        "query": "",
         "preferencesurl": "#",
         "closeurl": "#",
         "is_home": true
@@ -105,7 +107,7 @@
                     <ul id="moremenu-{{uniqid}}-navbar-nav" role="menubar" class="nav more-nav navbar-nav">
                         {{#canmanage}}
                         <li class="nav-item px-2" role="none">
-                            <a role="menuitem" class="nav-link {{#is_home}}active{{/is_home}}" href="{{homeurl}}" aria-current="{{#is_home}}true{{/is_home}}" data-disableactive="true">
+                            <a role="menuitem" class="nav-link {{#is_home}}active{{/is_home}}" href="{{homeurl}}" {{#is_home}}aria-current="page"{{/is_home}} data-disableactive="true">
                                 {{#str}}home, core{{/str}}
                             </a>
                         </li>
@@ -134,11 +136,11 @@
                                 <li><a class="dropdown-item" href="{{url}}">{{name}}</a></li>
                                 {{/reports.favorite}}
                                 {{#reports_has_recent}}
-                                <div class="dropdown-divider"></div>
+                                <li><hr class="dropdown-divider"></li>
                                 {{/reports_has_recent}}
                                 {{^reports_has_recent}}
                                 {{#reports_has_favorite}}
-                                <div class="dropdown-divider"></div>
+                                <li><hr class="dropdown-divider"></li>
                                 {{/reports_has_favorite}}
                                 {{/reports_has_recent}}
                                 <li><a href="{{libraryurl}}?tab=reports" class="dropdown-item" role="menuitem" tabindex="-1">{{#str}}more, local_la{{/str}}</a></li>
@@ -156,14 +158,14 @@
                                 {{#apps}}
                                 <li><a class="dropdown-item" href="{{url}}">{{name}}</a></li>
                                 {{/apps}}
-                                <div class="dropdown-divider"></div>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a href="{{libraryurl}}?tab=apps" class="dropdown-item" role="menuitem" tabindex="-1">{{#str}}more, local_la{{/str}}</a></li>
                             </ul>
                         </li>
                         {{/has_apps_menu}}
                         {{/canmanage}}
                         <li class="nav-item px-2" role="none">
-                            <a role="menuitem" class="nav-link {{#is_library}}active{{/is_library}}" href="{{libraryurl}}" aria-current="{{#is_library}}true{{/is_library}}" data-disableactive="true">
+                            <a role="menuitem" class="nav-link {{#is_library}}active{{/is_library}}" href="{{libraryurl}}" {{#is_library}}aria-current="page"{{/is_library}} data-disableactive="true">
                                 {{#str}}library, local_la{{/str}}
                             </a>
                         </li>

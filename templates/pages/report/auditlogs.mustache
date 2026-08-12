@@ -42,7 +42,7 @@
 
     Example context (json):
     {
-        "head": "<title>Audit logs</title>",
+        "head": "<h2>Audit logs</h2>",
         "header": "<header></header>",
         "reportid": 1,
         "audienceurl": "#",
@@ -63,7 +63,7 @@
                 {{/needsupgrade}}
                 {{^needsupgrade}}
                 <div class="d-flex justify-content-between align-items-start gap-3 mt-4">
-                    <form method="get" action="" class="d-flex justify-content-start">
+                    <form method="get" class="d-flex justify-content-start">
                         <input type="hidden" name="id" value="{{reportid}}">
                         <input type="hidden" name="tab" value="auditlogs">
                         <div class="input-group mb-3 w-auto">
