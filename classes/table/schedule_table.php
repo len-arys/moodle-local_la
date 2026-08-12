@@ -16,8 +16,6 @@
 
 namespace local_la\table;
 
-defined('MOODLE_INTERNAL') || die();
-
 use html_writer;
 use local_la\local\schedule;
 use local_la\local\url;
@@ -216,10 +214,15 @@ class schedule_table extends general_table {
             html_writer::div(
                 html_writer::div(
                     html_writer::div(
-                        html_writer::link('#', html_writer::tag('i', '', [
-                            'class' => 'icon fa fa-ellipsis-vertical fa-fw',
-                            'aria-hidden' => 'true',
-                        ]) . html_writer::span(get_string('actions', 'core'), 'visually-hidden') . html_writer::tag('b', '', ['class' => 'caret']), [
+                        html_writer::link(
+                            '#',
+                            html_writer::tag('i', '', [
+                                'class' => 'icon fa fa-ellipsis-vertical fa-fw',
+                                'aria-hidden' => 'true',
+                            ]) .
+                            html_writer::span(get_string('actions', 'core'), 'visually-hidden') .
+                            html_writer::tag('b', '', ['class' => 'caret']),
+                            [
                             'class' => 'btn btn-icon d-flex no-caret dropdown-toggle icon-no-margin',
                             'id' => 'la-schedule-action-menu-toggle-' . (int) $row->id,
                             'aria-label' => get_string('actions', 'core'),
@@ -229,7 +232,8 @@ class schedule_table extends general_table {
                             'aria-expanded' => 'false',
                             'aria-controls' => 'la-schedule-action-menu-' . (int) $row->id . '-menu',
                             'title' => get_string('actions', 'core'),
-                        ]) . $this->action_menu($row, $name),
+                            ]
+                        ) . $this->action_menu($row, $name),
                         'dropdown'
                     ),
                     'action-menu-trigger'

@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Laravel API helper.
  *
@@ -353,7 +351,7 @@ class api {
             return '';
         }
 
-        $plans = array_values(array_filter(array_unique(array_map(function($plan): string {
+        $plans = array_values(array_filter(array_unique(array_map(function ($plan): string {
             return strtolower(trim((string) $plan));
         }, $plans))));
         $json = json_encode($plans, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
@@ -460,6 +458,7 @@ class api {
 
         require_once($CFG->libdir . '/filelib.php');
 
+        // phpcs:ignore moodle.Files.RequireLogin.Missing -- This loads plugin defaults, not Moodle bootstrap.
         $defaults = require(__DIR__ . '/../../config.php');
         $curlsettings = $defaults['apicurlsettings'] ?? [];
         $configuredsettings = get_config('local_la', 'apicurlsettings');

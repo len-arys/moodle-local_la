@@ -154,7 +154,7 @@ define(['core/ajax'], function(Ajax) {
             };
         };
 
-        tracker.buildRequestBody = function(seconds, isNewVisit) {
+        tracker.buildRequestBody = function(seconds) {
             return JSON.stringify([{
                 index: 0,
                 methodname: 'local_la_track_learning_time',
@@ -180,7 +180,7 @@ define(['core/ajax'], function(Ajax) {
                 return false;
             }
 
-            body = tracker.buildRequestBody(seconds, isNewVisit);
+            body = tracker.buildRequestBody(seconds);
             tracker.log('send exit heartbeat', {
                 seconds: seconds,
                 isNewVisit: isNewVisit
@@ -226,13 +226,13 @@ define(['core/ajax'], function(Ajax) {
                     seconds: seconds,
                     isNewVisit: isNewVisit
                 });
-                return;
+                return false;
             }
 
             tracker.sending = true;
             tracker.log('send heartbeat', tracker.buildArgs(seconds));
 
-            Ajax.call([{
+            return Ajax.call([{
                 methodname: 'local_la_track_learning_time',
                 args: tracker.buildArgs(seconds)
             }])[0].then(function() {
@@ -243,6 +243,7 @@ define(['core/ajax'], function(Ajax) {
                     seconds: seconds,
                     isNewVisit: isNewVisit
                 });
+                return true;
             }).catch(function() {
                 tracker.log('heartbeat failed', {
                     seconds: seconds,
@@ -251,10 +252,13 @@ define(['core/ajax'], function(Ajax) {
                 if (!isNewVisit && seconds > 0) {
                     tracker.accumulatedMs += seconds * 1000;
                 }
+                return false;
             }).then(function() {
                 tracker.sending = false;
+                return true;
             }, function() {
                 tracker.sending = false;
+                return false;
             });
         };
 

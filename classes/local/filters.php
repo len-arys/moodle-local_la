@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Filter helper methods for report requests and URLs.
  *
@@ -26,7 +24,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class filters {
-
     /**
      * Get request param names for one filter key.
      *
@@ -132,9 +129,11 @@ class filters {
         }
 
         $searchcolumn = self::get_search_column($reportparams);
-        if (!empty($searchcolumn['key']) &&
+        if (
+            !empty($searchcolumn['key']) &&
                 (($filters[$searchcolumn['key']]['operator'] ?? 'any') === 'contains') &&
-                empty($filters[$searchcolumn['key']]['value'])) {
+                empty($filters[$searchcolumn['key']]['value'])
+        ) {
             $filters[$searchcolumn['key']]['operator'] = 'any';
             $filters[$searchcolumn['key']]['value'] = '';
         }

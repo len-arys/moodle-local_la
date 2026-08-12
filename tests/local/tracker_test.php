@@ -5,6 +5,14 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 declare(strict_types=1);
 
@@ -18,6 +26,7 @@ use advanced_testcase;
  * @package    local_la
  * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers     \local_la\local\tracker
  */
 final class tracker_test extends advanced_testcase {
     /**
@@ -34,7 +43,7 @@ final class tracker_test extends advanced_testcase {
      * An initial heartbeat records a visit and later accepted time updates the same visit.
      */
     public function test_immediate_visit_and_short_duration(): void {
-        global $DB, $SESSION;
+        global $DB;
 
         $user = $this->getDataGenerator()->create_user();
         $page = $this->page('course', 101, 101);
@@ -45,8 +54,11 @@ final class tracker_test extends advanced_testcase {
         $this->assertSame(1, (int) $total->visits);
         $this->assertSame(0, (int) $total->timesec);
 
-        $SESSION->local_la_tracking[$token]['lastheartbeat'] = time() - 3;
-        $SESSION->local_la_tracking_lastaccounted = time() - 3;
+        $cache = \cache::make('local_la', 'tracking');
+        $tokens = $cache->get('tokens');
+        $tokens[$token]['lastheartbeat'] = time() - 3;
+        $cache->set('tokens', $tokens);
+        $cache->set('lastaccounted', time() - 3);
         tracker::track((int) $user->id, $token, 120);
 
         $total = $DB->get_record('local_la_time_total', ['id' => $total->id], '*', MUST_EXIST);
@@ -83,8 +95,6 @@ final class tracker_test extends advanced_testcase {
      * Multiple page tokens share one session-wide wall-clock allowance.
      */
     public function test_parallel_tokens_share_session_time_budget(): void {
-        global $SESSION;
-
         $user = $this->getDataGenerator()->create_user();
         $page = $this->page('course', 303, 303);
         $first = $this->create_token((int) $user->id, $page);
@@ -92,10 +102,13 @@ final class tracker_test extends advanced_testcase {
 
         tracker::track((int) $user->id, $first, 0);
         tracker::track((int) $user->id, $second, 0);
+        $cache = \cache::make('local_la', 'tracking');
+        $tokens = $cache->get('tokens');
         foreach ([$first, $second] as $token) {
-            $SESSION->local_la_tracking[$token]['lastheartbeat'] = time() - 30;
+            $tokens[$token]['lastheartbeat'] = time() - 30;
         }
-        $SESSION->local_la_tracking_lastaccounted = time() - 30;
+        $cache->set('tokens', $tokens);
+        $cache->set('lastaccounted', time() - 30);
 
         tracker::track((int) $user->id, $first, 30);
         tracker::track((int) $user->id, $second, 30);
@@ -121,11 +134,12 @@ final class tracker_test extends advanced_testcase {
      * Expired and unknown tokens are rejected.
      */
     public function test_expired_token_is_rejected(): void {
-        global $SESSION;
-
         $user = $this->getDataGenerator()->create_user();
         $token = $this->create_token((int) $user->id, $this->page('site', 0, 0));
-        $SESSION->local_la_tracking[$token]['created'] = time() - DAYSECS - 1;
+        $cache = \cache::make('local_la', 'tracking');
+        $tokens = $cache->get('tokens');
+        $tokens[$token]['created'] = time() - DAYSECS - 1;
+        $cache->set('tokens', $tokens);
 
         $this->expectException(\invalid_parameter_exception::class);
         tracker::track((int) $user->id, $token, 0);
@@ -165,10 +179,7 @@ final class tracker_test extends advanced_testcase {
      * Reset per-request Moodle session tracking state.
      */
     private function reset_tracking_session(): void {
-        global $SESSION;
-
-        $SESSION->local_la_tracking = [];
-        unset($SESSION->local_la_tracking_lastaccounted);
+        \cache::make('local_la', 'tracking')->purge();
     }
 
     /**

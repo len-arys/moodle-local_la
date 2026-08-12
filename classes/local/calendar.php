@@ -1,9 +1,20 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_la\local;
-
-defined('MOODLE_INTERNAL') || die();
 
 use local_la\local\filters as filters_helper;
 use local_la\local\url as url_helper;
@@ -16,6 +27,22 @@ use local_la\local\url as url_helper;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class calendar {
+    /**
+     * Build calendar modal context.
+     *
+     * @param string $metric
+     * @param string $scope
+     * @param int $userid
+     * @param int $courseid
+     * @param int $activityid
+     * @param string $view
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @param string $name
+     * @param int $instanceid
+     * @return array
+     */
     public static function get_modal_context(
         string $metric,
         string $scope,
@@ -45,7 +72,7 @@ class calendar {
               GROUP BY d.daystamp
               ORDER BY d.daystamp ASC";
         $records = $DB->get_records_sql($sql, $params);
-        $days = array_values(array_map(static function($record): array {
+        $days = array_values(array_map(static function ($record): array {
             return [
                 'daystamp' => (int) $record->daystamp,
                 'value' => (int) $record->value,
@@ -55,7 +82,18 @@ class calendar {
         $anchor = self::resolve_anchor($days, $year, $month, $day);
 
         if ($view === 'week') {
-            $viewcontext = self::build_week_view($metric, $scope, $userid, $courseid, $activityid, $anchor['year'], $anchor['month'], $anchor['day'], $name, $instanceid);
+            $viewcontext = self::build_week_view(
+                $metric,
+                $scope,
+                $userid,
+                $courseid,
+                $activityid,
+                $anchor['year'],
+                $anchor['month'],
+                $anchor['day'],
+                $name,
+                $instanceid
+            );
         } else if ($view === 'year') {
             $viewcontext = self::build_year_view($days, $metric, $anchor['year'], $anchor['month']);
         } else if ($view === 'years') {
@@ -67,7 +105,13 @@ class calendar {
         return array_merge([
             'summary' => $summary,
             'filtertags' => self::build_filter_tags($scope, $summary, $userid, $courseid, $activityid),
-            'trackingreport' => $scope === 'report_page' ? [] : self::build_tracking_report_link($scope, $metric, $userid, $courseid, $activityid),
+            'trackingreport' => $scope === 'report_page' ? [] : self::build_tracking_report_link(
+                $scope,
+                $metric,
+                $userid,
+                $courseid,
+                $activityid
+            ),
             'metricisvisits' => $metric === 'visits',
             'metrics' => self::build_metrics($metric, (int) ($viewcontext['total'] ?? 0), $scope),
             'legendlabel' => get_string($metric === 'visits' ? 'visits' : 'timespent', 'local_la'),
@@ -87,6 +131,21 @@ class calendar {
         ], $viewcontext);
     }
 
+    /**
+     * Build the weekly calendar view.
+     *
+     * @param string $metric
+     * @param string $scope
+     * @param int $userid
+     * @param int $courseid
+     * @param int $activityid
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @param string $name
+     * @param int $instanceid
+     * @return array
+     */
     protected static function build_week_view(
         string $metric,
         string $scope,
@@ -159,7 +218,8 @@ class calendar {
                 $value = (int) ($values[$hour][$stamp] ?? 0);
                 $row['cells'][] = [
                     'value' => self::format_cell_value($metric, $value),
-                    'title' => userdate($stamp, '%A, %b %e') . ' · ' . $row['label'] . ' · ' . self::format_metric_value($metric, $value),
+                    'title' => userdate($stamp, '%A, %b %e') . ' · ' . $row['label'] . ' · ' .
+                        self::format_metric_value($metric, $value),
                     'level' => self::get_heatmap_level($value, $maxvalue),
                     'hasactivity' => $value > 0,
                 ];
@@ -201,6 +261,15 @@ class calendar {
         ];
     }
 
+    /**
+     * Build the monthly calendar view.
+     *
+     * @param array $days
+     * @param string $metric
+     * @param int $year
+     * @param int $month
+     * @return array
+     */
     protected static function build_month_view(array $days, string $metric, int $year, int $month): array {
         $byday = [];
         $maxvalue = 0;
@@ -290,6 +359,15 @@ class calendar {
         ];
     }
 
+    /**
+     * Build the yearly calendar view.
+     *
+     * @param array $days
+     * @param string $metric
+     * @param int $year
+     * @param int $selectedmonth
+     * @return array
+     */
     protected static function build_year_view(array $days, string $metric, int $year, int $selectedmonth): array {
         $values = array_fill(1, 12, 0);
 
@@ -352,6 +430,14 @@ class calendar {
         ];
     }
 
+    /**
+     * Build the multi-year calendar view.
+     *
+     * @param array $days
+     * @param string $metric
+     * @param int $year
+     * @return array
+     */
     protected static function build_years_view(array $days, string $metric, int $year): array {
         $decadestart = (int) floor($year / 10) * 10;
         $gridstart = $decadestart - 1;
@@ -415,14 +501,35 @@ class calendar {
         ];
     }
 
+    /**
+     * Normalise a calendar metric.
+     *
+     * @param string $metric
+     * @return string
+     */
     public static function normalise_metric(string $metric): string {
         return $metric === 'visits' ? 'visits' : 'timesec';
     }
 
+    /**
+     * Normalise a calendar view.
+     *
+     * @param string $view
+     * @return string
+     */
     public static function normalise_view(string $view): string {
         return in_array($view, ['month', 'week', 'year', 'years'], true) ? $view : 'month';
     }
 
+    /**
+     * Resolve the selected calendar date.
+     *
+     * @param array $days
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @return array
+     */
     public static function resolve_anchor(array $days, int $year, int $month, int $day): array {
         $lateststamp = 0;
         foreach ($days as $dayrecord) {
@@ -437,6 +544,14 @@ class calendar {
         ];
     }
 
+    /**
+     * Shift a month by the requested offset.
+     *
+     * @param int $year
+     * @param int $month
+     * @param int $delta
+     * @return array
+     */
     public static function shift_month(int $year, int $month, int $delta): array {
         $index = (($year * 12) + ($month - 1)) + $delta;
         $shiftedyear = (int) floor($index / 12);
@@ -448,6 +563,13 @@ class calendar {
         return [$shiftedyear, $shiftedmonth];
     }
 
+    /**
+     * Shift a week by the requested offset.
+     *
+     * @param int $weekstart
+     * @param int $delta
+     * @return array
+     */
     public static function shift_week(int $weekstart, int $delta): array {
         $targetstamp = $weekstart + ($delta * 7 * DAYSECS);
         return [
@@ -457,6 +579,14 @@ class calendar {
         ];
     }
 
+    /**
+     * Build calendar summary metrics.
+     *
+     * @param string $metric
+     * @param int $total
+     * @param string $scope
+     * @return array
+     */
     public static function build_metrics(string $metric, int $total, string $scope = ''): array {
         if ($metric === 'visits') {
             return [
@@ -472,6 +602,12 @@ class calendar {
         ];
     }
 
+    /**
+     * Build the heatmap legend.
+     *
+     * @param string $metric
+     * @return array
+     */
     public static function build_legend(string $metric): array {
         if ($metric === 'visits') {
             return [
@@ -490,6 +626,13 @@ class calendar {
         ];
     }
 
+    /**
+     * Get a heatmap intensity level.
+     *
+     * @param int $value
+     * @param int $maxvalue
+     * @return int
+     */
     public static function get_heatmap_level(int $value, int $maxvalue): int {
         if ($value <= 0 || $maxvalue <= 0) {
             return 0;
@@ -507,6 +650,13 @@ class calendar {
         return 4;
     }
 
+    /**
+     * Format a calendar metric value.
+     *
+     * @param string $metric
+     * @param int $value
+     * @return string
+     */
     public static function format_metric_value(string $metric, int $value): string {
         if ($metric === 'visits') {
             return $value . ' visits';
@@ -514,6 +664,13 @@ class calendar {
         return self::format_duration_value($value);
     }
 
+    /**
+     * Format a calendar cell value.
+     *
+     * @param string $metric
+     * @param int $value
+     * @return string
+     */
     public static function format_cell_value(string $metric, int $value): string {
         if ($metric === 'visits') {
             return (string) $value;
@@ -521,6 +678,12 @@ class calendar {
         return self::format_duration_value($value);
     }
 
+    /**
+     * Format a duration for calendar display.
+     *
+     * @param int $seconds
+     * @return string
+     */
     public static function format_duration_value(int $seconds): string {
         if ($seconds <= 0) {
             return '0m';
@@ -544,6 +707,17 @@ class calendar {
         return max(1, $minutes) . 'm';
     }
 
+    /**
+     * Resolve calendar scope data and query conditions.
+     *
+     * @param string $scope
+     * @param int $userid
+     * @param int $courseid
+     * @param int $activityid
+     * @param string $name
+     * @param int $instanceid
+     * @return array
+     */
     protected static function resolve_scope_context(
         string $scope,
         int $userid,
@@ -620,8 +794,10 @@ class calendar {
                 ];
 
             case 'report_page':
-                if ($name !== 'la_report' || $userid <= 0 || $instanceid <= 0 ||
-                        !helper::can_use_drilldown() || !audience::has_access($instanceid)) {
+                if (
+                    $name !== 'la_report' || $userid <= 0 || $instanceid <= 0 ||
+                        !helper::can_use_drilldown() || !audience::has_access($instanceid)
+                ) {
                     throw new \moodle_exception('nopermissions', 'error');
                 }
 
@@ -648,6 +824,13 @@ class calendar {
         throw new \moodle_exception('errorinvalidreportconfig', 'local_la');
     }
 
+    /**
+     * Build a calendar user summary.
+     *
+     * @param \stdClass $user
+     * @param string $secondary
+     * @return array
+     */
     protected static function get_user_summary(\stdClass $user, string $secondary): array {
         global $PAGE;
 
@@ -664,6 +847,16 @@ class calendar {
         ];
     }
 
+    /**
+     * Build calendar filter tags.
+     *
+     * @param string $scope
+     * @param array $summary
+     * @param int $userid
+     * @param int $courseid
+     * @param int $activityid
+     * @return array
+     */
     protected static function build_filter_tags(string $scope, array $summary, int $userid, int $courseid, int $activityid): array {
         $tags = [];
 
@@ -680,14 +873,35 @@ class calendar {
             }
         } else if ($scope === 'activity') {
             if (!empty($summary['secondary'])) {
-                $tags[] = self::make_filter_tag(get_string('course'), (string) $summary['secondary'], 'activity', 0, 0, $activityid);
+                $tags[] = self::make_filter_tag(
+                    get_string('course'),
+                    (string) $summary['secondary'],
+                    'activity',
+                    0,
+                    0,
+                    $activityid
+                );
             }
             if (!empty($summary['primary'])) {
-                $tags[] = self::make_filter_tag(get_string('activity'), (string) $summary['primary'], $courseid > 0 ? 'course' : 'all', 0, $courseid, 0);
+                $tags[] = self::make_filter_tag(
+                    get_string('activity'),
+                    (string) $summary['primary'],
+                    $courseid > 0 ? 'course' : 'all',
+                    0,
+                    $courseid,
+                    0
+                );
             }
         } else if ($scope === 'user_activity') {
             if (!empty($summary['primary'])) {
-                $tags[] = self::make_filter_tag(get_string('user'), (string) $summary['primary'], 'activity', 0, $courseid, $activityid);
+                $tags[] = self::make_filter_tag(
+                    get_string('user'),
+                    (string) $summary['primary'],
+                    'activity',
+                    0,
+                    $courseid,
+                    $activityid
+                );
             }
 
             $parts = array_map('trim', explode('·', (string) ($summary['secondary'] ?? '')));
@@ -695,7 +909,14 @@ class calendar {
                 $tags[] = self::make_filter_tag(get_string('course'), $parts[1], 'user_activity', $userid, 0, $activityid);
             }
             if (!empty($parts[0])) {
-                $tags[] = self::make_filter_tag(get_string('activity'), $parts[0], $courseid > 0 ? 'user_course' : 'user', $userid, $courseid, 0);
+                $tags[] = self::make_filter_tag(
+                    get_string('activity'),
+                    $parts[0],
+                    $courseid > 0 ? 'user_course' : 'user',
+                    $userid,
+                    $courseid,
+                    0
+                );
             }
         } else if ($scope === 'report_page') {
             if (!empty($summary['primary'])) {
@@ -715,7 +936,25 @@ class calendar {
         return $tags;
     }
 
-    protected static function make_filter_tag(string $label, string $value, string $targetscope, int $targetuserid, int $targetcourseid, int $targetactivityid): array {
+    /**
+     * Build one removable filter tag.
+     *
+     * @param string $label
+     * @param string $value
+     * @param string $targetscope
+     * @param int $targetuserid
+     * @param int $targetcourseid
+     * @param int $targetactivityid
+     * @return array
+     */
+    protected static function make_filter_tag(
+        string $label,
+        string $value,
+        string $targetscope,
+        int $targetuserid,
+        int $targetcourseid,
+        int $targetactivityid
+    ): array {
         return [
             'label' => $label,
             'value' => $value,
@@ -727,7 +966,23 @@ class calendar {
         ];
     }
 
-    protected static function build_tracking_report_link(string $scope, string $metric, int $userid, int $courseid, int $activityid): array {
+    /**
+     * Build a link to the user tracking report.
+     *
+     * @param string $scope
+     * @param string $metric
+     * @param int $userid
+     * @param int $courseid
+     * @param int $activityid
+     * @return array
+     */
+    protected static function build_tracking_report_link(
+        string $scope,
+        string $metric,
+        int $userid,
+        int $courseid,
+        int $activityid
+    ): array {
         global $DB;
 
         $report = $DB->get_record('local_la_report', ['shortname' => 'users_tracking'], 'id, name');
@@ -772,6 +1027,12 @@ class calendar {
         ];
     }
 
+    /**
+     * Get activity and course display names.
+     *
+     * @param int $activityid
+     * @return array
+     */
     protected static function get_activity_summary(int $activityid): array {
         global $DB;
 

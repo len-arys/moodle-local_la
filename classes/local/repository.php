@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Data access layer for local_la records.
  *
@@ -26,7 +24,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class repository {
-
     /**
      * Get enrolment method filter options from the site.
      *
@@ -37,7 +34,7 @@ class repository {
 
         require_once($CFG->libdir . '/enrollib.php');
 
-        return array_map(function(string $value): array {
+        return array_map(function (string $value): array {
             return [
                 'value' => $value,
                 'name' => get_string('pluginname', 'enrol_' . $value),
@@ -58,7 +55,7 @@ class repository {
         $modules = get_module_types_names(false, true);
         asort($modules);
 
-        return array_values(array_map(function(string $name, string $value): array {
+        return array_values(array_map(function (string $name, string $value): array {
             return [
                 'value' => $value,
                 'name' => $name,
@@ -82,11 +79,11 @@ class repository {
 
             if ($profilefield) {
                 $options = preg_split('/\r\n|\r|\n/', (string) ($profilefield->param1 ?? ''));
-                $options = array_values(array_filter(array_map('trim', $options), function(string $item): bool {
+                $options = array_values(array_filter(array_map('trim', $options), function (string $item): bool {
                     return $item !== '';
                 }));
 
-                return array_values(array_map(function(string $value): array {
+                return array_values(array_map(function (string $value): array {
                     return [
                         'value' => $value,
                         'name' => $value,
@@ -123,7 +120,7 @@ class repository {
             $params
         );
 
-        return array_values(array_map(function(\stdClass $record): array {
+        return array_values(array_map(function (\stdClass $record): array {
             return [
                 'value' => (string) $record->value,
                 'name' => trim((string) $record->name),
@@ -159,7 +156,7 @@ class repository {
             $params
         );
 
-        return array_values(array_map(function(\stdClass $record): array {
+        return array_values(array_map(function (\stdClass $record): array {
             return [
                 'value' => (string) $record->value,
                 'name' => trim((string) $record->name),
@@ -195,7 +192,7 @@ class repository {
             $params
         );
 
-        return array_values(array_map(function(\stdClass $record): array {
+        return array_values(array_map(function (\stdClass $record): array {
             return [
                 'value' => (string) $record->value,
                 'name' => trim((string) $record->name),
@@ -317,6 +314,10 @@ class repository {
      * Get library reports.
      *
      * @param int $limit
+     * @param int $offset
+     * @param string $sort
+     * @param string $dir
+     * @param string $search
      * @return array
      */
     public static function get_reports(
@@ -385,6 +386,7 @@ class repository {
     /**
      * Count library reports.
      *
+     * @param string $search
      * @return int
      */
     public static function count_reports(string $search = ''): int {
@@ -615,7 +617,6 @@ class repository {
         ], '*', IGNORE_MISSING);
 
         if ($relation) {
-
             $relation->status = 1;
             $relation->timemodified = time();
             $DB->update_record('local_la_report_users', $relation);
@@ -787,7 +788,7 @@ class repository {
 
         $params = $report->params;
 
-        uasort($columns, function(array $a, array $b): int {
+        uasort($columns, function (array $a, array $b): int {
             return ((int) ($a['order'] ?? 0)) <=> ((int) ($b['order'] ?? 0));
         });
 
@@ -1027,7 +1028,7 @@ class repository {
               ORDER BY urs.timeaccess DESC";
 
         $records = $DB->get_records_sql($sql, $params, 0, $limit);
-        $records = array_filter($records, function(\stdClass $record) use ($USER): bool {
+        $records = array_filter($records, function (\stdClass $record) use ($USER): bool {
             return audience::has_access((int) $record->id, (int) $USER->id);
         });
 

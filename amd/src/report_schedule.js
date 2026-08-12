@@ -97,54 +97,84 @@ define([
         };
     };
 
+    var renderSchedule = function(modal, response) {
+        var body;
+
+        modal.setTitle(response.title || '');
+        modal.setBody(response.html || '');
+        modal.getRoot().find('.modal-dialog').addClass('modal-lg');
+        showFooter(modal);
+
+        body = document.getElementById('la-schedule-body');
+        if (body) {
+            return TinyEditor.setupForTarget(body, JSON.parse(response.editoroptions || '{}'));
+        }
+
+        return true;
+    };
+
+    var loadSchedule = function(modal, reportid, scheduleid) {
+        return Ajax.call([{
+            methodname: 'local_la_schedule_modal',
+            args: {
+                reportid: reportid,
+                scheduleid: scheduleid || 0
+            }
+        }])[0].then(function(response) {
+            return renderSchedule(modal, response);
+        });
+    };
+
+    var saveSchedule = function(modal) {
+        return Ajax.call([{
+            methodname: 'local_la_save_schedule',
+            args: getFormData(modal.getRoot().find('.la-schedule-form').first())
+        }])[0].then(function() {
+            window.location.reload();
+            return true;
+        }).catch(Notification.exception);
+    };
+
+    var bindScheduleModal = function(modal) {
+        modal.getRoot().on(ModalEvents.save, function(event) {
+            event.preventDefault();
+            saveSchedule(modal);
+        });
+
+        modal.getRoot().on(ModalEvents.hidden, function() {
+            var editor = TinyEditor.getInstanceForElementId('la-schedule-body');
+            if (editor) {
+                editor.remove();
+            }
+        });
+    };
+
     var openScheduleModal = function(reportid, scheduleid) {
-        Str.get_strings([
+        var strings;
+
+        return Str.get_strings([
             {key: scheduleid ? 'editscheduledetails' : 'newschedule', component: 'local_la'},
             {key: 'loading', component: 'local_la'},
             {key: 'save', component: 'core'}
-        ]).then(function(strings) {
-            return ModalSaveCancel.create().then(function(modal) {
-                modal.setSaveButtonText(strings[2]);
-                setLoading(modal, strings[0], strings[1]);
-                modal.show();
+        ]).then(function(values) {
+            strings = values;
+            return ModalSaveCancel.create();
+        }).then(function(modal) {
+            modal.setSaveButtonText(strings[2]);
+            setLoading(modal, strings[0], strings[1]);
+            bindScheduleModal(modal);
+            modal.show();
+            return loadSchedule(modal, reportid, scheduleid);
+        }).catch(Notification.exception);
+    };
 
-                Ajax.call([{
-                    methodname: 'local_la_schedule_modal',
-                    args: {
-                        reportid: reportid,
-                        scheduleid: scheduleid || 0
-                    }
-                }])[0].then(function(response) {
-                    modal.setTitle(response.title || '');
-                    modal.setBody(response.html || '');
-                    modal.getRoot().find('.modal-dialog').addClass('modal-lg');
-                    showFooter(modal);
-
-                    var body = document.getElementById('la-schedule-body');
-                    if (body) {
-                        TinyEditor.setupForTarget(body, JSON.parse(response.editoroptions || '{}')).catch(Notification.exception);
-                    }
-                }).catch(Notification.exception);
-
-                modal.getRoot().on(ModalEvents.save, function(event) {
-                    event.preventDefault();
-                    Ajax.call([{
-                        methodname: 'local_la_save_schedule',
-                        args: getFormData(modal.getRoot().find('.la-schedule-form').first())
-                    }])[0].then(function() {
-                        window.location.reload();
-                    }).catch(Notification.exception);
-                });
-
-                modal.getRoot().on(ModalEvents.hidden, function() {
-                    var editor = TinyEditor.getInstanceForElementId('la-schedule-body');
-                    if (editor) {
-                        editor.remove();
-                    }
-                });
-
-                return modal;
-            });
+    var runScheduleAction = function(options) {
+        return Ajax.call([{
+            methodname: options.method,
+            args: {scheduleid: options.scheduleid}
+        }])[0].then(function() {
+            reloadWithNotification(options.successMessage);
+            return true;
         }).catch(Notification.exception);
     };
 
@@ -162,12 +192,7 @@ define([
 
             modal.getRoot().on(options.event, function(event) {
                 event.preventDefault();
-                Ajax.call([{
-                    methodname: options.method,
-                    args: {scheduleid: options.scheduleid}
-                }])[0].then(function() {
-                    reloadWithNotification(options.successMessage);
-                }).catch(Notification.exception);
+                runScheduleAction(options);
             });
 
             modal.show();
