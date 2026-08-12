@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
+    // phpcs:ignore moodle.Files.RequireLogin.Missing -- This loads plugin defaults, not Moodle bootstrap.
     $defaults = require(__DIR__ . '/config.php');
 
     $ADMIN->add('reports', new admin_category('local_la_reports', get_string('adminmenusection', 'local_la')));

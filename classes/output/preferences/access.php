@@ -16,8 +16,6 @@
 
 namespace local_la\output\preferences;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\helper;
 
 /**

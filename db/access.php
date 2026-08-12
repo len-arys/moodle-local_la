@@ -25,9 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
-    /**
-     * Allows a user to manage Learning Analytics reports.
-     */
+    // Allows a user to manage Lenarys Analytics reports.
     'local/la:manage' => [
         'riskbitmask'  => RISK_PERSONAL,
         'captype'      => 'write',

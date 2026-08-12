@@ -16,8 +16,6 @@
 
 namespace local_la\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use core_external\external_api;
 use core_external\external_function_parameters;
@@ -92,8 +90,10 @@ class share extends external_api {
         $headers = array_slice(array_values($params['headers']), 0, 30);
         $rows = array_slice(array_values($params['rows']), 0, 100);
 
-        if (empty($emails) || trim($params['subject']) === '' || trim($params['body']) === '' ||
-                empty($headers) || empty($rows)) {
+        if (
+            empty($emails) || trim($params['subject']) === '' || trim($params['body']) === '' ||
+                empty($headers) || empty($rows)
+        ) {
             throw new \invalid_parameter_exception('Missing required share field');
         }
 
@@ -215,7 +215,7 @@ class share extends external_api {
     protected static function render_table(array $headers, array $rows): string {
         $table = new \html_table();
         $table->attributes['style'] = 'width:100%;border-collapse:collapse;margin-top:16px;';
-        $table->head = array_map(static function($header): string {
+        $table->head = array_map(static function ($header): string {
             return html_writer::tag('strong', s((string) $header));
         }, $headers);
         $table->data = [];

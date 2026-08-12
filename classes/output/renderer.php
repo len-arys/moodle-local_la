@@ -16,8 +16,6 @@
 
 namespace local_la\output;
 
-defined('MOODLE_INTERNAL') || die;
-
 use plugin_renderer_base;
 use local_la\local\filters;
 use local_la\local\helper;
@@ -39,10 +37,8 @@ class renderer extends plugin_renderer_base {
      * @param string $active
      * @return array
      */
-    public static function get_header_context(string $active = ''): array {
-        global $PAGE;
-
-        $PAGE->requires->js_call_amd('local_la/header', 'init');
+    public function get_header_context(string $active = ''): array {
+        $this->page->requires->js_call_amd('local_la/header', 'init');
         $canmanage = helper::is_admin();
 
         $reports = [
@@ -52,6 +48,7 @@ class renderer extends plugin_renderer_base {
         $apps = $canmanage ? self::map_navigation_items(repository::get_apps(3), 'app') : [];
         $appearance = (string) get_config('local_la', 'appearance');
         $appearance = in_array($appearance, ['system', 'light', 'dark'], true) ? $appearance : 'system';
+        // phpcs:ignore moodle.Files.RequireLogin.Missing -- This loads plugin defaults, not Moodle bootstrap.
         $defaults = require(__DIR__ . '/../../config.php');
 
         return [
@@ -60,6 +57,8 @@ class renderer extends plugin_renderer_base {
             'darkstylesurl' => (new \moodle_url('/local/la/assets/css/darkstyles.css'))->out(false),
             'homeurl' => $canmanage ? url::home() : url::library(['tab' => 'reports']),
             'libraryurl' => url::library(),
+            'searchurl' => $this->page->url->out(false),
+            'query' => '',
             'preferencesurl' => url::preferences(),
             'closeurl' => url::close(),
             'canmanage' => $canmanage,

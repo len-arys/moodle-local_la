@@ -86,7 +86,7 @@
 
     Example context (json):
     {
-        "head": "<title>Audience</title>",
+        "head": "<h2>Audience</h2>",
         "header": "<header></header>",
         "reportid": 1,
         "can_manage": true,
@@ -121,7 +121,7 @@
                                         <div class="ms-3">
                                             <span class="me-1">{{name}}</span>
                                         </div>
-                                        <button class="btn toggle-card-button ms-auto" data-toggle="collapse" data-target="#la-audience-group-{{key}}" aria-expanded="true" aria-controls="la-audience-group-{{key}}" title="Show/hide '{{name}}'">
+                                        <button class="btn toggle-card-button ms-auto" data-toggle="collapse" data-target="#la-audience-group-{{key}}" aria-expanded="true" aria-controls="la-audience-group-{{key}}" title="{{#str}}showhideaudience, local_la, {{name}}{{/str}}">
                                             <span class="collapsed-icon-container"><i class="toggle-card-icon fa fa-lg fa-angle-down"></i></span>
                                             <span class="expanded-icon-container"><i class="toggle-card-icon fa fa-lg fa-angle-up"></i></span>
                                         </button>
@@ -132,7 +132,7 @@
                                         <div class="list-group list-group-flush">
                                             {{#items}}
                                                 <a href="#"
-                                                   title="Add audience '{{name}}'"
+                                                   title="{{#str}}addaudience, local_la, {{name}}{{/str}}"
                                                    role="button"
                                                    class="list-group-item list-group-item-action pe-2 bg-transparent audience-menu-item{{#disabled}} disabled text-muted{{/disabled}}"
                                                    data-region="sidebar-item"
@@ -242,7 +242,7 @@
                         {{#cards}}
                             <div data-region="audience-card" class="instance-card" data-audience-type="{{type}}" data-audience-title="{{name}}" data-report-id="{{reportid}}">
                                 {{#showormessage}}
-                                    <span class="audience-separator d-flex mb-3 justify-content-center align-items-center small text-muted fw-bold">OR</span>
+                                    <span class="audience-separator d-flex mb-3 justify-content-center align-items-center small text-muted fw-bold">{{#str}}or, local_la{{/str}}</span>
                                 {{/showormessage}}
                             <div class="mb-3 card">
                                 <div class="card-header p-0">

@@ -16,8 +16,6 @@
 
 namespace local_la\output\preferences;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\helper;
 
 /**
@@ -71,8 +69,11 @@ class plan {
         }
 
         if ($license['status'] === 'active' && !empty($license['nextbilldate'])) {
-            return get_string('nextpaymentdate', 'local_la',
-                userdate((int) $license['nextbilldate'], get_string('strftimedate', 'langconfig')));
+            return get_string(
+                'nextpaymentdate',
+                'local_la',
+                userdate((int) $license['nextbilldate'], get_string('strftimedate', 'langconfig'))
+            );
         }
 
         if ($license['status'] === 'past_due') {

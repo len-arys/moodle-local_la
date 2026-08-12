@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Lightweight SQL safety checks.
  *
@@ -131,7 +129,7 @@ class validator {
      * @return string[]
      */
     public static function get_default_restricted_tables(): array {
-        return array_values(array_filter(array_keys(self::get_table_choices()), static function(string $table): bool {
+        return array_values(array_filter(array_keys(self::get_table_choices()), static function (string $table): bool {
             return self::is_default_restricted_table($table);
         }));
     }
@@ -169,10 +167,12 @@ class validator {
         $sql = preg_replace([
             '/\'(?:\'\'|[^\'])*\'/s',
             '/"(?:""|[^"])*"/s',
+            // phpcs:ignore moodle.Strings.ForbiddenStrings.Found -- SQL backtick identifiers must be removed.
             '/`(?:``|[^`])*`/s',
             '/\[(?:\]\]|[^\]])*\]/s',
         ], '', trim($sql));
 
+        // phpcs:ignore moodle.Strings.ForbiddenStrings.Found -- Remaining SQL backticks make the query invalid.
         if ($sql === null || preg_match('/[\'"`\[\]]/', $sql)) {
             return false;
         }
@@ -201,8 +201,10 @@ class validator {
         }
 
         foreach ($tokens as $index => $token) {
-            if ((str_starts_with($token, 'pg_') && str_ends_with($token, 'lock'))
-                    || ($token === 'for' && ($tokens[$index + 1] ?? '') === 'share')) {
+            if (
+                (str_starts_with($token, 'pg_') && str_ends_with($token, 'lock'))
+                    || ($token === 'for' && ($tokens[$index + 1] ?? '') === 'share')
+            ) {
                 return false;
             }
         }
@@ -275,7 +277,7 @@ class validator {
         for ($index = $start, $count = count($tokens); $index < $count; $index++) {
             if ($tokens[$index] === '(') {
                 $depth++;
-            } elseif ($tokens[$index] === ')' && --$depth === 0) {
+            } else if ($tokens[$index] === ')' && --$depth === 0) {
                 return $index;
             }
         }

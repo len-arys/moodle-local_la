@@ -21,14 +21,14 @@
  * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once('../../config.php');
-require_once($CFG->libdir . '/tablelib.php');
-
 use local_la\local\audience;
 use local_la\local\helper;
 use local_la\local\repository;
 use local_la\local\url;
 use local_la\output\report as report_page;
+
+require_once('../../config.php');
+require_once($CFG->libdir . '/tablelib.php');
 
 require_login();
 
@@ -73,7 +73,6 @@ $PAGE->set_pagelayout('popup');
 $PAGE->set_heading(get_string('pluginname', 'local_la'));
 $PAGE->set_url(url::report_tab_url((int) $report->id, ['tab' => $tab]));
 $PAGE->set_title(format_string($report->name));
-$PAGE->requires->css('/local/la/styles.css');
 $PAGE->requires->js_call_amd('local_la/report_actions', 'init');
 if (helper::is_admin()) {
     $PAGE->requires->js_call_amd('local_la/report_details', 'init');

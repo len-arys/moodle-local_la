@@ -177,6 +177,24 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
         });
     };
 
+    var installReport = function(root, report) {
+        var row = root.find('[data-shortname="' + report.shortname + '"]');
+        setReportStatus(row, 'fa-solid fa-spinner fa-spin', 'fa-solid fa-spinner fa-spin', strings.installingitem);
+
+        return Ajax.call([{
+            methodname: 'local_la_agent_install_report',
+            args: {
+                shortname: report.shortname
+            }
+        }])[0].then(function() {
+            setReportStatus(row, 'fa-regular fa-square-check', 'fa-regular fa-circle-check', strings.installed);
+            return true;
+        }).catch(function(error) {
+            setReportStatus(row, 'fa-regular fa-circle-xmark', 'fa-solid fa-circle-xmark', strings.faileditem);
+            throw error;
+        });
+    };
+
     var installReports = function(root, reports) {
         var pending = reports.filter(function(report) {
             return !report.installed;
@@ -185,21 +203,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
 
         pending.forEach(function(report) {
             request = request.then(function() {
-                var row = root.find('[data-shortname="' + report.shortname + '"]');
-                setReportStatus(row, 'fa-solid fa-spinner fa-spin', 'fa-solid fa-spinner fa-spin', strings.installingitem);
-
-                return Ajax.call([{
-                    methodname: 'local_la_agent_install_report',
-                    args: {
-                        shortname: report.shortname
-                    }
-                }])[0].then(function() {
-                    setReportStatus(row, 'fa-regular fa-square-check', 'fa-regular fa-circle-check', strings.installed);
-                    return true;
-                }).catch(function(error) {
-                    setReportStatus(row, 'fa-regular fa-circle-xmark', 'fa-solid fa-circle-xmark', strings.faileditem);
-                    throw error;
-                });
+                return installReport(root, report);
             });
         });
 
@@ -208,7 +212,10 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
 
     var runAgentSetup = function(root) {
         root.find('.la-welcome-card').addClass('is-setup');
-        root.find('.la-welcome-slides, [data-region="agent-dots"], [data-action="agent-prev"], [data-action="agent-next"], [data-action="agent-complete"]')
+        root.find(
+            '.la-welcome-slides, [data-region="agent-dots"], [data-action="agent-prev"], ' +
+            '[data-action="agent-next"], [data-action="agent-complete"]'
+        )
             .addClass('d-none');
         root.find('[data-region="agent-setup"]').removeClass('d-none');
         setSetupText(root, strings.checking, strings.checkingdesc);
@@ -305,7 +312,7 @@ define(['jquery', 'core/ajax', 'core/notification', 'core/str'], function($, Aja
                 bind(root);
                 showSlide(root, 0);
                 return true;
-            });
+            }).catch(Notification.exception);
         }
     };
 });

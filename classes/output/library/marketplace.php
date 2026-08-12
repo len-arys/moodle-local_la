@@ -16,8 +16,6 @@
 
 namespace local_la\output\library;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\helper;
 use local_la\local\url;
 use renderer_base;
@@ -116,10 +114,12 @@ class marketplace {
         $typebaseparams = $baseparams + ['marketplan' => $plan];
         $typeoptions = [];
         $currenttype = get_string('reports');
-        foreach ([
+        foreach (
+            [
             'reports' => get_string('reports'),
             'apps' => get_string('apps', 'local_la'),
-        ] as $key => $name) {
+            ] as $key => $name
+        ) {
             if ($type === $key) {
                 $currenttype = $name;
             }

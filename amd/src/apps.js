@@ -45,7 +45,7 @@ define([
         stop: '',
         maximize: '',
         minimize: '',
-        delete: '',
+        'delete': '',
         deletewidget: '',
         deletewidgetconfirm: ''
     };
@@ -55,12 +55,12 @@ define([
         var widgetkey = String(card.data('widgetKey') || '');
 
         if (!appid || !widgetkey || card.data('refreshing')) {
-            return;
+            return false;
         }
 
         card.data('refreshing', true);
 
-        Ajax.call([{
+        return Ajax.call([{
             methodname: 'local_la_get_app_widget',
             args: {
                 appid: appid,
@@ -90,10 +90,10 @@ define([
         var widgetkey = String(card.data('widgetKey') || '');
 
         if (!appid || !widgetkey) {
-            return;
+            return false;
         }
 
-        Ajax.call([{
+        return Ajax.call([{
             methodname: 'local_la_update_app_widget_state',
             args: {
                 appid: appid,
@@ -122,6 +122,19 @@ define([
         saveWidgetState(card, 'fullwidth', enabled);
     };
 
+    var removeWidget = function(card, appid, widgetkey) {
+        return Ajax.call([{
+            methodname: 'local_la_delete_app_widget',
+            args: {
+                appid: appid,
+                widgetkey: widgetkey
+            }
+        }])[0].then(function() {
+            card.remove();
+            return true;
+        }).catch(Notification.exception);
+    };
+
     var deleteWidget = function(card) {
         var appid = Number(card.data('appId') || 0);
         var widgetkey = String(card.data('widgetKey') || '');
@@ -137,16 +150,7 @@ define([
             modal.setSaveButtonText(strings.delete);
 
             modal.getRoot().on(ModalEvents.save, function() {
-                Ajax.call([{
-                    methodname: 'local_la_delete_app_widget',
-                    args: {
-                        appid: appid,
-                        widgetkey: widgetkey
-                    }
-                }])[0].then(function() {
-                    card.remove();
-                    return true;
-                }).catch(Notification.exception);
+                removeWidget(card, appid, widgetkey);
             });
 
             modal.show();

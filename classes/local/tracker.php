@@ -5,10 +5,16 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_la\local;
-
-defined('MOODLE_INTERNAL') || die();
 
 use moodle_url;
 
@@ -105,11 +111,10 @@ class tracker {
      * @return string
      */
     protected static function create_session_token(int $userid, array $pageinfo): string {
-        global $SESSION;
-
         $now = time();
-        $tokens = isset($SESSION->local_la_tracking) && is_array($SESSION->local_la_tracking) ?
-            $SESSION->local_la_tracking : [];
+        $cache = \cache::make('local_la', 'tracking');
+        $tokens = $cache->get('tokens');
+        $tokens = is_array($tokens) ? $tokens : [];
 
         foreach ($tokens as $key => $state) {
             if (empty($state['created']) || (int) $state['created'] < $now - self::TOKEN_TTL) {
@@ -120,8 +125,8 @@ class tracker {
             array_shift($tokens);
         }
 
-        if (empty($tokens) || !isset($SESSION->local_la_tracking_lastaccounted)) {
-            $SESSION->local_la_tracking_lastaccounted = $now;
+        if (empty($tokens) || $cache->get('lastaccounted') === false) {
+            $cache->set('lastaccounted', $now);
         }
 
         do {
@@ -135,7 +140,7 @@ class tracker {
             'lastheartbeat' => $now,
             'visitcounted' => false,
         ];
-        $SESSION->local_la_tracking = $tokens;
+        $cache->set('tokens', $tokens);
 
         return $token;
     }
@@ -174,26 +179,31 @@ class tracker {
      * @return void
      */
     public static function track(int $userid, string $token, int $trackedseconds): void {
-        global $DB, $SESSION;
+        global $DB;
 
         $now = time();
-        $tokens = isset($SESSION->local_la_tracking) && is_array($SESSION->local_la_tracking) ?
-            $SESSION->local_la_tracking : [];
+        $cache = \cache::make('local_la', 'tracking');
+        $tokens = $cache->get('tokens');
+        $tokens = is_array($tokens) ? $tokens : [];
         $state = $tokens[$token] ?? null;
 
-        if (!is_array($state) || (int) ($state['userid'] ?? 0) !== $userid ||
+        if (
+            !is_array($state) || (int) ($state['userid'] ?? 0) !== $userid ||
                 empty($state['page']['name']) ||
-                (int) ($state['created'] ?? 0) < $now - self::TOKEN_TTL) {
+                (int) ($state['created'] ?? 0) < $now - self::TOKEN_TTL
+        ) {
             unset($tokens[$token]);
-            $SESSION->local_la_tracking = $tokens;
+            $cache->set('tokens', $tokens);
             throw new \invalid_parameter_exception('Invalid or expired page tracking token');
         }
 
         $elapsed = max(0, $now - (int) ($state['lastheartbeat'] ?? $now));
-        if (!isset($SESSION->local_la_tracking_lastaccounted)) {
-            $SESSION->local_la_tracking_lastaccounted = $now;
+        $lastaccounted = $cache->get('lastaccounted');
+        if ($lastaccounted === false) {
+            $lastaccounted = $now;
+            $cache->set('lastaccounted', $now);
         }
-        $sessionelapsed = max(0, $now - (int) $SESSION->local_la_tracking_lastaccounted);
+        $sessionelapsed = max(0, $now - (int) $lastaccounted);
         $trackedseconds = max(0, min(
             self::MAX_TRACKED_SECONDS,
             self::get_interval() * 2,
@@ -207,7 +217,7 @@ class tracker {
         if (!$countvisit && $trackedseconds === 0) {
             $state['lastheartbeat'] = $now;
             $tokens[$token] = $state;
-            $SESSION->local_la_tracking = $tokens;
+            $cache->set('tokens', $tokens);
             return;
         }
 
@@ -255,9 +265,9 @@ class tracker {
         $state['lastheartbeat'] = $now;
         $state['visitcounted'] = true;
         $tokens[$token] = $state;
-        $SESSION->local_la_tracking = $tokens;
+        $cache->set('tokens', $tokens);
         if ($trackedseconds > 0) {
-            $SESSION->local_la_tracking_lastaccounted = $now;
+            $cache->set('lastaccounted', $now);
         }
     }
 
