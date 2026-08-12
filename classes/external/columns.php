@@ -1,9 +1,20 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_la\external;
-
-defined('MOODLE_INTERNAL') || die();
 
 use context_system;
 use external_api;
@@ -252,7 +263,7 @@ class columns extends external_api {
      * @return void
      */
     protected static function sort_section_fields(array &$fields): void {
-        usort($fields, function(array $a, array $b): int {
+        usort($fields, function (array $a, array $b): int {
             if (!empty($a['active']) && empty($b['active'])) {
                 return -1;
             }
@@ -369,6 +380,7 @@ class columns extends external_api {
      * Build a visible name from one field.
      *
      * @param string $field
+     * @param string $entitykey
      * @param \xmldb_field|null $metadata
      * @return string
      */
@@ -793,7 +805,9 @@ class columns extends external_api {
                 $existingkey = self::find_existing_column($reportcolumns, '', '', $expression);
                 $existing = $existingkey !== '' ? ($reportcolumns[$existingkey] ?? []) : [];
                 $type = $existing['type'] ?? self::infer_profile_type((string) $profilefield->datatype);
-                $label = trim((string) $profilefield->name) !== '' ? (string) $profilefield->name : (string) $profilefield->shortname;
+                $label = trim((string) $profilefield->name) !== '' ?
+                    (string) $profilefield->name :
+                    (string) $profilefield->shortname;
 
                 $fields[] = [
                     'name' => (string) $profilefield->shortname,
@@ -1043,8 +1057,10 @@ class columns extends external_api {
                 continue;
             }
 
-            if (!in_array((string) $item['entitykey'], ['calculated_field', 'profile_field', 'cohort_field'], true) &&
-                    !validator::validate_table((string) $item['entitykey'])) {
+            if (
+                !in_array((string) $item['entitykey'], ['calculated_field', 'profile_field', 'cohort_field'], true) &&
+                    !validator::validate_table((string) $item['entitykey'])
+            ) {
                 continue;
             }
 
@@ -1264,8 +1280,10 @@ class columns extends external_api {
         $report = self::get_managed_report_or_fail($params['id']);
         $columns = $report->params['columns'] ?? [];
 
-        if (empty($columns[$params['key']]['filter']) ||
-                ($columns[$params['key']]['filter']['type'] ?? '') !== 'text') {
+        if (
+            empty($columns[$params['key']]['filter']) ||
+                ($columns[$params['key']]['filter']['type'] ?? '') !== 'text'
+        ) {
             throw new \moodle_exception('errorinvalidreportconfig', 'local_la');
         }
 
@@ -1378,7 +1396,7 @@ class columns extends external_api {
                 'Columns',
                 VALUE_DEFAULT,
                 []
-            )
+            ),
         ]);
     }
 

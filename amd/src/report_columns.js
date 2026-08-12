@@ -26,6 +26,8 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/notification', 'core/
     var COLUMN_ITEM_SELECTOR = '[data-column-key]';
     var BUILDER_ITEM_SELECTOR = '[data-region="builder-item"]';
     var BUILDER_SECTION_SELECTOR = '[data-region="builder-section"]';
+    var SAVE_COLUMN_SETTINGS_SELECTOR = '[data-action="save-column-settings"]';
+    var CANCEL_COLUMN_SETTINGS_SELECTOR = '[data-action="cancel-column-settings"]';
 
     var filterBuilderItems = function(input) {
         var field = $(input);
@@ -34,7 +36,9 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/notification', 'core/
 
         modal.find(BUILDER_SECTION_SELECTOR).each(function() {
             var section = $(this);
-            var sectionname = $.trim(String(section.find('[data-region="builder-section-name"]').first().text() || '')).toLowerCase();
+            var sectionname = $.trim(String(
+                section.find('[data-region="builder-section-name"]').first().text() || ''
+            )).toLowerCase();
             var visiblecount = 0;
 
             section.find(BUILDER_ITEM_SELECTOR).each(function() {
@@ -174,67 +178,85 @@ define(['jquery', 'core/ajax', 'core/modal_factory', 'core/notification', 'core/
     };
 
     var openSettingsModal = function(reportid, key) {
-        Str.get_strings([
+        var modal;
+        var strings;
+
+        return Str.get_strings([
             {key: 'settings', component: 'local_la'},
             {key: 'loading', component: 'local_la'},
             {key: 'unabletoloaddata', component: 'local_la'}
-        ]).then(function(strings) {
+        ]).then(function(values) {
+            strings = values;
             return Modal.create({
                 title: strings[0],
                 body: '<div class="text-muted">' + escapeHtml(strings[1]) + '</div>'
-            }).then(function(modal) {
-                modal.show();
+            });
+        }).then(function(createdModal) {
+            modal = createdModal;
+            modal.show();
 
-                Ajax.call([{
-                    methodname: 'local_la_get_column_settings',
+            return Ajax.call([{
+                methodname: 'local_la_get_column_settings',
+                args: {
+                    id: reportid,
+                    key: key
+                }
+            }])[0];
+        }).then(function(response) {
+            modal.setTitle(response.title || strings[0]);
+            modal.setBody(response.html || '');
+            modal.getRoot().find('.modal-dialog').removeClass('modal-sm modal-lg modal-xl');
+            modal.getRoot().find('.modal-dialog').addClass('modal-lg');
+            moveModalFooter(modal.getRoot(), '.la-column-settings-footer');
+
+            modal.getRoot().off('click.laColumnSettingsSave').on(
+                'click.laColumnSettingsSave', SAVE_COLUMN_SETTINGS_SELECTOR, function(event) {
+                var form = modal.getRoot().find('.la-column-settings-form').first();
+
+                event.preventDefault();
+
+                saveAndReload(Ajax.call([{
+                    methodname: 'local_la_save_column_settings',
                     args: {
-                        id: reportid,
-                        key: key
+                        id: Number(form.find('[name="id"]').val() || 0),
+                        key: String(form.find('[name="key"]').val() || ''),
+                        column: {
+                            enabled: form.find(
+                                '[data-region="column-enabled"], [name$="[enabled]"]'
+                            ).prop('checked') ? 1 : 0,
+                            name: String(form.find('[data-region="column-name"], [name$="[name]"]').val() || ''),
+                            type: String(form.find('[data-region="column-type"], [name$="[type]"]').val() || 'text'),
+                            formula: String(form.find(
+                                '[data-region="column-formula"], [name$="[formula]"]'
+                            ).val() || ''),
+                            condition: String(form.find(
+                                '[data-region="column-condition"], [name$="[condition]"]'
+                            ).val() || ''),
+                            visible: form.find(
+                                '[data-region="column-visible"], [name$="[visible]"]'
+                            ).prop('checked') ? 1 : 0,
+                            sortable: form.find(
+                                '[data-region="column-sortable"], [name$="[sortable]"]'
+                            ).prop('checked') ? 1 : 0
+                        }
                     }
-                }])[0].then(function(response) {
-                    modal.setTitle(response.title || strings[0]);
-                    modal.setBody(response.html || '');
-                    modal.getRoot().find('.modal-dialog').removeClass('modal-sm modal-lg modal-xl');
-                    modal.getRoot().find('.modal-dialog').addClass('modal-lg');
-                    moveModalFooter(modal.getRoot(), '.la-column-settings-footer');
+                }])[0]);
+            });
 
-                    modal.getRoot().off('click.laColumnSettingsSave').on('click.laColumnSettingsSave', '[data-action="save-column-settings"]', function(event) {
-                        var form = modal.getRoot().find('.la-column-settings-form').first();
-
-                        event.preventDefault();
-
-                        saveAndReload(Ajax.call([{
-                            methodname: 'local_la_save_column_settings',
-                            args: {
-                                id: Number(form.find('[name="id"]').val() || 0),
-                                key: String(form.find('[name="key"]').val() || ''),
-                                column: {
-                                    enabled: form.find('[data-region="column-enabled"], [name$="[enabled]"]').prop('checked') ? 1 : 0,
-                                    name: String(form.find('[data-region="column-name"], [name$="[name]"]').val() || ''),
-                                    type: String(form.find('[data-region="column-type"], [name$="[type]"]').val() || 'text'),
-                                    formula: String(form.find('[data-region="column-formula"], [name$="[formula]"]').val() || ''),
-                                    condition: String(form.find('[data-region="column-condition"], [name$="[condition]"]').val() || ''),
-                                    visible: form.find('[data-region="column-visible"], [name$="[visible]"]').prop('checked') ? 1 : 0,
-                                    sortable: form.find('[data-region="column-sortable"], [name$="[sortable]"]').prop('checked') ? 1 : 0
-                                }
-                            }
-                        }])[0]);
-                    });
-
-                    modal.getRoot().off('click.laColumnSettingsCancel').on('click.laColumnSettingsCancel', '[data-action="cancel-column-settings"]', function(event) {
-                        event.preventDefault();
-                        modal.hide();
-                    });
-
-                    return modal;
-                }).catch(function(error) {
-                    modal.setBody('<div class="alert alert-danger mb-0">' + escapeHtml(strings[2]) + '</div>');
-                    Notification.exception(error);
+            modal.getRoot().off('click.laColumnSettingsCancel').on(
+                'click.laColumnSettingsCancel', CANCEL_COLUMN_SETTINGS_SELECTOR, function(event) {
+                    event.preventDefault();
+                    modal.hide();
                 });
 
-                return modal;
-            });
-        }).catch(Notification.exception);
+            return modal;
+        }).catch(function(error) {
+            if (modal) {
+                modal.setBody('<div class="alert alert-danger mb-0">' + escapeHtml(strings[2]) + '</div>');
+            }
+            Notification.exception(error);
+            return false;
+        });
     };
 
     var bindColumnControls = function() {

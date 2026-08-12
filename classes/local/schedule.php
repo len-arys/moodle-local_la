@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Report schedule helper.
  *
@@ -47,6 +45,7 @@ class schedule {
         static $limit = null;
 
         if ($limit === null) {
+            // phpcs:ignore moodle.Files.RequireLogin.Missing -- This loads plugin defaults, not Moodle bootstrap.
             $defaults = require(__DIR__ . '/../../config.php');
             $limit = max(1, (int) ($defaults['schedulemaxrecipients'] ?? 100));
         }
@@ -70,6 +69,13 @@ class schedule {
         ) > self::get_max_recipients();
     }
 
+    /**
+     * Build the schedule table query parts.
+     *
+     * @param int $reportid
+     * @param string $search
+     * @return array
+     */
     public static function get_records_sql(int $reportid, string $search = ''): array {
         global $DB, $USER;
 
@@ -92,6 +98,12 @@ class schedule {
         return [$from, $where, $params];
     }
 
+    /**
+     * Require permission to manage a schedule.
+     *
+     * @param int $scheduleid
+     * @return \stdClass
+     */
     public static function require_manage(int $scheduleid): \stdClass {
         global $DB, $USER;
 
@@ -109,14 +121,23 @@ class schedule {
             throw new \moodle_exception('planrequired', 'local_la', '', helper::get_plan_label((string) $report->plan));
         }
 
-        if (!audience::has_access((int) $schedule->reportid) ||
-                (!helper::is_admin() && (int) $schedule->usercreated !== (int) $USER->id)) {
+        if (
+            !audience::has_access((int) $schedule->reportid) ||
+                (!helper::is_admin() && (int) $schedule->usercreated !== (int) $USER->id)
+        ) {
             throw new \moodle_exception('nopermissions', 'error');
         }
 
         return $schedule;
     }
 
+    /**
+     * Build the schedule modal context.
+     *
+     * @param int $reportid
+     * @param int $scheduleid
+     * @return array
+     */
     public static function get_modal_context(int $reportid, int $scheduleid = 0): array {
         global $DB, $USER;
 
@@ -171,21 +192,43 @@ class schedule {
             'time' => [
                 'days' => self::get_number_options(1, 31, (int) userdate($time, '%d')),
                 'months' => self::get_month_options((int) userdate($time, '%m')),
-                'years' => self::get_number_options((int) userdate($time, '%Y'), (int) userdate($time, '%Y') + 10, (int) userdate($time, '%Y')),
+                'years' => self::get_number_options(
+                    (int) userdate($time, '%Y'),
+                    (int) userdate($time, '%Y') + 10,
+                    (int) userdate($time, '%Y')
+                ),
                 'hours' => self::get_number_options(0, 23, (int) userdate($time, '%H'), true),
                 'minutes' => self::get_number_options(0, 59, (int) userdate($time, '%M'), true),
             ],
             'formats' => self::get_format_options($record ? (string) $record->format : 'csv'),
-            'recurrences' => self::get_options(['none', 'daily', 'weekly', 'monthly'], 'recurrence', $record ? (string) $record->recurrence : 'none'),
+            'recurrences' => self::get_options(
+                ['none', 'daily', 'weekly', 'monthly'],
+                'recurrence',
+                $record ? (string) $record->recurrence : 'none'
+            ),
             'emptyoptions' => [
-                ['value' => 'send', 'name' => get_string('sendemptyreport', 'local_la'), 'selected' => !$record || $record->emptyreport === 'send'],
-                ['value' => 'skip', 'name' => get_string('donotsendemptyreport', 'local_la'), 'selected' => $record && $record->emptyreport === 'skip'],
+                [
+                    'value' => 'send',
+                    'name' => get_string('sendemptyreport', 'local_la'),
+                    'selected' => !$record || $record->emptyreport === 'send',
+                ],
+                [
+                    'value' => 'skip',
+                    'name' => get_string('donotsendemptyreport', 'local_la'),
+                    'selected' => $record && $record->emptyreport === 'skip',
+                ],
             ],
             'audiences' => $audiences,
             'hasaudiences' => !empty($audiences),
         ];
     }
 
+    /**
+     * Save a report schedule.
+     *
+     * @param array $data
+     * @return int
+     */
     public static function save(array $data): int {
         global $DB, $USER;
 
@@ -255,6 +298,13 @@ class schedule {
         return (int) $DB->insert_record('local_la_report_schedule', $record);
     }
 
+    /**
+     * Change a schedule status.
+     *
+     * @param int $scheduleid
+     * @param int $status
+     * @return \stdClass
+     */
     public static function toggle(int $scheduleid, int $status): \stdClass {
         global $DB, $USER;
 
@@ -286,6 +336,12 @@ class schedule {
         return $schedule;
     }
 
+    /**
+     * Send a scheduled report.
+     *
+     * @param int $scheduleid
+     * @return \stdClass
+     */
     public static function send(int $scheduleid): \stdClass {
         global $DB, $USER;
 
@@ -384,8 +440,10 @@ class schedule {
      * @return bool
      */
     public static function is_due(\stdClass $schedule, int $now): bool {
-        if (empty($schedule->status) || (int) $schedule->timestart > $now ||
-                (!empty($schedule->timenextattempt) && (int) $schedule->timenextattempt > $now)) {
+        if (
+            empty($schedule->status) || (int) $schedule->timestart > $now ||
+                (!empty($schedule->timenextattempt) && (int) $schedule->timenextattempt > $now)
+        ) {
             return false;
         }
 
@@ -420,8 +478,10 @@ class schedule {
         if (!$report || empty($report->userid)) {
             throw new \moodle_exception('errorinvalidreportconfig', 'local_la');
         }
-        if (!helper::has_plan((string) $report->plan) ||
-                !audience::has_access((int) $report->id, (int) $creator->id)) {
+        if (
+            !helper::has_plan((string) $report->plan) ||
+                !audience::has_access((int) $report->id, (int) $creator->id)
+        ) {
             throw new \moodle_exception('nopermissions', 'error');
         }
         if (!self::is_enabled_format((string) $schedule->format)) {
@@ -449,15 +509,17 @@ class schedule {
         $sent = 0;
 
         foreach ($recipients as $recipient) {
-            if (email_to_user(
-                $recipient,
-                $sender,
-                (string) $schedule->subject,
-                $messagetext,
-                $messagehtml,
-                $attachment['path'],
-                $attachment['filename']
-            )) {
+            if (
+                email_to_user(
+                    $recipient,
+                    $sender,
+                    (string) $schedule->subject,
+                    $messagetext,
+                    $messagehtml,
+                    $attachment['path'],
+                    $attachment['filename']
+                )
+            ) {
                 $sent++;
             }
         }
@@ -569,12 +631,14 @@ class schedule {
     protected static function require_active_report_relation(int $reportid, int $userid): void {
         global $DB;
 
-        if (!$DB->record_exists('local_la_report', ['id' => $reportid]) ||
+        if (
+            !$DB->record_exists('local_la_report', ['id' => $reportid]) ||
                 !$DB->record_exists('local_la_report_users', [
                     'reportid' => $reportid,
                     'userid' => $userid,
                     'status' => 1,
-                ])) {
+                ])
+        ) {
             throw new \moodle_exception('errorinvalidreportconfig', 'local_la');
         }
     }
@@ -705,7 +769,7 @@ class schedule {
                 (string) $schedule->format,
                 $exportclass->format_data($table->headers),
                 $table->rawdata,
-                static function(\stdClass $record, bool $supportshtml) use ($table, $exportclass): array {
+                static function (\stdClass $record, bool $supportshtml) use ($table, $exportclass): array {
                     $record = $table->format_row($record);
                     return $supportshtml ? $record : $exportclass->format_data($record);
                 }
@@ -797,6 +861,12 @@ class schedule {
         return isset($plugins[$format]) && $plugins[$format]->is_enabled();
     }
 
+    /**
+     * Delete a report schedule.
+     *
+     * @param int $scheduleid
+     * @return \stdClass
+     */
     public static function delete(int $scheduleid): \stdClass {
         global $DB;
 
@@ -807,8 +877,16 @@ class schedule {
         return $schedule;
     }
 
+    /**
+     * Build language-string options.
+     *
+     * @param array $keys
+     * @param string $prefix
+     * @param string $selected
+     * @return array
+     */
     protected static function get_options(array $keys, string $prefix, string $selected = ''): array {
-        return array_map(function(string $key) use ($prefix, $selected): array {
+        return array_map(function (string $key) use ($prefix, $selected): array {
             return [
                 'value' => $key,
                 'name' => get_string($prefix . $key, 'local_la'),
@@ -817,6 +895,12 @@ class schedule {
         }, $keys);
     }
 
+    /**
+     * Build export format options.
+     *
+     * @param string $selected
+     * @return array
+     */
     protected static function get_format_options(string $selected): array {
         $options = [];
 
@@ -833,6 +917,15 @@ class schedule {
         return $options;
     }
 
+    /**
+     * Build numeric options.
+     *
+     * @param int $from
+     * @param int $to
+     * @param int $selected
+     * @param bool $pad
+     * @return array
+     */
     protected static function get_number_options(int $from, int $to, int $selected, bool $pad = false): array {
         $options = [];
 
@@ -847,6 +940,12 @@ class schedule {
         return $options;
     }
 
+    /**
+     * Build month options.
+     *
+     * @param int $selected
+     * @return array
+     */
     protected static function get_month_options(int $selected): array {
         $options = [];
 
@@ -860,5 +959,4 @@ class schedule {
 
         return $options;
     }
-
 }

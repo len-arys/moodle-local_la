@@ -16,8 +16,6 @@
 
 namespace local_la\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use external_api;
 use external_function_parameters;

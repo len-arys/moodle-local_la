@@ -21,11 +21,11 @@
  * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once('../../config.php');
-
 use local_la\local\helper;
 use local_la\local\url;
 use local_la\output\library as library_page;
+
+require_once('../../config.php');
 
 $tab = optional_param('tab', 'reports', PARAM_ALPHA);
 $page = optional_param('page', 0, PARAM_INT);

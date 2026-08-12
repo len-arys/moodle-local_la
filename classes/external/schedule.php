@@ -16,8 +16,6 @@
 
 namespace local_la\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use external_api;
 use external_function_parameters;
@@ -37,6 +35,11 @@ use local_la\local\schedule as schedule_helper;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class schedule extends external_api {
+    /**
+     * Describe schedule modal parameters.
+     *
+     * @return external_function_parameters
+     */
     public static function modal_parameters(): external_function_parameters {
         return new external_function_parameters([
             'reportid' => new external_value(PARAM_INT, 'Report ID'),
@@ -44,6 +47,13 @@ class schedule extends external_api {
         ]);
     }
 
+    /**
+     * Load the schedule modal.
+     *
+     * @param int $reportid
+     * @param int $scheduleid
+     * @return array
+     */
     public static function modal(int $reportid, int $scheduleid = 0): array {
         global $PAGE;
 
@@ -64,7 +74,9 @@ class schedule extends external_api {
         $editor = new editor();
 
         return [
-            'title' => $params['scheduleid'] ? get_string('editscheduledetails', 'local_la') : get_string('newschedule', 'local_la'),
+            'title' => $params['scheduleid'] ?
+                get_string('editscheduledetails', 'local_la') :
+                get_string('newschedule', 'local_la'),
             'html' => $renderer->render_from_template(
                 'local_la/modal/schedule',
                 schedule_helper::get_modal_context((int) $params['reportid'], (int) $params['scheduleid'])
@@ -88,6 +100,11 @@ class schedule extends external_api {
         ];
     }
 
+    /**
+     * Describe schedule save parameters.
+     *
+     * @return external_function_parameters
+     */
     public static function save_parameters(): external_function_parameters {
         return new external_function_parameters([
             'reportid' => new external_value(PARAM_INT, 'Report ID'),
@@ -108,6 +125,21 @@ class schedule extends external_api {
         ]);
     }
 
+    /**
+     * Save a report schedule.
+     *
+     * @param int $reportid
+     * @param string $name
+     * @param string $format
+     * @param int $timestart
+     * @param string $recurrence
+     * @param string $subject
+     * @param string $body
+     * @param array $audiences
+     * @param string $emptyreport
+     * @param int $scheduleid
+     * @return array
+     */
     public static function save(
         int $reportid,
         string $name,
@@ -153,12 +185,23 @@ class schedule extends external_api {
         return ['success' => true];
     }
 
+    /**
+     * Describe schedule send parameters.
+     *
+     * @return external_function_parameters
+     */
     public static function send_parameters(): external_function_parameters {
         return new external_function_parameters([
             'scheduleid' => new external_value(PARAM_INT, 'Schedule ID'),
         ]);
     }
 
+    /**
+     * Send a report schedule now.
+     *
+     * @param int $scheduleid
+     * @return array
+     */
     public static function send(int $scheduleid): array {
         $params = self::validate_parameters(self::send_parameters(), ['scheduleid' => $scheduleid]);
         self::validate_context(context_system::instance());
@@ -176,10 +219,21 @@ class schedule extends external_api {
         return ['success' => true];
     }
 
+    /**
+     * Describe schedule deletion parameters.
+     *
+     * @return external_function_parameters
+     */
     public static function delete_parameters(): external_function_parameters {
         return self::send_parameters();
     }
 
+    /**
+     * Delete a report schedule.
+     *
+     * @param int $scheduleid
+     * @return array
+     */
     public static function delete(int $scheduleid): array {
         $params = self::validate_parameters(self::delete_parameters(), ['scheduleid' => $scheduleid]);
         self::validate_context(context_system::instance());
@@ -194,6 +248,11 @@ class schedule extends external_api {
         return ['success' => true];
     }
 
+    /**
+     * Describe schedule toggle parameters.
+     *
+     * @return external_function_parameters
+     */
     public static function toggle_parameters(): external_function_parameters {
         return new external_function_parameters([
             'scheduleid' => new external_value(PARAM_INT, 'Schedule ID'),
@@ -201,6 +260,13 @@ class schedule extends external_api {
         ]);
     }
 
+    /**
+     * Change a schedule status.
+     *
+     * @param int $scheduleid
+     * @param int $status
+     * @return array
+     */
     public static function toggle(int $scheduleid, int $status): array {
         $params = self::validate_parameters(self::toggle_parameters(), [
             'scheduleid' => $scheduleid,
@@ -219,6 +285,11 @@ class schedule extends external_api {
         return ['success' => true];
     }
 
+    /**
+     * Describe schedule modal results.
+     *
+     * @return external_single_structure
+     */
     public static function modal_returns(): external_single_structure {
         return new external_single_structure([
             'title' => new external_value(PARAM_TEXT, 'Modal title'),
@@ -227,18 +298,38 @@ class schedule extends external_api {
         ]);
     }
 
+    /**
+     * Describe schedule save results.
+     *
+     * @return external_single_structure
+     */
     public static function save_returns(): external_single_structure {
         return new external_single_structure(['success' => new external_value(PARAM_BOOL, 'Success')]);
     }
 
+    /**
+     * Describe schedule toggle results.
+     *
+     * @return external_single_structure
+     */
     public static function toggle_returns(): external_single_structure {
         return self::save_returns();
     }
 
+    /**
+     * Describe schedule send results.
+     *
+     * @return external_single_structure
+     */
     public static function send_returns(): external_single_structure {
         return self::save_returns();
     }
 
+    /**
+     * Describe schedule deletion results.
+     *
+     * @return external_single_structure
+     */
     public static function delete_returns(): external_single_structure {
         return self::save_returns();
     }

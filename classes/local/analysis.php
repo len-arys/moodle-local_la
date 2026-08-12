@@ -16,8 +16,6 @@
 
 namespace local_la\local;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Builds lightweight analyst summaries for selected report rows.
  *
@@ -387,7 +385,7 @@ class analysis {
         $low = $q1 - (1.5 * $iqr);
         $high = $q3 + (1.5 * $iqr);
 
-        return array_filter($values, static function(float $value) use ($low, $high): bool {
+        return array_filter($values, static function (float $value) use ($low, $high): bool {
             return $value < $low || $value > $high;
         });
     }
@@ -464,21 +462,30 @@ class analysis {
      * @return string
      */
     protected static function summary_text(array $profile, ?array $dominant, array $stats): string {
-        $parts = [get_string('summaryprofile', 'local_la',
-            (object) ['rows' => $profile['rowcount'], 'columns' => $profile['columncount']])];
+        $parts = [get_string(
+            'summaryprofile',
+            'local_la',
+            (object) ['rows' => $profile['rowcount'], 'columns' => $profile['columncount']]
+        )];
 
         if ($dominant !== null && $dominant['count'] > 1) {
-            $parts[] = get_string('summarydominantvalue', 'local_la',
-                (object) ['value' => $dominant['value'], 'count' => $dominant['count']]);
+            $parts[] = get_string(
+                'summarydominantvalue',
+                'local_la',
+                (object) ['value' => $dominant['value'], 'count' => $dominant['count']]
+            );
         }
 
         foreach (['progress', 'grade', 'time', 'visits'] as $semantic) {
             if (isset($stats[$semantic])) {
-                $parts[] = get_string('summaryaveragevalue', 'local_la',
+                $parts[] = get_string(
+                    'summaryaveragevalue',
+                    'local_la',
                     (object) [
                         'label' => get_string('avg' . $semantic, 'local_la'),
                         'value' => self::format_measure($stats[$semantic]['average'], $semantic),
-                    ]);
+                    ]
+                );
             }
         }
 
@@ -503,8 +510,11 @@ class analysis {
         $outliers = self::outlier_count($stats);
 
         if ($profile['missingvalues'] > 0 || $profile['duplicaterows'] > 0) {
-            $items[] = get_string('focusdataquality', 'local_la',
-                (object) ['missing' => $profile['missingvalues'], 'duplicates' => $profile['duplicaterows']]);
+            $items[] = get_string(
+                'focusdataquality',
+                'local_la',
+                (object) ['missing' => $profile['missingvalues'], 'duplicates' => $profile['duplicaterows']]
+            );
         }
         if ($lowprogress > 0) {
             $items[] = get_string('focuslowprogress', 'local_la', $lowprogress);
@@ -546,8 +556,11 @@ class analysis {
         $relationship = self::relationship_signal($stats);
 
         if ($dominant !== null && $dominant['count'] > 1) {
-            $signals[] = self::signal('concentration', 'info', get_string('signalconcentration', 'local_la',
-                (object) ['count' => $dominant['count'], 'label' => $dominant['value']]));
+            $signals[] = self::signal('concentration', 'info', get_string(
+                'signalconcentration',
+                'local_la',
+                (object) ['count' => $dominant['count'], 'label' => $dominant['value']]
+            ));
         }
         if ($inactive > 0) {
             $signals[] = self::signal('inactivityrisk', 'warning', get_string('signalinactivityrisk', 'local_la', $inactive));
@@ -559,12 +572,18 @@ class analysis {
             $signals[] = self::signal('performancegap', 'danger', get_string('signalperformancegap', 'local_la', $lowgrade));
         }
         if ($effortwithoutoutcome > 0) {
-            $signals[] = self::signal('effortwithoutoutcome', 'danger',
-                get_string('signaleffortwithoutoutcome', 'local_la', $effortwithoutoutcome));
+            $signals[] = self::signal(
+                'effortwithoutoutcome',
+                'danger',
+                get_string('signaleffortwithoutoutcome', 'local_la', $effortwithoutoutcome)
+            );
         }
         if ($close > 0) {
-            $signals[] = self::signal('completionopportunity', 'success',
-                get_string('signalcompletionopportunity', 'local_la', $close));
+            $signals[] = self::signal(
+                'completionopportunity',
+                'success',
+                get_string('signalcompletionopportunity', 'local_la', $close)
+            );
         }
         if ($outliers !== null) {
             $signals[] = self::signal('outlier', 'neutral', get_string('signaloutlier', 'local_la', $outliers));
@@ -573,8 +592,11 @@ class analysis {
             $signals[] = self::signal('relationship', 'info', get_string('signalrelationship', 'local_la', $relationship));
         }
         if ($profile['missingvalues'] > 0 || $profile['duplicaterows'] > 0) {
-            $signals[] = self::signal('dataquality', 'neutral', get_string('signaldataquality', 'local_la',
-                (object) ['missing' => $profile['missingvalues'], 'duplicates' => $profile['duplicaterows']]));
+            $signals[] = self::signal('dataquality', 'neutral', get_string(
+                'signaldataquality',
+                'local_la',
+                (object) ['missing' => $profile['missingvalues'], 'duplicates' => $profile['duplicaterows']]
+            ));
         }
 
         return array_slice($signals ?: [self::signal('limitedsignal', 'neutral', get_string('signallimited', 'local_la'))], 0, 6);
@@ -638,7 +660,7 @@ class analysis {
      * @return int
      */
     protected static function count_below(array $values, float $threshold): int {
-        return count(array_filter($values, static function(float $value) use ($threshold): bool {
+        return count(array_filter($values, static function (float $value) use ($threshold): bool {
             return $value < $threshold;
         }));
     }
@@ -652,7 +674,7 @@ class analysis {
      * @return int
      */
     protected static function count_between(array $values, float $min, float $max): int {
-        return count(array_filter($values, static function(float $value) use ($min, $max): bool {
+        return count(array_filter($values, static function (float $value) use ($min, $max): bool {
             return $value >= $min && $value <= $max;
         }));
     }

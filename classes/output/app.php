@@ -16,8 +16,6 @@
 
 namespace local_la\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\repository;
 use local_la\local\app as app_helper;
 use local_la\local\url;
@@ -77,7 +75,7 @@ class app implements renderable, templatable {
         $loadingtime = microtime(true) - $start;
 
         return [
-            'header' => $output->render_from_template('local_la/header', renderer::get_header_context('apps')),
+            'header' => $output->render_from_template('local_la/header', $output->get_header_context('apps')),
             'head' => $appcontext ? $output->render_from_template('local_la/components/app_head', [
                 'homeurl' => url::home(),
                 'breadcrumbtitle' => get_string('apps', 'local_la'),

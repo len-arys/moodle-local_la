@@ -16,8 +16,6 @@
 
 namespace local_la\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use renderer_base;
 use renderable;
 use templatable;
@@ -123,9 +121,11 @@ class library implements renderable, templatable {
         }
 
         return $tabcontext + [
-            'header' => $output->render_from_template('local_la/header', renderer::get_header_context('library')),
-            'head' => $output->render_from_template('local_la/components/general_head',
-                renderer::get_general_head_context('library', $this->get_tabs())),
+            'header' => $output->render_from_template('local_la/header', $output->get_header_context('library')),
+            'head' => $output->render_from_template(
+                'local_la/components/general_head',
+                renderer::get_general_head_context('library', $this->get_tabs())
+            ),
             'can_manage' => helper::is_admin(),
             'tab' => $this->tab,
         ];

@@ -16,8 +16,6 @@
 
 namespace local_la\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\calendar;
 use local_la\local\filters;
 use local_la\local\helper;
@@ -168,6 +166,7 @@ class report implements renderable, templatable {
     /**
      * Build report metric values.
      *
+     * @param float $loadingtime
      * @return array
      */
     protected function get_metric_values(float $loadingtime = 0): array {
@@ -311,6 +310,14 @@ class report implements renderable, templatable {
         return $options;
     }
 
+    /**
+     * Build one report filter item.
+     *
+     * @param string $key
+     * @param array $column
+     * @param array $filter
+     * @return array
+     */
     protected function get_filter_item(string $key, array $column, array $filter): array {
         $definition = $column['filter'] ?? [];
         $type = (string) ($definition['type'] ?? 'text');
@@ -402,7 +409,7 @@ class report implements renderable, templatable {
         $items = [];
         $columns = $this->report->params['columns'] ?? [];
 
-        uasort($columns, function(array $left, array $right): int {
+        uasort($columns, function (array $left, array $right): int {
             return ((int) ($left['order'] ?? 9999)) <=> ((int) ($right['order'] ?? 9999));
         });
 
@@ -534,7 +541,7 @@ class report implements renderable, templatable {
 
         $canmanage = helper::is_admin();
         $context = [
-            'header' => $output->render_from_template('local_la/header', renderer::get_header_context('reports')),
+            'header' => $output->render_from_template('local_la/header', $output->get_header_context('reports')),
             'head' => $output->render_from_template('local_la/components/report_head', [
                 'homeurl' => url::home(),
                 'breadcrumbtitle' => get_string('reports'),

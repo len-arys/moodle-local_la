@@ -544,6 +544,8 @@ define([
             }
 
             const context = getPromptContext();
+            const ajaxurl = Config.wwwroot + '/lib/ajax/service.php?sesskey=' + Config.sesskey +
+                '&info=local_la_generate_report';
             const emptyhistory = document.getElementById('la-ai-report-empty-history');
             if (emptyhistory) {
                 emptyhistory.remove();
@@ -556,7 +558,7 @@ define([
             loadingmessage = appendMessage('loading', form.dataset.loadingText);
             setPending(true);
 
-            request = $.ajax(Config.wwwroot + '/lib/ajax/service.php?sesskey=' + Config.sesskey + '&info=local_la_generate_report', {
+            request = $.ajax(ajaxurl, {
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',
@@ -666,7 +668,9 @@ define([
             });
         }
 
-        form.querySelectorAll('input[name="la_ai_report_context"], input[name="la_ai_table_context[]"], input[name="la_ai_table_mode"]').forEach(function(input) {
+        form.querySelectorAll(
+            'input[name="la_ai_report_context"], input[name="la_ai_table_context[]"], input[name="la_ai_table_mode"]'
+        ).forEach(function(input) {
             input.addEventListener('change', renderContextChips);
         });
         renderContextChips();

@@ -16,8 +16,6 @@
 
 namespace local_la\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use external_api;
 use external_function_parameters;
@@ -78,7 +76,13 @@ class logs extends external_api {
             'title' => get_string('details'),
             'html' => $renderer->render_from_template('local_la/modal/log_details', [
                 'items' => [
-                    ['label' => get_string('time', 'local_la'), 'value' => userdate((int) $log->timecreated, get_string('strftimedatetime', 'langconfig'))],
+                    [
+                        'label' => get_string('time', 'local_la'),
+                        'value' => userdate(
+                            (int) $log->timecreated,
+                            get_string('strftimedatetime', 'langconfig')
+                        ),
+                    ],
                     ['label' => get_string('user'), 'value' => trim(fullname($log))],
                     ['label' => get_string('email'), 'value' => (string) ($log->email ?? '')],
                     ['label' => get_string('action'), 'value' => (string) $log->action],

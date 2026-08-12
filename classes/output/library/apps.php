@@ -16,8 +16,6 @@
 
 namespace local_la\output\library;
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_la\local\helper;
 use local_la\local\repository;
 use local_la\local\url;

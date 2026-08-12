@@ -82,10 +82,10 @@
     {{#fullreporturl}}
     <div class="d-flex justify-content-between align-items-center gap-3 mt-3">
         <div class="d-flex align-items-center gap-2">
-            <div class="form-label small text-muted mb-0">Rows</div>
+            <div class="form-label small text-muted mb-0">{{#str}}rows, local_la{{/str}}</div>
             <select class="form-select form-select-sm w-auto" data-action="change-report-preview-limit">
                 <option value="100" selected>100</option>
-                <option value="-1">All</option>
+                <option value="-1">{{#str}}all, core{{/str}}</option>
             </select>
         </div>
         <a href="{{fullreporturl}}" class="btn btn-secondary" data-action="open-full-report">

@@ -16,8 +16,6 @@
 
 namespace local_la\output;
 
-defined('MOODLE_INTERNAL') || die();
-
 use renderer_base;
 use renderable;
 use templatable;
@@ -97,7 +95,7 @@ class home implements renderable, templatable {
         }
 
         return [
-            'header' => $output->render_from_template('local_la/header', renderer::get_header_context('home')),
+            'header' => $output->render_from_template('local_la/header', $output->get_header_context('home')),
             'libraryurl' => url::library(),
             'reports' => $reports,
             'has_reports' => !empty($reports),
@@ -292,5 +290,4 @@ class home implements renderable, templatable {
 
         return array_values(array_filter($defaults, static fn($table) => isset($available[$table])));
     }
-
 }

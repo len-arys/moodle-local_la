@@ -16,8 +16,6 @@
 
 namespace local_la\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use external_api;
 use external_function_parameters;
@@ -116,7 +114,9 @@ class agent extends external_api {
 
         return [
             'success' => $error === '',
-            'source' => helper::is_api_mode() ? get_string('pluginapi_auto', 'local_la') : get_string('pluginapi_manual', 'local_la'),
+            'source' => helper::is_api_mode() ?
+                get_string('pluginapi_auto', 'local_la') :
+                get_string('pluginapi_manual', 'local_la'),
             'status' => (string) ($license['status'] ?? ''),
             'plan' => (string) ($license['planlabel'] ?? ''),
             'message' => $error === '' ? '' : get_string('agentlicensefailed', 'local_la'),

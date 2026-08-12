@@ -83,6 +83,9 @@
         "reportid": 1,
         "key": "course",
         "name": "Course",
+        "operator_name": "filter_course_operator",
+        "value_name": "filter_course_value",
+        "value": "",
         "operators": [
             {
                 "value": "is",
@@ -93,7 +96,7 @@
         "is_text": true
     }
 }}
-<div class="filter pb-3 mb-3" data-filter-for="{{name}}">
+<div class="filter" data-filter-for="{{name}}">
     <div class="filter-header d-flex align-items-start justify-content-between">
         <div class="filter-name text-truncate">{{name}}</div>
         {{#can_search_default}}

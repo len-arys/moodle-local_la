@@ -16,8 +16,6 @@
 
 namespace local_la\external;
 
-defined('MOODLE_INTERNAL') || die();
-
 use context_system;
 use external_api;
 use external_function_parameters;
@@ -35,6 +33,11 @@ use local_la\local\logger;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class audience extends external_api {
+    /**
+     * Describe audience save parameters.
+     *
+     * @return external_function_parameters
+     */
     public static function save_parameters(): external_function_parameters {
         return new external_function_parameters([
             'reportid' => new external_value(PARAM_INT, 'Report ID'),
@@ -48,6 +51,14 @@ class audience extends external_api {
         ]);
     }
 
+    /**
+     * Save a report audience.
+     *
+     * @param int $reportid
+     * @param string $type
+     * @param array $instanceids
+     * @return array
+     */
     public static function save(int $reportid, string $type, array $instanceids = []): array {
         $params = self::validate_parameters(self::save_parameters(), [
             'reportid' => $reportid,
@@ -70,6 +81,11 @@ class audience extends external_api {
         return ['success' => true];
     }
 
+    /**
+     * Describe audience deletion parameters.
+     *
+     * @return external_function_parameters
+     */
     public static function delete_parameters(): external_function_parameters {
         return new external_function_parameters([
             'reportid' => new external_value(PARAM_INT, 'Report ID'),
@@ -77,6 +93,13 @@ class audience extends external_api {
         ]);
     }
 
+    /**
+     * Delete a report audience.
+     *
+     * @param int $reportid
+     * @param string $type
+     * @return array
+     */
     public static function delete(int $reportid, string $type): array {
         $params = self::validate_parameters(self::delete_parameters(), [
             'reportid' => $reportid,
@@ -97,12 +120,22 @@ class audience extends external_api {
         return ['success' => true];
     }
 
+    /**
+     * Describe audience deletion results.
+     *
+     * @return external_single_structure
+     */
     public static function delete_returns(): external_single_structure {
         return new external_single_structure([
             'success' => new external_value(PARAM_BOOL, 'Success'),
         ]);
     }
 
+    /**
+     * Describe audience save results.
+     *
+     * @return external_single_structure
+     */
     public static function save_returns(): external_single_structure {
         return new external_single_structure([
             'success' => new external_value(PARAM_BOOL, 'Success'),

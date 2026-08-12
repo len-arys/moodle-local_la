@@ -21,11 +21,11 @@
  * @copyright  2026 Lenarys, LLC
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once('../../config.php');
-
 use local_la\local\url;
 use local_la\local\helper;
 use local_la\output\home as home_page;
+
+require_once('../../config.php');
 
 require_login();
 if (!helper::is_admin()) {
@@ -38,7 +38,6 @@ $PAGE->set_pagelayout('popup');
 $PAGE->set_title(get_string('home'));
 $PAGE->set_heading(get_string('pluginname', 'local_la'));
 $PAGE->set_url(url::home_url());
-$PAGE->requires->css('/local/la/styles.css');
 $PAGE->requires->js_call_amd('local_la/home', 'init');
 
 $renderer = $PAGE->get_renderer("local_la");

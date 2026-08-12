@@ -140,6 +140,7 @@ define(['jquery', 'core/ajax', 'core/form-autocomplete', 'core/notification'], f
                 form.addClass('d-none');
                 setMenuItemDisabled(type, false);
                 updateEmptyState();
+                return true;
             }).catch(Notification.exception);
             return;
         }
@@ -166,6 +167,7 @@ define(['jquery', 'core/ajax', 'core/form-autocomplete', 'core/notification'], f
             }
         }])[0].then(function() {
             window.location.reload();
+            return true;
         }).catch(Notification.exception);
     };
 
