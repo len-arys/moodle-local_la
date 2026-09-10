@@ -52,6 +52,8 @@ Moodle Marketplace installations should use the plugin release explicitly marked
 
 ### From a ZIP package
 
+To try the plugin before purchasing, select **Free** in Moodle Marketplace and download the plugin. Marketplace provides the free download; the Lenarys API activates the trial after installation.
+
 1. Confirm that the package supports the site's Moodle version using the compatibility table above.
 2. In Moodle, go to **Site administration > Plugins > Install plugins**.
 3. Upload the plugin ZIP package and select **Local plugin** if Moodle asks for the plugin type.
@@ -81,6 +83,8 @@ Go to **Site administration > Plugins > Local plugins > Lenarys Analytics** and:
 4. Review report audiences and the users who hold management access.
 5. Confirm that Moodle cron and outbound email are working before enabling scheduled deliveries.
 
+For the Free download, the Billing Admin then opens the plugin's **Preferences > General** page. With API mode configured, this page syncs with the Lenarys API and saves the generated `free` license and its 30-day trial state. No purchase or emailed license is needed to start this trial.
+
 ## Capabilities and access
 
 - `local/la:manage` allows report management. It is granted by default to managers.
@@ -91,7 +95,17 @@ Scheduled reports are sent only to eligible, email-enabled audience members. An 
 
 ## Licensing and external services
 
-Access to the Lenarys Marketplace and licensed features requires an active subscription purchased and managed through [Moodle Marketplace](https://marketplace.moodle.com/plugins/4002). The plugin does not provide a checkout flow. Contact [Lenarys support](https://lenarys.com/support) for manual licensing assistance.
+**Free** is the Moodle Marketplace option for downloading and installing the plugin before purchasing. It is not a Marketplace-managed trial of Core. After installation, opening **Preferences > General** syncs with the Lenarys API: the plugin sends an empty license with the Moodle site URL, and the API creates or reuses the site's `free` license. A new `free` license provides a 30-day trial, displayed in Moodle as **Free Trial**. The plugin saves the generated key and the trial end returned by the API; downloading the ZIP does not start the trial.
+
+When the trial expires, licensed access ends and the user must purchase a paid plan to continue. Reopening Preferences or syncing again does not restart an expired trial.
+
+Core, Pro (Edu), and Max (ORG) are paid plans purchased and managed through [Moodle Marketplace](https://marketplace.moodle.com/plugins/4002). Users can purchase before installing or after trying Free. Stripe notifies the Lenarys API of the purchase; the API creates the paid license and emails it to the buyer email address.
+
+**Preferences > Billing** provides Marketplace and support links only. It does not save licenses or call the API. The plugin currently has no form for entering an emailed paid license.
+
+Opening **Preferences > General** checks the saved license with the site's Moodle URL and caches the returned plan, status, dates, features, and plugin information. An HTTP **401** means the license is invalid or a paid key is required; an HTTP **409** means it is already bound to another site. Failed checks retain the saved key for retry and clear cached entitlements. Reopening General retries the check.
+
+Access requires an active or trialing status and a future `plan_time`, and also respects the returned trial end or next payment date. Paid plans without a usable plan time remain unavailable until the API receives the billing-period end. The plugin does not provide Checkout or Customer Portal actions or use the website's pricing-feed endpoint. Update availability comes from the nested `plugin` object and requires a newer published version.
 
 In API mode, the plugin communicates with the API endpoint configured by the site administrator. These requests can include:
 

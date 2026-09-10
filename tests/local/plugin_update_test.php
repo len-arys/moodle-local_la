@@ -65,6 +65,30 @@ final class plugin_update_test extends advanced_testcase {
         }
     }
 
+    /** Removed top-level update fields cannot override nested published metadata. */
+    public function test_legacy_fields_are_ignored_and_cached_update_is_recomputed(): void {
+        $payload = $this->get_payload([
+            'version' => '2026080303',
+            'updates' => ['Nested notes'],
+            'released' => '2026-08-04T15:00:00Z',
+            'status' => 'published',
+        ]);
+        $payload['updates'] = ['Obsolete notes'];
+        $payload['has_update'] = false;
+        api::apply_license_payload($payload);
+        $this->assertTrue(helper::get_license()['hasupdate']);
+        $this->assertSame(['Nested notes'], helper::get_license()['updates']);
+
+        set_config('version', 2026080303, 'local_la');
+        $this->assertFalse(helper::get_license()['hasupdate']);
+
+        unset($payload['plugin']);
+        $payload['has_update'] = true;
+        api::apply_license_payload($payload);
+        $this->assertFalse(helper::get_license()['hasupdate']);
+        $this->assertSame([], helper::get_license()['updates']);
+    }
+
     /**
      * Preferences includes versions and the localized release date.
      */

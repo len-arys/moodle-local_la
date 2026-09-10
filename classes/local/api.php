@@ -262,17 +262,13 @@ class api {
      * @return array
      */
     public static function apply_license_payload(array $response): array {
-        if (empty($response['license'])) {
+        if (!empty($response['error']) || empty($response['license'])) {
             return self::clear_license((string) ($response['error'] ?? get_string('licensecheckfailed', 'local_la')));
         }
 
         $plugin = is_array($response['plugin'] ?? null) ? $response['plugin'] : [];
-        $pluginversion = trim((string) ($plugin['version'] ?? ''));
-        $hasupdate = ($plugin['status'] ?? '') === 'published' && ctype_digit($pluginversion) &&
-            (int) $pluginversion > (int) get_config('local_la', 'version');
-
         set_config('license', (string) $response['license'], 'local_la');
-        set_config('licensestatus', (string) ($response['status'] ?? 'active'), 'local_la');
+        set_config('licensestatus', (string) ($response['status'] ?? 'inactive'), 'local_la');
         set_config('licenseplans', self::encode_plans($response['plans'] ?? []), 'local_la');
         $plan = (string) ($response['plan'] ?? helper::DP);
         set_config('licenseplan', helper::normalize_plan($plan), 'local_la');
@@ -282,31 +278,30 @@ class api {
         set_config('licensefeatures', self::encode_features($response['features'] ?? []), 'local_la');
         set_config('aiprompt', (string) ($response['ai_promt'] ?? $response['ai_prompt'] ?? ''), 'local_la');
         set_config('aireportsample', self::encode_ai_report_sample($response['ai_report'] ?? null), 'local_la');
-
-        return array_merge(helper::get_license(), [
-            'planname' => (string) ($response['plan_name'] ?? ''),
+        set_config('licenseinfo', json_encode([
+            'planname' => $plan === 'free' ? get_string('plan_free', 'local_la') : (string) ($response['plan_name'] ?? ''),
             'plandescription' => (string) ($response['plan_description'] ?? ''),
             'price' => (string) ($response['price'] ?? ''),
             'currency' => (string) ($response['currency'] ?? ''),
             'billingperiod' => (string) ($response['billing_period'] ?? ''),
-            'updates' => is_array($plugin['updates'] ?? null) ? $plugin['updates'] : [],
-            'hasupdate' => $hasupdate,
-            'pluginversion' => ctype_digit($pluginversion) ? $pluginversion : '',
-            'pluginreleased' => self::parse_time($plugin['released'] ?? null),
+            'plugin' => $plugin,
+            'nextbilldate' => self::parse_time($response['next_payment_at'] ?? null),
+        ]), 'local_la');
+
+        return array_merge(helper::get_license(), [
             'reports' => is_array($response['reports'] ?? null) ? $response['reports'] : [],
             'apps' => is_array($response['apps'] ?? null) ? $response['apps'] : [],
-            'nextbilldate' => self::parse_time($response['next_payment_at'] ?? null),
         ]);
     }
 
     /**
-     * Clear cached license state.
+     * Clear cached entitlement state, retaining the license for a later retry.
      *
      * @param string $error
      * @return array
      */
     protected static function clear_license(string $error): array {
-        set_config('license', '', 'local_la');
+        set_config('licenseinfo', '', 'local_la');
         set_config('licensestatus', '', 'local_la');
         set_config('licenseplan', '', 'local_la');
         set_config('licenseplans', '', 'local_la');
@@ -329,6 +324,9 @@ class api {
     protected static function encode_features($features): string {
         if (!is_array($features)) {
             return '';
+        }
+        if (array_is_list($features)) {
+            $features = array_fill_keys(array_filter($features, 'is_string'), true);
         }
 
         $json = json_encode($features, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
@@ -368,6 +366,9 @@ class api {
     protected static function parse_time($value): int {
         if (empty($value)) {
             return 0;
+        }
+        if (is_numeric($value)) {
+            return (int) $value;
         }
 
         $time = strtotime((string) $value);
@@ -501,15 +502,16 @@ class api {
      * @return array
      */
     protected static function decode_response(\curl $curl, string $result, string $url): array {
+        $info = $curl->get_info();
+        $status = (int) ($info['http_code'] ?? 0);
+        if (in_array($status, [401, 409], true)) {
+            return ['error' => get_string($status === 401 ? 'licenseinvalidrequired' : 'licenseboundelsewhere', 'local_la')];
+        }
         $data = json_decode($result, true);
-        if (is_array($data)) {
-            $data['error'] = $data['message'] ?? $data['error'] ?? null;
-
+        if (!$curl->get_errno() && $status >= 200 && $status < 300 && is_array($data)) {
             return $data;
         }
 
-        $info = $curl->get_info();
-        $status = (int) ($info['http_code'] ?? 0);
         $error = $curl->get_errno() ? 'cURL error ' . $curl->get_errno() : 'HTTP ' . $status;
         $debug = helper::is_debug_enabled();
 
@@ -518,8 +520,6 @@ class api {
                 'url' => self::safe_url($url),
                 'status' => $status,
                 'curlerrno' => $curl->get_errno(),
-                'curlerror' => method_exists($curl, 'get_error') ? $curl->get_error() : '',
-                'response' => substr($result, 0, 500),
             ]);
         }
 

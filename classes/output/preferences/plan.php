@@ -98,6 +98,6 @@ class plan {
 
         $plan = helper::normalize_plan($plan);
 
-        return $OUTPUT->image_url($plan, 'local_la')->out(false);
+        return $OUTPUT->image_url($plan === 'free' ? 'core' : $plan, 'local_la')->out(false);
     }
 }
