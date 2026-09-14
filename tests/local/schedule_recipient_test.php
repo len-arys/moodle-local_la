@@ -68,14 +68,43 @@ final class schedule_recipient_test extends advanced_testcase {
     }
 
     /**
-     * Self delivery uses the creator's email eligibility.
+     * Self delivery requires audience access but no plugin capability.
      */
     public function test_self_recipient_does_not_require_a_plugin_capability(): void {
+        global $DB;
+
         $reportid = $this->create_report();
         $user = $this->getDataGenerator()->create_user();
+        $this->add_audience($reportid, 'user', (int) $user->id);
 
         $recipients = $this->get_recipients($reportid, ['self'], $user);
         $this->assertSame([(int) $user->id], array_map('intval', array_column($recipients, 'id')));
+
+        $DB->delete_records('local_la_report_audience', ['reportid' => $reportid]);
+        $this->assertSame([], $this->get_recipients($reportid, ['self'], $user));
+    }
+
+    /**
+     * A saved all-users schedule respects audience access revoked after creation.
+     */
+    public function test_all_users_recipients_respect_current_audience(): void {
+        global $DB;
+
+        $reportid = $this->create_report();
+        $allowed = $this->getDataGenerator()->create_user();
+        $revoked = $this->getDataGenerator()->create_user();
+        $this->add_audience($reportid, 'all', 0);
+        $this->add_audience($reportid, 'user', (int) $allowed->id);
+
+        $recipients = $this->get_recipients($reportid, ['all'], $allowed);
+        $this->assertContains((int) $revoked->id, array_map('intval', array_column($recipients, 'id')));
+
+        $DB->delete_records('local_la_report_audience', ['reportid' => $reportid, 'type' => 'all']);
+
+        $recipients = $this->get_recipients($reportid, ['all'], $allowed);
+        $ids = array_map('intval', array_column($recipients, 'id'));
+        $this->assertContains((int) $allowed->id, $ids);
+        $this->assertNotContains((int) $revoked->id, $ids);
     }
 
     /**
