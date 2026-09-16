@@ -121,6 +121,7 @@
                 <div class="alert alert-danger" role="alert">
                     {{#license.haserror}}{{license.error}}{{/license.haserror}}
                     {{^license.haserror}}{{#str}}pluginnotregistered, local_la{{/str}}{{/license.haserror}}
+                    <a class="alert-link" href="{{settings.pluginsettingsurl}}">{{#str}}settings, core{{/str}}</a>
                 </div>
             {{/license.notregistered}}
 

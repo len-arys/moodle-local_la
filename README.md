@@ -101,7 +101,9 @@ When the trial expires, licensed access ends and the user must purchase a paid p
 
 Core, Pro (Edu), and Max (ORG) are paid plans purchased and managed through [Moodle Marketplace](https://marketplace.moodle.com/plugins/4002). Users can purchase before installing or after trying Free. Stripe notifies the Lenarys API of the purchase; the API creates the paid license and emails it to the buyer email address.
 
-**Preferences > Billing** provides Marketplace and support links only. It does not save licenses or call the API. The plugin currently has no form for entering an emailed paid license.
+In API mode, the Billing Admin enters or replaces the emailed 64-character paid license in the plugin's Moodle settings and selects **Save changes**. Saving only stores the key. Opening **Preferences > General** in the plugin then checks it with the Moodle site URL and caches the returned state. The API handles binding the paid license and replacing an eligible Free Trial.
+
+**Preferences > Billing** provides Marketplace and support links only. It does not save licenses or call the API.
 
 Opening **Preferences > General** checks the saved license with the site's Moodle URL and caches the returned plan, status, dates, features, and plugin information. An HTTP **401** means the license is invalid or a paid key is required; an HTTP **409** means it is already bound to another site. Failed checks retain the saved key for retry and clear cached entitlements. Reopening General retries the check.
 

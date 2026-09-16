@@ -329,7 +329,7 @@ class helper {
         $end = $license['plan'] === 'free' || $license['status'] === 'trialing' ?
             (int) $license['trialends'] : (int) $license['nextbilldate'];
 
-        // plan_time remains mandatory; older manual licenses may omit the lifecycle date.
+        // The plan_time value remains mandatory; older manual licenses may omit the lifecycle date.
         return $end === 0 || $end > time();
     }
 
