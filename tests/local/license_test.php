@@ -30,7 +30,9 @@ use advanced_testcase;
  * @covers     \local_la\local\helper
  */
 final class license_test extends advanced_testcase {
-    /** Set up an isolated license configuration. */
+    /**
+     * Set up an isolated license configuration.
+     */
     protected function setUp(): void {
         global $CFG;
         parent::setUp();
@@ -40,7 +42,9 @@ final class license_test extends advanced_testcase {
         require_once($CFG->libdir . '/filelib.php');
     }
 
-    /** Empty-license registration saves the generated trial identity and dates. */
+    /**
+     * Empty-license registration saves the generated trial identity and dates.
+     */
     public function test_first_activation_saves_free_trial(): void {
         $payload = $this->payload('free', 'trialing');
         $payload['trial_ends_at'] = time() + 30 * DAYSECS;
@@ -60,7 +64,9 @@ final class license_test extends advanced_testcase {
         $this->assertTrue(helper::has_feature('calendar'));
     }
 
-    /** A paid key replaces a trial and all returned metadata survives cache reads. */
+    /**
+     * A paid key replaces a trial and all returned metadata survives cache reads.
+     */
     public function test_paid_license_check_caches_state(): void {
         api::apply_license_payload($this->payload('free', 'trialing'));
         $payload = $this->payload('core', 'active');
@@ -82,7 +88,9 @@ final class license_test extends advanced_testcase {
         $this->assertSame(['License fixes'], $cached['updates']);
     }
 
-    /** A failed request keeps the paid identity for retry, but grants no access. */
+    /**
+     * A failed request keeps the paid identity for retry, but grants no access.
+     */
     public function test_failed_check_retains_key_without_entitlements(): void {
         api::apply_license_payload($this->payload());
         \curl::mock_response('Service unavailable');
@@ -93,7 +101,9 @@ final class license_test extends advanced_testcase {
         $this->assertFalse(helper::has_feature('calendar'));
     }
 
-    /** HTTP errors cannot be accepted as successful JSON responses. */
+    /**
+     * HTTP errors cannot be accepted as successful JSON responses.
+     */
     public function test_http_errors_have_clear_messages_and_reject_payloads(): void {
         $method = new \ReflectionMethod(api::class, 'decode_response');
         foreach ([401 => 'licenseinvalidrequired', 409 => 'licenseboundelsewhere', 500 => 'licensecheckfailed'] as $code => $key) {
@@ -109,7 +119,9 @@ final class license_test extends advanced_testcase {
         }
     }
 
-    /** Revoked statuses, expired dates, and missing plan time all deny access. */
+    /**
+     * Revoked statuses, expired dates, and missing plan time all deny access.
+     */
     public function test_entitlement_checks_enforce_status_and_dates(): void {
         $cases = [
             ['status' => 'past_due'],
@@ -128,7 +140,9 @@ final class license_test extends advanced_testcase {
         }
     }
 
-    /** A valid paid license cannot implicitly enable absent features. */
+    /**
+     * A valid paid license cannot implicitly enable absent features.
+     */
     public function test_features_still_come_from_api(): void {
         api::apply_license_payload($this->payload());
         $this->assertTrue(helper::has_feature('calendar'));

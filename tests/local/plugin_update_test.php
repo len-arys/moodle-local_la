@@ -65,7 +65,9 @@ final class plugin_update_test extends advanced_testcase {
         }
     }
 
-    /** Removed top-level update fields cannot override nested published metadata. */
+    /**
+     * Removed top-level update fields cannot override nested published metadata.
+     */
     public function test_legacy_fields_are_ignored_and_cached_update_is_recomputed(): void {
         $payload = $this->get_payload([
             'version' => '2026080303',
