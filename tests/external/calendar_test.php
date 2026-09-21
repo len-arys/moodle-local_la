@@ -33,6 +33,9 @@ final class calendar_test extends advanced_testcase {
      * Prepare an active calendar feature.
      */
     protected function setUp(): void {
+        global $CFG;
+
+        require_once($CFG->libdir . '/externallib.php');
         parent::setUp();
         $this->resetAfterTest();
         set_config('licensestatus', 'active', 'local_la');

@@ -42,6 +42,9 @@ final class report_access_test extends advanced_testcase {
      * Prepare isolated access state.
      */
     protected function setUp(): void {
+        global $CFG;
+
+        require_once($CFG->libdir . '/externallib.php');
         parent::setUp();
         $this->resetAfterTest();
     }

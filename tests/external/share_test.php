@@ -33,6 +33,9 @@ final class share_test extends advanced_testcase {
      * Prepare isolated sharing state.
      */
     protected function setUp(): void {
+        global $CFG;
+
+        require_once($CFG->libdir . '/externallib.php');
         parent::setUp();
         $this->resetAfterTest();
     }

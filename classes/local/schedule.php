@@ -406,7 +406,7 @@ class schedule {
                     'deleted' => 0,
                     'suspended' => 0,
                 ], '*', MUST_EXIST);
-                \core\cron::setup_user($creator);
+                cron_setup_user($creator);
                 $userchanged = true;
                 $delivery = self::deliver($schedule);
                 self::record_success($schedule, $now);
@@ -424,7 +424,7 @@ class schedule {
                 );
             } finally {
                 if ($userchanged) {
-                    \core\cron::setup_user($originaluser);
+                    cron_setup_user($originaluser);
                 }
             }
         }

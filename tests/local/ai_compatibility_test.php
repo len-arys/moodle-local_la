@@ -37,6 +37,9 @@ final class ai_compatibility_test extends advanced_testcase {
      * Reset configuration and use an administrator identity.
      */
     protected function setUp(): void {
+        global $CFG;
+
+        require_once($CFG->libdir . '/externallib.php');
         parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
