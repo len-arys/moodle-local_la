@@ -38,6 +38,7 @@ final class license_test extends advanced_testcase {
         parent::setUp();
         $this->resetAfterTest();
         $this->setAdminUser();
+        set_config('api', helper::API_MODE_AUTO, 'local_la');
         set_config('apiurl', 'https://api.example.com', 'local_la');
         require_once($CFG->libdir . '/filelib.php');
     }
