@@ -33,6 +33,7 @@ final class report_test extends advanced_testcase {
      * Literal filter labels are not treated as language identifiers.
      */
     public function test_filter_options_accept_literal_labels(): void {
+        $this->resetAfterTest();
         $report = new class ((object) ['params' => []]) extends report {
             /**
              * Get report filter options.
