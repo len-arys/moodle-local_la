@@ -119,7 +119,7 @@ class agent extends external_api {
                 get_string('pluginapi_manual', 'local_la'),
             'status' => (string) ($license['status'] ?? ''),
             'plan' => (string) ($license['planlabel'] ?? ''),
-            'message' => $error === '' ? '' : get_string('agentlicensefailed', 'local_la'),
+            'message' => $error,
             'details' => helper::is_debug_enabled() ? $error : '',
         ];
     }
