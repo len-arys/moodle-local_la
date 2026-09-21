@@ -39,6 +39,7 @@ final class home_test extends advanced_testcase {
         $this->resetAfterTest();
         $this->setAdminUser();
         $PAGE->set_context(context_system::instance());
+        $PAGE->set_url('/local/la/index.php');
 
         $context = (new home())->export_for_template($PAGE->get_renderer('local_la'));
 

@@ -165,6 +165,7 @@ body.path-local-la {
 }
 
 /* Moodle 4.3 does not provide Bootstrap 5's visually-hidden utility. */
+/* stylelint-disable declaration-no-important, function-url-scheme-disallowed-list -- Bootstrap compatibility utilities. */
 .visually-hidden {
     position: absolute !important;
     width: 1px !important;
@@ -587,6 +588,7 @@ body .la-main .la-report-view-controls > .dropdown:last-child > .btn {
     margin-left: -1px;
     border-radius: 0 2rem 2rem 0;
 }
+/* stylelint-enable declaration-no-important, function-url-scheme-disallowed-list */
 
 @media (min-width: 992px) {
     .navbar > .la-header-grid {
@@ -700,6 +702,7 @@ body.path-local-la [data-region="report-metric-avatars"]:focus-within .la-report
 }
 
 /* Bootstrap 4 lacks Moodle 5's gap and font-size utilities used by the metric header. */
+/* stylelint-disable declaration-no-important -- Override Bootstrap 4 layout utilities. */
 body .la-main .la-report-head-metrics,
 body .la-main [data-region="report-metric-values"] {
     gap: .5rem !important;
@@ -731,6 +734,7 @@ body .la-main .la-report-metric-value > .fs-4 {
     font-size: 1.5rem !important;
     line-height: 1.2;
 }
+/* stylelint-enable declaration-no-important */
 
 .la-report-metric-value-label {
     display: none;
@@ -3172,6 +3176,7 @@ body.path-local-la.theme-dark .la-table-sql-debug {
 
 .la-header-search-modal .la-header-search-modal-input {
     border-right: 0;
+    /* stylelint-disable-next-line declaration-no-important -- Override Bootstrap 4 input-group corners. */
     border-radius: 0.5rem 0 0 0.5rem !important;
 }
 
@@ -3179,6 +3184,7 @@ body.path-local-la.theme-dark .la-table-sql-debug {
     padding-right: 0.75rem;
     padding-left: 0.75rem;
     border-left: 0;
+    /* stylelint-disable-next-line declaration-no-important -- Override Bootstrap 4 input-group corners. */
     border-radius: 0 0.5rem 0.5rem 0 !important;
 }
 
