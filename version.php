@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_la';
-$plugin->version   = 2026092100;
+$plugin->version   = 2026092150;
 $plugin->requires  = 2025041400; // Moodle 5.0 minimum (MOODLE_500_STABLE).
 $plugin->supported = [500, 502];
 $plugin->maturity  = MATURITY_STABLE;
