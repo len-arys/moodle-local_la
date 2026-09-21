@@ -75,7 +75,7 @@ class multiselect extends external_api {
             $label = trim((string) ($item['category'] ?? ''));
 
             if ($label === '') {
-                $label = get_string('uncategorised', 'core');
+                $label = get_string('uncategorised', 'grades');
             }
 
             if (!array_key_exists($label, $groups)) {
