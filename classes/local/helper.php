@@ -247,6 +247,11 @@ class helper {
         $plan = self::normalize_plan((string) get_config('local_la', 'licenseplan'));
         $status = trim((string) get_config('local_la', 'licensestatus')) ?: 'inactive';
         $plantime = (int) get_config('local_la', 'licenseplantime');
+        $info = json_decode((string) get_config('local_la', 'licenseinfo'), true);
+        $info = is_array($info) ? $info : [];
+        $plugin = is_array($info['plugin'] ?? null) ? $info['plugin'] : [];
+        $pluginversion = trim((string) ($plugin['version'] ?? ''));
+        $released = $plugin['released'] ?? null;
 
         return [
             'apimode' => self::get_api_mode(),
@@ -257,17 +262,19 @@ class helper {
             'planlabel' => self::get_plan_label($plan),
             'plantime' => $plantime,
             'features' => self::decode_license_features(),
-            'planname' => '',
-            'plandescription' => '',
-            'price' => '',
-            'currency' => '',
-            'billingperiod' => '',
-            'updates' => [],
-            'hasupdate' => false,
-            'pluginversion' => '',
-            'pluginreleased' => 0,
+            'planname' => $plan === 'free' ? get_string('plan_free', 'local_la') : (string) ($info['planname'] ?? ''),
+            'plandescription' => (string) ($info['plandescription'] ?? ''),
+            'price' => (string) ($info['price'] ?? ''),
+            'currency' => (string) ($info['currency'] ?? ''),
+            'billingperiod' => (string) ($info['billingperiod'] ?? ''),
+            'updates' => is_array($plugin['updates'] ?? null) ? $plugin['updates'] : [],
+            'hasupdate' => ($plugin['status'] ?? '') === 'published' && ctype_digit($pluginversion) &&
+                (int) $pluginversion > (int) get_config('local_la', 'version'),
+            'pluginversion' => ctype_digit($pluginversion) ? $pluginversion : '',
+            'pluginreleased' => is_numeric($released) ? (int) $released : (strtotime((string) $released) ?: 0),
+            'pluginstatus' => (string) ($plugin['status'] ?? ''),
             'trialends' => (int) get_config('local_la', 'licensetrialends'),
-            'nextbilldate' => 0,
+            'nextbilldate' => (int) ($info['nextbilldate'] ?? 0),
             'lastcheck' => (int) get_config('local_la', 'licenselastcheck'),
         ];
     }
@@ -281,7 +288,7 @@ class helper {
     public static function has_plan(string $plan): bool {
         $plans = self::get_plans();
         $license = self::get_license();
-        if (empty($license['plantime']) || (int) $license['plantime'] < time()) {
+        if (!self::is_license_active($license)) {
             return false;
         }
 
@@ -302,11 +309,28 @@ class helper {
      */
     public static function has_feature(string $feature): bool {
         $license = self::get_license();
-        if (empty($license['plantime']) || (int) $license['plantime'] < time()) {
+        if (!self::is_license_active($license)) {
             return false;
         }
 
         return !empty($license['features'][$feature]);
+    }
+
+    /**
+     * Require an active status and unexpired entitlement and lifecycle dates.
+     *
+     * @param array $license
+     * @return bool
+     */
+    protected static function is_license_active(array $license): bool {
+        if (!in_array($license['status'], ['active', 'trialing'], true) || (int) $license['plantime'] <= time()) {
+            return false;
+        }
+        $end = $license['plan'] === 'free' || $license['status'] === 'trialing' ?
+            (int) $license['trialends'] : (int) $license['nextbilldate'];
+
+        // The plan_time value remains mandatory; older manual licenses may omit the lifecycle date.
+        return $end === 0 || $end > time();
     }
 
     /**
@@ -349,6 +373,9 @@ class helper {
 
         if (!in_array($default, $plans, true)) {
             array_unshift($plans, $default);
+        }
+        if (!in_array('free', $plans, true)) {
+            array_unshift($plans, 'free');
         }
 
         return $plans;

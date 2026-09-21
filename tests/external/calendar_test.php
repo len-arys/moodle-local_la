@@ -35,6 +35,7 @@ final class calendar_test extends advanced_testcase {
     protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest();
+        set_config('licensestatus', 'active', 'local_la');
         set_config('licenseplantime', time() + DAYSECS, 'local_la');
         set_config('licensefeatures', json_encode(['calendar' => true]), 'local_la');
     }

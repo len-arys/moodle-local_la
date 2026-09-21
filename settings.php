@@ -103,6 +103,16 @@ if ($hassiteconfig) {
     ));
     $settings->hide_if('local_la/apiurl', 'local_la/api', 'neq', 'api');
 
+    if (\local_la\local\helper::is_billing_admin()) {
+        $settings->add(new admin_setting_configpasswordunmask(
+            'local_la/license',
+            get_string('licensekey', 'local_la'),
+            get_string('licensekey_desc', 'local_la'),
+            ''
+        ));
+        $settings->hide_if('local_la/license', 'local_la/api', 'neq', 'api');
+    }
+
     $settings->add(new admin_setting_configtext(
         'local_la/apicurlsettings',
         get_string('apicurlsettings', 'local_la'),

@@ -614,7 +614,7 @@ class schedule {
         }
 
         foreach ($users as $userid => $user) {
-            if (!self::can_receive_email($user)) {
+            if (!self::can_receive_email($user) || !audience::has_access((int) $schedule->reportid, (int) $userid)) {
                 unset($users[$userid]);
             }
         }
