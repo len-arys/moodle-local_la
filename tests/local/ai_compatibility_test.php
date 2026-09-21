@@ -102,6 +102,10 @@ final class ai_compatibility_test extends advanced_testcase {
     public function test_preferences_show_ai_provider_link_on_supported_version(): void {
         global $CFG;
 
+        if (!class_exists(\core_ai\manager::class)) {
+            $this->markTestSkipped('Moodle AI providers are unavailable on this version.');
+        }
+
         $CFG->version = helper::MOODLE_AI_MIN_VERSION;
         set_config('api', helper::API_MODE_LOCAL, 'local_la');
 

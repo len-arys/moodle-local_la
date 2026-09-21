@@ -361,6 +361,10 @@ final class report_access_test extends advanced_testcase {
      * The user menu links to reports when the user has an audience report.
      */
     public function test_user_menu_contains_reports_link_for_audience_member(): void {
+        if (!class_exists(extend_user_menu::class)) {
+            $this->markTestSkipped('The user menu hook is unavailable on this Moodle version.');
+        }
+
         $user = $this->getDataGenerator()->create_user();
         $reportid = $this->create_report('Menu report');
         $this->add_user_audience($reportid, (int) $user->id);
@@ -380,6 +384,10 @@ final class report_access_test extends advanced_testcase {
      * The user menu omits the reports link when the user has no audience reports.
      */
     public function test_user_menu_omits_reports_link_without_audience_reports(): void {
+        if (!class_exists(extend_user_menu::class)) {
+            $this->markTestSkipped('The user menu hook is unavailable on this Moodle version.');
+        }
+
         $this->setUser($this->getDataGenerator()->create_user());
         $hook = new extend_user_menu();
 
