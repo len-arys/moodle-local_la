@@ -47,12 +47,16 @@ class audit {
 
         if ($search !== '') {
             $searchsql = " AND (" .
-                $DB->sql_like('LOWER(r.name)', ':search', false) .
-                " OR " . $DB->sql_like('LOWER(u.firstname)', ':search', false) .
-                " OR " . $DB->sql_like('LOWER(u.lastname)', ':search', false) .
-                " OR " . $DB->sql_like('LOWER(u.email)', ':search', false) .
+                $DB->sql_like('LOWER(r.name)', ':searchreportname', false) .
+                " OR " . $DB->sql_like('LOWER(u.firstname)', ':searchfirstname', false) .
+                " OR " . $DB->sql_like('LOWER(u.lastname)', ':searchlastname', false) .
+                " OR " . $DB->sql_like('LOWER(u.email)', ':searchemail', false) .
             ")";
-            $params['search'] = '%' . $DB->sql_like_escape(\core_text::strtolower($search)) . '%';
+            $search = '%' . $DB->sql_like_escape(\core_text::strtolower($search)) . '%';
+            $params['searchreportname'] = $search;
+            $params['searchfirstname'] = $search;
+            $params['searchlastname'] = $search;
+            $params['searchemail'] = $search;
         }
 
         return [
