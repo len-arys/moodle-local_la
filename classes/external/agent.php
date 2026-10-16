@@ -27,6 +27,7 @@ use local_la\local\helper;
 use local_la\local\installer;
 use local_la\local\logger;
 use local_la\local\repository;
+use local_la\local\validator;
 
 /**
  * Guided agent external API.
@@ -139,6 +140,17 @@ class agent extends external_api {
             $shortname = (string) ($report['shortname'] ?? '');
             if ($shortname === '') {
                 continue;
+            }
+
+            $snippets = [(string) ($report['sql']['code'] ?? '')];
+            foreach (($report['sql']['dependencies'] ?? []) as $dependency) {
+                $snippets[] = (string) ($dependency['code'] ?? '');
+            }
+
+            foreach ($snippets as $sql) {
+                if (validator::get_restricted_tables_used($sql) || validator::get_missing_tables_used($sql)) {
+                    continue 2;
+                }
             }
 
             $reports[] = [
