@@ -361,6 +361,8 @@ final class report_access_test extends advanced_testcase {
      * The user menu links to reports when the user has an audience report.
      */
     public function test_user_menu_contains_reports_link_for_audience_member(): void {
+        global $PAGE;
+
         if (!class_exists(extend_user_menu::class)) {
             $this->markTestSkipped('The user menu hook is unavailable on this Moodle version.');
         }
@@ -373,8 +375,15 @@ final class report_access_test extends advanced_testcase {
 
         hook_callbacks::extend_user_menu($hook);
 
-        $items = $hook->get_navitems();
+        $items = method_exists($hook, 'get_menu_items') ? $hook->get_menu_items() : $hook->get_navitems();
         $this->assertCount(1, $items);
+        if (method_exists($hook, 'get_menu_items')) {
+            $this->assertInstanceOf(\core_user\output\user_action_menu\link::class, $items[0]);
+            $item = $items[0]->export_for_template($PAGE->get_renderer('core'));
+            $this->assertSame(get_string('lenarysreports', 'local_la'), $item['title']);
+            $this->assertSame(url::library(['tab' => 'reports']), $item['url']);
+            return;
+        }
         $this->assertSame('link', $items[0]->itemtype);
         $this->assertSame(get_string('lenarysreports', 'local_la'), $items[0]->title);
         $this->assertSame(url::library(['tab' => 'reports']), $items[0]->url->out(false));
@@ -393,7 +402,8 @@ final class report_access_test extends advanced_testcase {
 
         hook_callbacks::extend_user_menu($hook);
 
-        $this->assertSame([], $hook->get_navitems());
+        $items = method_exists($hook, 'get_menu_items') ? $hook->get_menu_items() : $hook->get_navitems();
+        $this->assertSame([], $items);
     }
 
     /**
