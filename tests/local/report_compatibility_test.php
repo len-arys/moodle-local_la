@@ -28,6 +28,7 @@ use advanced_testcase;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers     \local_la\local\report
  * @covers     \local_la\local\validator
+ * @covers     \local_la\external\agent
  */
 final class report_compatibility_test extends advanced_testcase {
     /**
@@ -51,6 +52,47 @@ final class report_compatibility_test extends advanced_testcase {
         );
         $this->assertFalse(validator::passes("SELECT x.id FROM {{$missing}} x"));
         $this->assertSame([], validator::get_missing_tables_used('SELECT u.id FROM {user} u'));
+    }
+
+    /**
+     * Welcome setup skips blocked main queries and dependencies while retaining compatible reports.
+     */
+    public function test_welcome_reports_skip_restricted_and_missing_tables(): void {
+        global $CFG, $USER;
+
+        require_once($CFG->libdir . '/externallib.php');
+
+        $this->setAdminUser();
+        set_config('billingadmins', $USER->id, 'local_la');
+        set_config('api', helper::API_MODE_AUTO, 'local_la');
+        set_config('apiurl', 'https://api.example.com', 'local_la');
+        set_config('license', str_repeat('a', 64), 'local_la');
+        set_config('restrictedtables', 'sessions', 'local_la');
+        require_once($CFG->libdir . '/filelib.php');
+
+        $cases = [
+            'restricted_main' => ['sessions', 'course'],
+            'missing_main' => ['local_la_missing_table', 'course'],
+            'restricted_dependency' => ['user', 'sessions'],
+            'missing_dependency' => ['user', 'local_la_missing_table'],
+            'compatible' => ['user', 'course'],
+        ];
+        $reports = [];
+        foreach ($cases as $shortname => [$main, $dependency]) {
+            $reports[] = [
+                'shortname' => $shortname,
+                'sql' => [
+                    'code' => "SELECT u.id FROM {{$main}} u",
+                    'dependencies' => [['code' => "LEFT JOIN {{$dependency}} c ON c.id = u.id"]],
+                ],
+            ];
+        }
+        \curl::mock_response(json_encode(['reports' => $reports]));
+
+        $result = \local_la\external\agent::get_reports();
+
+        $this->assertSame(['compatible'], array_column($result['reports'], 'shortname'));
+        $this->assertFalse($result['reports'][0]['installed']);
     }
 
     /**
