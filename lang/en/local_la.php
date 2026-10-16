@@ -313,7 +313,7 @@ $string['licenseboundelsewhere'] = 'This license is already bound to another Moo
 $string['licensecheckfailed'] = 'License check failed.';
 $string['licensecheckfaileddetail'] = 'License check failed: {$a}.';
 $string['licensefile'] = 'License file';
-$string['licensefile_desc'] = 'Upload a local license file when API Mode is set to Local.';
+$string['licensefile_desc'] = 'Upload a local license file when API Mode is set to Local. <a href="{$a}">Contact us</a> to request a license file.';
 $string['licensefileinvalid'] = 'The uploaded license file is not valid JSON.';
 $string['licensefilenotfound'] = 'Upload a license file to use local API mode.';
 $string['licenseinvalidrequired'] = 'The license is invalid or a paid license is required for this site. Update the license in the plugin settings using the key from your Moodle Marketplace purchase email.';
