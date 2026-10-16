@@ -1,6 +1,6 @@
 # Lenarys Analytics
 
-![Moodle™ compatibility](https://img.shields.io/badge/Moodle%E2%84%A2-5.0%E2%80%935.2-orange)
+![Moodle™ compatibility](https://img.shields.io/badge/Moodle%E2%84%A2-5.0%E2%80%935.3-orange)
 [![Moodle Plugin CI](https://github.com/len-arys/moodle-local_la/actions/workflows/ci.yml/badge.svg)](https://github.com/len-arys/moodle-local_la/actions/workflows/ci.yml)
 [![License: GPL v3 or later](https://img.shields.io/github/license/len-arys/moodle-local_la)](LICENSE)
 
@@ -22,7 +22,7 @@ The plugin provides a report and app library, controlled report audiences, sched
 
 ## Requirements
 
-- This `main` branch is for Moodle 5.0 through 5.2.
+- This `main` branch is for Moodle 5.0 through 5.3.
 - A PHP version supported by the installed Moodle release.
 - Moodle cron configured and running for scheduled report delivery.
 - No additional Moodle plugins are required.
@@ -35,13 +35,13 @@ Moodle releases are supported in separate plugin branches because the required M
 
 | Moodle release line | Minimum Moodle version | Plugin branch |
 | --- | --- | --- |
-| Moodle 5.0–5.2 | Moodle 5.0 | `main` |
+| Moodle 5.0–5.3 | Moodle 5.0 | `main` |
 | Moodle 4.5 | Moodle 4.5 | `MOODLE_405_STABLE` |
 | Moodle 4.3 | Moodle 4.3.12 | `MOODLE_403_STABLE` |
 | Moodle 4.2 | Moodle 4.2.11 | `MOODLE_402_STABLE` |
 | Moodle 4.0 | Moodle 4.0.12 | `MOODLE_400_STABLE` |
 
-The `main` branch targets Moodle 5.0 through 5.2. Moodle 4.5 sites must use `MOODLE_405_STABLE`. Do not install `main` or a package from another Moodle release branch on an older site. Moodle versions not listed in the table are not currently supported.
+The `main` branch targets Moodle 5.0 through 5.3. Moodle 4.5 sites must use `MOODLE_405_STABLE`. Do not install `main` or a package from another Moodle release branch on an older site. Moodle versions not listed in the table are not currently supported.
 
 Moodle Marketplace installations should use the plugin release explicitly marked as compatible with the site's Moodle version. When installing from source control, check out the matching `MOODLE_*_STABLE` branch before creating or installing the ZIP package.
 
