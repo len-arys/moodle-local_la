@@ -133,7 +133,7 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configstoredfile(
         'local_la/licensefile',
         get_string('licensefile', 'local_la'),
-        get_string('licensefile_desc', 'local_la'),
+        get_string('licensefile_desc', 'local_la', (new moodle_url($defaults['contacturl']))->out()),
         'licensefile',
         $defaults['licensefile'],
         ['accepted_types' => ['.json'], 'maxfiles' => 1]
